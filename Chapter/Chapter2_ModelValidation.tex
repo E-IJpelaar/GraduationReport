@@ -75,38 +75,55 @@ in which, $\xi_{i,0}$ corresponds to the undeformed configuration of the robotic
 where $\Phi : \mathbb{R} \mapsto \mathbb{R}^{m \times n}$ is a shape function matrix in which $n$ is equal to the amount of modal coordinates, and $m$ the amount of active strains, and $B_a \subseteq \text{span}(\mathbb{I}_6)$ a selection matrix of unconstrained strains. Within matrix $B_a$ the active strains are given a `1' and constrained stains `0'. For the planar soft robot one curvature-torsion strain and one stretch-shear strain are active. 
 
 
-\todo{cite paper with quaternions}
-In Matlab \cite{MATLAB2020} a script was created to calculate the forward kinematics given modal coordinates $q(t)$. To reduce computation time of solving the ODE with \verb+ode45+, $\hat{\xi}$ (\ref{eq2:gaccent}) curvature-torsion strain can be reformulated using quaternion formulation expressing it as a rotation matrix.  $g$ in (\ref{eq2:dgdsigma}) can be reformulated to
+In Matlab \cite{MATLAB2020} a code was created to calculate the forward kinematics given modal coordinates $q(t)$. To reduce computation time of solving the ODE with \verb+ode45+, the 4 by 4 matrix $g(\sigma,t)$, Equation (\ref{eq2:g}), is rewritten as a column vector of size 7. To this end, the rotation matrix $R(\sigma,t)$ is rewritten to quaternion formulation as follows \cite{Boyer2019},
+
 
 \begin{equation}
-    \begin{pmatrix} Q \\ r \end{pmatrix}' = \begin{pmatrix} 2 ||Q||^{-1} A(R(Q)K)Q \\ R(Q)r \end{pmatrix}
+\frac{\partial}{\partial \sigma}    \begin{pmatrix} Q \\ p \end{pmatrix} = \begin{pmatrix} 2 ||Q||^{-1} A(R(Q)K)Q \\ R(Q)p \end{pmatrix}
+\label{eq2:Qp}
 \end{equation}
 
-where $Q$ is a quaternion expressing rotation based on 
-
-\todo{cite paper with equations below.}
-
+where $Q$ is the quaternion representation of rotation matrix $R$, and $R(Q)$ a function mapping a quaternion to rotation matrix representation, $A$ is a function defined as,
 
 
 \begin{equation}
     A(K) = \begin{pmatrix} 0 & -K_1 & -K_2 & -K_3 \\ K_1 & 0 & -K_3 & \hspace{8pt}K_2 \\ K_2 & \hspace{8pt}K_3 & 0 & -K_1 \\ K_3 & -K_2 & \hspace{8pt}K_1 & 0 \end{pmatrix}
+    \label{eq2:AK}
 \end{equation}
 
+where $K_i$ correspond to the entries of $xi(\sigma,t)$ shown in Equation (\ref{eq2:etaxi}). In Equation \ref{eq2:Qp} and \ref{eq2:AK} the dependency of $\sigma$ and $t$ has been omitted for the sake of readability.
 
 \subsection{Inverse kinematics of the planar robot}
+
+The developed forward kinematic model can be used for determining the inverse kinematics of the planar robot. This is done by a Jacobian search method. In essence, a desired position and orientation of the robot's end-effector is given. A Newton-Euler based optimization is carried out to find the modal coordinates $q(t)$ mapping to end-effector position $x,z,\theta$. This Newton-Euler search method uses the Jacobian which is given by \cite{Caasenbrood2020},
+
+\begin{equation}
+\eta(\sigma,t) = Ad_{g^{-1}(\sigma = l)} \int_{0}^{\sigma} Ad_g B_a \Phi(\sigma) d\sigma \dot{q} := J\dot{q}
+\end{equation}
+
+where $J(\sigma,q) \in \mathbb{R}^{6 \times n}$ is the jacobian matrix mapping modal velocities to the time-twist field, and $Ad_g$ is defined as the adjoint mapping found by,
 
 
 \begin{equation}
     Ad_g = \begin{pmatrix} R & 0 \\ \hat{r}R & R \end{pmatrix}
 \end{equation}
 
+in which, $R$ is the rotation matrix at space instant $\sigma$, and $\hat{r}$ a 3x3 skew-symmetric matrix for which holds that $\hat{r}V = r \times V$ for any $V \in \mathbb{R}^3$ \cite{Boyer2019}.
+
 \begin{equation}
-\eta(\sigma,t) = Ad_{g^{-1}} \int_{0}^{\sigma} Ad_g B_a \Phi(\sigma) d\sigma \dot{q} := J\dot{q}
+    J^\dagger = wJ^\top(JwJ^top + \rho I_{6\times 6})^{-1}
+\end{equation}
+
+
+\begin{equation}
+    q_{k+1} = q_{k} + \alpha J^\dagger (x_d - x_k)
 \end{equation}
 
 
 
-cite: boyer forward dynamics for the quaternions
+
+
+
 
 
 
@@ -159,17 +176,40 @@ In the Abaqus FEM environment these constants need to be translated to \verb+C10
     \verb+D1+ = \frac{2}{\kappa}
 \end{equation}
 
-As mentioned, two simulations were carried out pressurizing both bellows equally for 20kPa and 80kPa. Deformations in $x,y,z$ direction for both material parameters are shown in Table (\ref{tab2:linnonlindef}). Node that for this simulation, in which both bellows are pressurized equally, the elongation in $y$-direction is most relevant. The deformation in remaining directions should be small.
+As mentioned, two simulations were carried out pressurizing both bellows equally for 20kPa and 80kPa.Deformations in $x,y,z$ direction for both material parameters are shown in Table (\ref{tab2:linnonlindef}). The procedure to calculate deformation works as follows. After the bellows are pressurized, the nodes in the top plate are isolated. Hereby, we assume that the connection plate at the tip of the robot does not deform when pressurizing the bellows. In Matlab the displacement of each individual node in the top plate is calculated, before a mean displacement is calculated of all nodes together. Note that for this simulation, in which both bellows are pressurized equally, the elongation in $y$-direction is most relevant. The deformation in remaining directions should be small.
 
 \begin{table}[H]
     \centering
     \begin{tabular}{|c|c|c|}  \hline
     & \textbf{Linear}    &  \textbf{Non Linear}    \\ \hline
       [x;y;z] 20 kPa   &  [-0.125;17.9;-0.167]     &         [ -0.123;18.0;-0.167]           \\ \hline
-     [ x,y,z] 80 kPa   &  [0.329;35.0;-0.228]    &       [0.334;35.1;-0.228]             \\ \hline
+     [x,y,z] 80 kPa   &  [0.329;35.0;-0.228]    &       [0.334;35.1;-0.228]             \\ \hline
     \end{tabular}
     \caption{Deformation in  $x,y,z$-direction in $mm$ for linear and nonlinear material parameters for 20 and 80 kPa}
     \label{tab2:linnonlindef}
 \end{table}
 
-A
+As can be seen, deformation in $x,z$-direction is small and matches for the linear and non-linear material parameters. For the elongation in $y$-direction the results also matches really well. Since only pure elongation is measured, the differences between linear and non-linear parameters are expected to be small. It is expected that for rotation, e.g. pressurizing bellows unequally, the difference in deformation for linear and non-linear material parameters are more significant.
+
+
+
+
+
+\subsection{Influence of mesh refinement for non-linear material parameters}
+
+In an effort to speed-up computation time, while maintaining accuracy, in Abaqus FEM simulation and post-processing, the influence of mesh refinement on the deformation is analyzed. In this way the minimum mesh-size can be determined needed for properly conducting a stiffness analysis. The experiments will be conducted for a pressure of 80kPa. Using a too small pressure will result in smaller deformations, which can be more easily captured with less nodes. Since the air pumps are able to pressurize the bellows to a maximum of around 80kPa, this pressure will be used for this analysis. During this analysis the auto mesh function in Abaqus 2020 is used, if this option fails finding a balance between computation time and output quality, a choice can be made to refine meshes locally. The obtained $y$-elongation is plotted versus the amount of nodes in Figure (\ref{fig2:meshrefinement}).
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Figures/Chapter2/MeshRefinement.eps}
+    \caption{Mesh refinement analysis conducted at 80kPa, no. of nodes plotted against elongation in $y$}
+    \label{fig2:meshrefinement}
+\end{figure}
+
+Figure (\ref{fig2:meshrefinement}) clearly shows that from 60 thousand nodes onwards, elongation in $y$-direction can be estimated fairly reliable. This amount of nodes will therefore be the baseline for further experiments, and auto mesh function will be used.
+
+
+
+\subsection{Determining longitudinal stiffness}
+Now the material parameters and minimum mesh size has been determined, the longitudinal stiffness can be determined, to this end multiple simulations with varying bellow pressure will be carried out. In this way a relation between applied pressure and elongation can be drawn. From this relation stiffness $K_{yy}$ can be determined. Further experiments are needed to determine rotational stiffness $K_{xz}$.
