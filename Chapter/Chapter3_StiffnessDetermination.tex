@@ -1,0 +1,93 @@
+
+
+
+
+
+\section{Stiffness Determination in FEM}
+
+
+
+
+
+
+
+
+\subsection{Influence of (non)-linear material parameters}
+
+
+The influence of linear/non-linear material parameters were investigated by pressurizing both bellows equally for 20kPa and 80kPa for both linear and non-linear material parameters. For the linear case a Young's modulus ($E$) of 69 Mpa and a Poisson ratio ($\nu$) of 0.45 were used. These parameters can be used to calculate the Lamé parameters necessary to simulate non-linear Neo-Hookeon deformation. To this end, Lamé's first parameter or shear modulus $\mu$ and bulk modulus $\kappa$ need to be calculated, these can be calculated with the following equations, respectively
+
+\begin{equation}
+    \mu = \frac{E}{2(1+\nu)}
+\end{equation}
+
+
+\begin{equation}
+    \kappa = \frac{E}{3(1-2\nu)}
+\end{equation}
+
+In the Abaqus FEM environment these constants need to be translated to \verb+C10+ and \verb+D1+ parameters by the with
+
+\begin{equation}
+    \verb+C10+ = \frac{\mu}{2}
+\end{equation}
+
+
+\begin{equation}
+    \verb+D1+ = \frac{2}{\kappa}
+\end{equation}
+
+As mentioned, two simulations were carried out pressurizing both bellows equally for 20kPa and 80kPa.Deformations in $x,y,z$ direction for both material parameters are shown in Table (\ref{tab3:linnonlindef}). The procedure to calculate deformation works as follows. After the bellows are pressurized, the nodes in the top plate are isolated. Hereby, we assume that the connection plate at the tip of the robot does not deform when pressurizing the bellows. In Matlab the displacement of each individual node in the top plate is calculated, before a mean displacement is calculated of all nodes together. Note that for this simulation, in which both bellows are pressurized equally, the elongation in $y$-direction is most relevant. The deformation in remaining directions should be small.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}  \hline
+    & \textbf{Linear}    &  \textbf{Non Linear}    \\ \hline
+      [x;y;z] 20 kPa   &  [-0.125;17.9;-0.167]     &         [ -0.123;18.0;-0.167]           \\ \hline
+     [x,y,z] 80 kPa   &  [0.329;35.0;-0.228]    &       [0.334;35.1;-0.228]             \\ \hline
+    \end{tabular}
+    \caption{Deformation in  $x,y,z$-direction in $mm$ for linear and nonlinear material parameters for 20 and 80 kPa}
+    \label{tab3:linnonlindef}
+\end{table}
+
+As can be seen, deformation in $x,z$-direction is small and matches for the linear and non-linear material parameters. For the elongation in $y$-direction the results also matches really well. Since only pure elongation is measured, the differences between linear and non-linear parameters are expected to be small. It is expected that for rotation, e.g. pressurizing bellows unequally, the difference in deformation for linear and non-linear material parameters are more significant.
+
+\newpage
+\subsection{Influence of mesh refinement for non-linear material parameters}
+
+In an effort to speed-up computation time, while maintaining accuracy, in Abaqus FEM simulation and post-processing, the influence of mesh refinement on the deformation is analyzed. In this way the minimum mesh-size can be determined needed for properly conducting a stiffness analysis. The experiments will be conducted for a pressure of 80kPa. Using a too small pressure will result in smaller deformations, which can be more easily captured with less nodes. Since the air pumps are able to pressurize the bellows to a maximum of around 80kPa, this pressure will be used for this analysis. During this analysis the auto mesh function in Abaqus 2020 is used, if this option fails finding a balance between computation time and output quality, a choice can be made to refine meshes locally. The obtained $y$-elongation is plotted versus the amount of nodes in Figure (\ref{fig3:meshrefinement}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Figures/Chapter2/MeshRefinement.eps}
+    \caption{Mesh refinement analysis conducted at 80kPa, no. of nodes plotted against elongation in $y$}
+    \label{fig3:meshrefinement}
+\end{figure}
+
+
+Figure (\ref{fig3:meshrefinement}) clearly shows that from 60 thousand nodes onwards, elongation in $y$-direction can be estimated fairly reliable. This amount of nodes will therefore be the baseline for further experiments, and auto mesh function will be used.
+
+
+
+\subsection{Determining longitudinal stiffness}
+Now the material parameters and minimum mesh size has been determined, the longitudinal stiffness can be determined. To this end, multiple simulations with varying bellow pressure are done. In this way a relation between applied pressure and elongation can be drawn. From this relation stiffness $K_{yy}$ can be determined, when the area on which the pressure acts is known. Further experiments are needed to determine rotational stiffness $K_{xz}$. Figure (\ref{fig3:pvsy}) shows a non-linear trend in elongation with respect to the applied pressure. If the area on which the pressure acts is deemed constant, one can conclude that the stiffness is non-linear.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{Figures/Chapter3/pvsy.eps}
+    \caption{Elongation in $y$-direction for simulated pressures (blue) and a fifth order polynomial fit}
+    \label{fig3:pvsy}
+\end{figure}
+
+
+The elongation in $y$-direction can be described by function of pressure in $kPa$ as follows,
+
+
+\begin{equation}
+    \epsilon(p) = 
+    \begin{cases}
+    1.75\cdot10^{-8}p^5	-5.34\cdot10^{-6}p^4 + 6.34\cdot^10^{-4}p^3	-3.81\cdot^{-2}p^2	1.45p	+0.13,& \text{for} \hspace{5pt} 0 \leq p \leq 100\\
+    \text{undefined},              & \text{otherwise}
+\end{cases}
+\end{equation}

@@ -1,12 +1,6 @@
-In an attempt to create a model based controller that can be applied to the soft robotic actuator, the developed non-linear model should first be validated. This is done by using a planar 2 degree-of-freedom soft robot. This robot has a translational and rotational degree of freedom. Rotation is only dependent on the difference in bellow length, not absolute bellow length. To measure rotation, an Inertial Measurement Unit (IMU) is connected at the tip of the robot. The position of the bellows can be tracked with a camera set-up. From this data, elongation and curvature of each individual bellow can extracted. Being able to measure/determine both degrees-of-freedom allows us to validate the dynamic model. 
+In an attempt to create a model based controller that can be applied to the soft robotic actuator, the developed non-linear model should first be validated. This is done by using a planar 2 degree-of-freedom soft robot. This robot has a translational and rotational degree of freedom. Rotation is only dependent on the difference in bellow length, not absolute bellow length. To measure rotation, an Inertial Measurement Unit (IMU) is connected at the tip of the robot. The position of the bellows can be tracked with a camera set-up. From this data, elongation and curvature of each individual bellow can extracted. Being able to measure/determine both degrees-of-freedom allows us to validate the dynamic model.
 
 \section{Model validation for the planar soft actuator}
-
-
-\subsection{Measuring Devices}
-
-
-
 
 \subsection{Forward kinematics of the planar robot}
 
@@ -95,7 +89,32 @@ where $K_i$ correspond to the entries of $xi(\sigma,t)$ shown in Equation (\ref{
 
 \subsection{Inverse kinematics of the planar robot}
 
-The developed forward kinematic model can be used for determining the inverse kinematics of the planar robot. This is done by a Jacobian search method. In essence, a desired position and orientation of the robot's end-effector is given. A Newton-Euler based optimization is carried out to find the modal coordinates $q(t)$ mapping to end-effector position $x,z,\theta$. This Newton-Euler search method uses the Jacobian which is given by \cite{Caasenbrood2020},
+The developed forward kinematic model can be used for determining the inverse kinematics of the planar robot. This is done by a Jacobian search method. In essence, a desired position and orientation of the robot's end-effector is given. The Jacobian inverse technique is used to find the modal coordinates $q(t)$ mapping to desired end-effector position $x_d = [x,z,\theta]^\top$. For the forward kinematics the following can be stated,
+
+\begin{equation}
+    x = f(q)
+\end{equation}
+
+where, $x \in \mathbb{R}^n$ is the position and orientation vector of the end-effector. For the planar robot $n = 3$, as two translations and one coupled rotation can be achieved. Modal coordinates are stored in vector $q \in \mathbb{R}^m$, which can take any size. Lastly, $f$ a function which describes the forward kinematics performing $x \mapsto q$. For the inverse kinematic problem we aim to find,
+
+\begin{equation}
+    q = f^{-1}(x)
+\end{equation}
+
+The modal coordinates corresponding to the desired end-effector position and orientation can be found by using the inverse jacobian method, with the updating scheme as,
+
+\begin{equation}
+    q_{k+1} = q_k + \alpha J^\dagger \beta e_k \hspace{20pt} \text{with} \hspace{10pt}  e_k = x_d - x_k
+\end{equation}
+
+where $q_k$ are the modal coordinates at iteration $k$, $\alpha$ a learning gain used to enhance fast convergence $\beta$ is a diagonal matrix used to prioritize desired end-effector coordinates. In our case, the position in the $x-y$ plane is more important than the orientation $\theta$. Lastly, $J^\dagger$ is an adapted form of the damped Moore–Penrose pseudo inverse defined as,
+
+\begin{equation}
+    J^\dagger = wJ^\top(JwJ^\top + \rho I)^{-1}
+    \label{eq2:pseudoinverse}
+\end{equation}
+
+In this equation $w$ is a diagonal weighing matrix used to prioritize modal coordinates of which the strain is approximated with lower order shape functions, this is done to reduce the dimension of the system as far as possible. The factor $\rho I \in \mathbb{R}^{6 \times 6}$ is introduced to avoid singularities of the jacobian matrix $J$. The Jacobian at each increment is determined with the following equation \cite{Caasenbrood2020},
 
 \begin{equation}
 \eta(\sigma,t) = Ad_{g^{-1}(\sigma = l)} \int_{0}^{\sigma} Ad_g B_a \Phi(\sigma) d\sigma \dot{q} := J\dot{q}
@@ -110,106 +129,47 @@ where $J(\sigma,q) \in \mathbb{R}^{6 \times n}$ is the jacobian matrix mapping m
 
 in which, $R$ is the rotation matrix at space instant $\sigma$, and $\hat{r}$ a 3x3 skew-symmetric matrix for which holds that $\hat{r}V = r \times V$ for any $V \in \mathbb{R}^3$ \cite{Boyer2019}.
 
-\begin{equation}
-    J^\dagger = wJ^\top(JwJ^top + \rho I_{6\times 6})^{-1}
-\end{equation}
+Based on above equation an algorithm is formulated to obtain the inverse kinematics based on an initial guess $q_0$ as follows,
 
 
-\begin{equation}
-    q_{k+1} = q_{k} + \alpha J^\dagger (x_d - x_k)
-\end{equation}
+\todo{finish algorithm, cite source on pseudo inverse and inverse jacobian technique}
+\begin{algorithm}
+\caption{Numerical Inverse Kinematics}
 
+\begin{algorithmic}[1]
+\State q $\leftarrow$ $q_0$ \Comment{Initial condtion}
+\Procedure{$|| x_k - x_d || > \epsilon$}{}      \Comment{While error is larger than some $\epsilon$}
+    \State $x_k$ = $f(q_k)$
+    \State Read the value 
+    \If{$condition = True$}
+        \State Do this
+        \If{$Condition \geq 1$}
+        \State Do that
+        \ElsIf{$Condition \neq 5$}
+        \State Do another
+        \State Do that as well
+        \Else
+        \State Do otherwise
+        \EndIf
+    \EndIf
 
+    \While{$something \not= 0$}  \Comment{put some comments here}
+        \State $var1 \leftarrow var2$  \Comment{another comment}
+        \State $var3 \leftarrow var4$
+    \EndWhile 
+    \label{alg2:numericalinverse}
+\EndProcedure
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Stiffness Determination in FEM}
-
-
-
+\end{algorithmic}
+\end{algorithm}
 
 
 
 
 
-\subsection{Influence of (non)-linear material parameters}
-
-
-The influence of linear/non-linear material parameters were investigated by pressurizing both bellows equally for 20kPa and 80kPa for both linear and non-linear material parameters. For the linear case a Young's modulus ($E$) of 69 Mpa and a Poisson ratio ($\nu$) of 0.45 were used. These parameters can be used to calculate the Lamé parameters necessary to simulate non-linear Neo-Hookeon deformation. To this end, Lamé's first parameter or shear modulus $\mu$ and bulk modulus $\kappa$ need to be calculated, these can be calculated with the following equations, respectively
-
-\begin{equation}
-    \mu = \frac{E}{2(1+\nu)}
-\end{equation}
-
-
-\begin{equation}
-    \kappa = \frac{E}{3(1-2\nu)}
-\end{equation}
-
-In the Abaqus FEM environment these constants need to be translated to \verb+C10+ and \verb+D1+ parameters by the with
-
-\begin{equation}
-    \verb+C10+ = \frac{\mu}{2}
-\end{equation}
-
-
-\begin{equation}
-    \verb+D1+ = \frac{2}{\kappa}
-\end{equation}
-
-As mentioned, two simulations were carried out pressurizing both bellows equally for 20kPa and 80kPa.Deformations in $x,y,z$ direction for both material parameters are shown in Table (\ref{tab2:linnonlindef}). The procedure to calculate deformation works as follows. After the bellows are pressurized, the nodes in the top plate are isolated. Hereby, we assume that the connection plate at the tip of the robot does not deform when pressurizing the bellows. In Matlab the displacement of each individual node in the top plate is calculated, before a mean displacement is calculated of all nodes together. Note that for this simulation, in which both bellows are pressurized equally, the elongation in $y$-direction is most relevant. The deformation in remaining directions should be small.
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{|c|c|c|}  \hline
-    & \textbf{Linear}    &  \textbf{Non Linear}    \\ \hline
-      [x;y;z] 20 kPa   &  [-0.125;17.9;-0.167]     &         [ -0.123;18.0;-0.167]           \\ \hline
-     [x,y,z] 80 kPa   &  [0.329;35.0;-0.228]    &       [0.334;35.1;-0.228]             \\ \hline
-    \end{tabular}
-    \caption{Deformation in  $x,y,z$-direction in $mm$ for linear and nonlinear material parameters for 20 and 80 kPa}
-    \label{tab2:linnonlindef}
-\end{table}
-
-As can be seen, deformation in $x,z$-direction is small and matches for the linear and non-linear material parameters. For the elongation in $y$-direction the results also matches really well. Since only pure elongation is measured, the differences between linear and non-linear parameters are expected to be small. It is expected that for rotation, e.g. pressurizing bellows unequally, the difference in deformation for linear and non-linear material parameters are more significant.
 
 
 
 
 
-\subsection{Influence of mesh refinement for non-linear material parameters}
 
-In an effort to speed-up computation time, while maintaining accuracy, in Abaqus FEM simulation and post-processing, the influence of mesh refinement on the deformation is analyzed. In this way the minimum mesh-size can be determined needed for properly conducting a stiffness analysis. The experiments will be conducted for a pressure of 80kPa. Using a too small pressure will result in smaller deformations, which can be more easily captured with less nodes. Since the air pumps are able to pressurize the bellows to a maximum of around 80kPa, this pressure will be used for this analysis. During this analysis the auto mesh function in Abaqus 2020 is used, if this option fails finding a balance between computation time and output quality, a choice can be made to refine meshes locally. The obtained $y$-elongation is plotted versus the amount of nodes in Figure (\ref{fig2:meshrefinement}).
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = 0.8\textwidth]{Figures/Chapter2/MeshRefinement.eps}
-    \caption{Mesh refinement analysis conducted at 80kPa, no. of nodes plotted against elongation in $y$}
-    \label{fig2:meshrefinement}
-\end{figure}
-
-Figure (\ref{fig2:meshrefinement}) clearly shows that from 60 thousand nodes onwards, elongation in $y$-direction can be estimated fairly reliable. This amount of nodes will therefore be the baseline for further experiments, and auto mesh function will be used.
-
-
-
-\subsection{Determining longitudinal stiffness}
-Now the material parameters and minimum mesh size has been determined, the longitudinal stiffness can be determined, to this end multiple simulations with varying bellow pressure will be carried out. In this way a relation between applied pressure and elongation can be drawn. From this relation stiffness $K_{yy}$ can be determined. Further experiments are needed to determine rotational stiffness $K_{xz}$.
