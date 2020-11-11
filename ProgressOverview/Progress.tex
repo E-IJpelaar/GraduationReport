@@ -1,2 +1,14 @@
-This week I have worked the forward and inverse kinematics in report form.
-Additionally, I have fixed the Abaqus simulation of which the outcomes are presented in chapter 3. I have carried out simulations for linear and non-linear material properties, performed a mesh refinement to deterimine mininam mesh-size/nodes. Lastly, I have performed simulations for multiple pressures and made a plot with the elongation. I have fitted a polynomial to capture the strain of the robot in y-direction for a first approximation. 
+The elongation stiffness has been fit using an $\verb+fmincon.m+$, the graph and explanation is written in that specific subsection.
+
+I have made a script in which the rotational FEM experiments can be loaded in. The top plates angle, and y-z coordinate of the end-effector is extracted from this data. This will be used as input to the IK model. We have discussed about formulating the inverse kinematics as an optimization problem to fit to the FEM data. However, it turns out that the IK solution, without optimization, already yields very satisfactory results for only a singular shape function (constant curvature approach). We should therefore discuss whether or not if an optimization script is deemed necessary. Looking at these first results, this optimization might only succeed in finding some very small improvements to the model.
+
+
+
+To discuss
+
+\begin{itemize}
+    \item Is optimization needed to fit IK
+    \item The function $\verb+affine_fit.m+$ gives us a "point-on-plane", however visually this does not match that well. Let's discuss how to adapt that
+\end{itemize}
+
+

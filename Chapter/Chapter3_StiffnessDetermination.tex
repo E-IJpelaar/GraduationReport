@@ -75,19 +75,84 @@ Now the material parameters and minimum mesh size has been determined, the longi
 
 \begin{figure}[H]
     \centering
-    \includegraphics{Figures/Chapter3/pvsy.eps}
-    \caption{Elongation in $y$-direction for simulated pressures (blue) and a fifth order polynomial fit}
+    \includegraphics{Figures/Chapter3/pvselongatoin.eps}
+    \caption{Pressure as function of elongation in $y$-direction for simulated pressures (blue) and a hyper-elastic model fit.}
     \label{fig3:pvsy}
 \end{figure}
 
+\todo{Jacobian for determining coefficients is ill-conditioned. More measurements needed? Other way of finding coefficients}
 
-The elongation in $y$-direction can be described by function of pressure in $kPa$ as follows,
+Assuming a hyper-elastic stiffness model \cite{Caasenbrood2020StiffnessModel}, the stiffness as function of elongation can be formulated as,
 
 
 \begin{equation}
-    \epsilon(p) = 
-    \begin{cases}
-    1.75\cdot10^{-8}p^5	-5.34\cdot10^{-6}p^4 + 6.34\cdot^10^{-4}p^3	-3.81\cdot^{-2}p^2	1.45p	+0.13,& \text{for} \hspace{5pt} 0 \leq p \leq 100\\
-    \text{undefined},              & \text{otherwise}
-\end{cases}
+    k(\epsilon) =  100041 + 99959 [\tanh({1.25 \epsilon})^2 -1]
 \end{equation}
+
+
+
+
+\subsection{Pressure Mapping}
+
+The developed non-linear model has force input $\tau$. However, inputs that are applied to the robotic system are pressures $p$. Therefore, are mapping $p \mapsto \tau(p)$ has to be obtained. Most straightforward would be calculating force by $F = \frac{p}{A}$. To this end, the inner surface area of the bellows are determined as this is where the pressure effectively is applied on. The red marked areas in Figure \ref{fig4:bellowarea} show the area on which the pressure acts for cut body. The surface area of a single red disc is $282.77 mm^2$, each bellow has 8 ``wave like" shapes and a top and a bottom side. Therefore the total surface area is found to be equal to $9048.64 mm^2$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{Figures/Chapter3/area.png}
+    \caption{The red areas indicated the estimated area on which the pressure acts in y-direction}
+    \label{fig4:bellowarea}
+\end{figure}
+
+This results in the following pressure mapping,
+
+\begin{equation}
+    \tau(p) = pA = 9048.64\cdot 10^{-6}p
+\end{equation}
+
+A bellow pressure of 80 $kPa$ will therefore result in a force of $724 N$. (Which is way to high, considering the flexibility when I held in my hands, a force of 7.24 Newton would be more on its place I think). Another way to find a pressure mapping is to introduce an effective surface area $A_{eff}$ which can be determined by attaching masses to the robot and measure elongation.
+
+
+
+\subsection{Rotational stiffness determination}
+
+In order to determine rotational stiffness of the robot, one bellow is inflated whilst the other bellow is not pressurized. Due to symmetry properties the rotational stiffness is assumed to be equal for both rotations. Figure (\ref{fig4:undeformed}) and (\ref{fig4:deformed}) show the undeformed and deformed soft robot for a single bellow pressure of 60 kPa. 
+
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.6\linewidth]{Figures/Chapter3/singlesideundeformed60kPa.png}
+  \captionof{figure}{Undeformed}
+  \label{fig4:undeformed}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.65\linewidth]{Figures/Chapter3/singlesideddeformed60kPa.png}
+  \captionof{figure}{Deformed, applying 60kPa on the left bellow}
+  \label{fig4:deformed}
+\end{minipage}
+\end{figure}
+
+In order to decouple elongation stiffness and rotational stiffness, post processing is necessary. This is done by extracting the nodes of interest, which are situated along the centre line of the robot. Tracking these nodes results in a cluster of nodes. This clusters of nodes can be used to fit the inverse kinematic model, as is done in Figure (\ref{fig4:midnodesfit}). In this way elongation and rotation can be separated in modal coordinates. Since the elongation stiffness is know, the rotational stiffness can be isolated. This has not succeeded yet.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.6\textwidth]{Figures/Chapter3/kinfit.png}
+    \caption{Node clusters from FEM simulation and the fitted inverse kinematic solution}
+    \label{fig4:midnodesfit}
+\end{figure}
+
+The inverse kinematic solution provides the generalized coordinates $q$ so the rotational and elongation contribution can be separated. At this point, this process still needs to be automated, now the fitting is done by hand. Additionally, a method still needs to found to decouple $K_{\theta}$ and $K_{yy}$.
+
+
+
+
+
+
+
+\subsection{Data extraction from Abaqus/CAE and Post-processing in Matlab}
+
+
+To be written
