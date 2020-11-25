@@ -1,24 +1,25 @@
-In an attempt to create a model based controller that can be applied to the soft robotic actuator, the developed non-linear model should first be validated. This is done by using a planar 2 degree-of-freedom soft robot. This robot has a translational and rotational degree of freedom. Rotation is only dependent on the difference in bellow length, not absolute bellow length. To measure rotation, an Inertial Measurement Unit (IMU) is connected at the tip of the robot. The position of the bellows can be tracked with a camera set-up. From this data, elongation and curvature of each individual bellow can extracted. Being able to measure/determine both degrees-of-freedom allows us to validate the dynamic model.
+
+To develop a suitable model based controller, the developed non-linear model should first be validate. This is done using a planar 2 degree-of-freedom soft robot. This robot has a translational and rotational degree of freedom. Rotation is only dependent on the difference in bellow length, not absolute bellow length. To measure rotation, an Inertial Measurement Unit (IMU) is connected at the tip of the robot. The position of the bellows can be tracked with an optical tracking system. From this data, elongation and curvature of each individual bellow can extracted. This allows validation of the dynamic model.
 
 \section{Model validation for the planar soft actuator}
 
-\subsection{Forward kinematics of the planar robot}
+\subsection{Forward kinematics}
 
-To describe the configuration space of the soft robot, it is regarded as a continuous deformable structure with infinite degrees of freedom.
-A model that describes the configuration space of the soft robotic manipulator as a function of space and time was formulated in \cite{Caasenbrood2020}. The model is based on a one-dimensional Cosserat beam together with geometrically exact beam theories proposed in \cite{Simo1986}.
+The forward kinematics of the robot manipulator are derived by using the model formulated in \cite{Caasenbrood2020}. Here, the soft robotic manipulator is regarded as a continuous deformable structure with infinite degrees of freedom. A one-dimensional Cosserat beam model is used to describe the configuration space of the robot. This one-dimensional beam can be regarded as curve through the centre of the robot in longitudinal direction. This curve describes the configuration of the soft robot as a function of space and time. 
 
-Consider a spatial coordinate $\sigma \in \mathbb{X}$ within the bounded domain $\mathbb{X} \in [0,l] \subset \mathbb{R}$, and a temporal coordinate $t \in  \mathbb{T}$ with $\mathbb{T} \subseteq \mathbb{R}$. Given these notations, position $p(\sigma,t) \in \mathbb{R}^3$ and rotation matrix $R(\sigma,t) \in \mathbb{SO}(3)$ can be given for any point $\sigma$ and instance $t$ on the continuous backbone of the soft manipulator by,
+Consider a spatial coordinate $\sigma \in \mathbb{X}$ within the bounded domain $\mathbb{X} \in [0,l] \subset \mathbb{R}$, and a temporal coordinate $t \in  \mathbb{T}$ with $\mathbb{T} \subseteq \mathbb{R}$. This allows to describe the position $p(\sigma,t) \in \mathbb{R}^3$ and rotation $R(\sigma,t) \in \mathbb{SO}(3)$ 
+for any point $\sigma$ and instance $t$ of the centre of the soft manipulator by,
+
 
 \begin{equation}
-    g(\sigma,t) := \begin{pmatrix}  R(\sigma,t) & p(\sigma,t) \\ 0_3^\top & 1 \end{pmatrix} \in \mathbb{SE}(3)
+    g(\sigma,t) := \begin{pmatrix}  R(\sigma,t) & p(\sigma,t) \\ 0_3^\top & 1 \end{pmatrix} \in \mathbb{SE}(3),
     \label{eq2:g}
 \end{equation}
 
-where $\mathbb{SE}(3)$ is the Lie group of rigid body transformations in $\mathbb{R}^3$ \cite{Sola2018}. Since function $g$ is space and time variant, changes in space and time can be captured by two vector fields in the Lie algebra $\mathfrak{se}(3)$. Partial derivatives $\partial (.)/\partial(\sigma)$ and $\partial (.)/\partial(t)$ will be denoted by a `prime' and `dot' for position and time, respectively. The partial derivative with respect to time of (\ref{eq2:g}) results in the time-twist field described by,
-
+where $\mathbb{SE}(3)$ is the Lie group of rigid body transformations in $\mathbb{R}^3$ \cite{Sola2018}. The partial derivatives of $g$ can be described by two vector fields in the Lie algebra $\mathfrak{se}(3)$. Here $\partial (.)/\partial(\sigma)$ and $\partial (.)/\partial(t)$ will be denoted by a `prime' and `dot' for position and time, respectively. The partial derivative with respect to time of (\ref{eq2:g}) results in the time-twist field as described by,
 
 \begin{equation}
-    \frac{\partial g}{\partial t} = \dot{g} = g\hat{\eta} \Longrightarrow \hat{\eta} := g^{-1}\dot{g} = \begin{pmatrix} \Omega_\times & V \\ 0_3^\top & 0 \end{pmatrix} \in  \mathfrak{se}(3)
+    \frac{\partial g}{\partial t} = \dot{g} = g\hat{\eta} \Longrightarrow \hat{\eta} := g^{-1}\dot{g} = \begin{pmatrix} \Omega_\times & V \\ 0_3^\top & 0 \end{pmatrix} \in  \mathfrak{se}(3),
     \label{eq2:dotg}
 \end{equation}
 
@@ -26,34 +27,37 @@ where $\Omega = (\omega_1,\omega_2,\omega_3)^\top$ and $V = (v_1,v_2,v_3)^\top$ 
 
 
 \begin{equation}
-   \frac{\partial g}{\partial \sigma} =  g' = g\hat{\xi} \Longrightarrow \hat{\xi} := g^{-1}g' = \begin{pmatrix} K_\times & E \\ 0_3^\top & 0 \end{pmatrix} \in  \mathfrak{se}(3)
+   \frac{\partial g}{\partial \sigma} =  g' = g\hat{\xi} \Longrightarrow \hat{\xi} := g^{-1}g' = \begin{pmatrix} K_\times & E \\ 0_3^\top & 0 \end{pmatrix} \in  \mathfrak{se}(3),
     \label{eq2:gaccent}
 \end{equation}
 
-in which $K = (k_1,k_2,k_3)^\top$ and $E = (\epsilon_1,\epsilon_2,\epsilon_3)^\top$ represent vectors containing the curvature-torsion strain and stretch-shear strain, respectively. Likewise, vector field $\xi(\sigma,t)$ describes an infinitesimal local transformation by a frame at time instance $t$ between infinitesimally small $\sigma$ and $\sigma+\Delta \sigma$. Because $\mathfrak{se}(3) \cong \mathbb{R}^6$ and with mapping $\eta \mapsto \hat{\eta}$, (\ref{eq2:dotg}) and (\ref{eq2:gaccent}) can be formulated as a column vector in $\mathbb{R}^6$ as
+in which $K = (k_1,k_2,k_3)^\top$ and $E = (\epsilon_1,\epsilon_2,\epsilon_3)^\top$ represent vectors containing the curvature-torsion strain and stretch-shear strain, respectively. Likewise, vector field $\xi(\sigma,t)$ describes an infinitesimal local transformation by a frame at time instance $t$ between infinitesimally small $\sigma$ and $\sigma+\Delta \sigma$. Because $\mathfrak{se}(3) \cong \mathbb{R}^6$ and with mapping $\eta \mapsto \hat{\eta}$, (\ref{eq2:dotg}) and (\ref{eq2:gaccent}) can be formulated as a column vector in $\mathbb{R}^6$ as,
 
 
 \begin{equation}
-    \eta(\sigma,t) = \begin{pmatrix} \Omega \\ V \end{pmatrix}; \hspace{20pt} \xi(\sigma,t) = \begin{pmatrix} K \\ E \end{pmatrix}
+    \eta(\sigma,t) = \begin{pmatrix} \Omega \\ V \end{pmatrix}; \hspace{20pt} \xi(\sigma,t) = \begin{pmatrix} K \\ E \end{pmatrix}.
     \label{eq2:etaxi}
 \end{equation}
 
-For solving the forward kinematics only position of the soft robotic manipulator is of interest, hence the following first order partial differential equation (PDE) needs to be solved for spatial coordinate $\sigma$ only,
+
+
+
+For solving the forward kinematics only position of the soft robotic manipulator is of interest. Hence, first order partial differential equation (PDE)
 
 \begin{equation}
-    \frac{\partial g}{\partial \sigma} = g \hat{\xi}
+    \frac{\partial g}{\partial \sigma} = g \hat{\xi},
     \label{eq2:dgdsigma}
 \end{equation}
 
-To solve this PDE, it is transformed to an ordinary differential equation (ODE) which is suitable for controller design. This is done by projecting the infinite-dimensional system onto a subspace of finite dimension which contains basis elements of the expected solution. By reducing the dimensionality of the system, higher order dynamics are not captured in the model, therefore robustness should be taken into account. To transform PDE (\ref{eq2:dgdsigma}), the components of the strain field $\xi := (g^{-1}g')$ are approximated using a finite amount of orthogonal shape functions, as follows
+needs to be solved. To solve this PDE, it is transformed to an ordinary differential equation (ODE) by exploiting the Galerkin reduction method. Here, the infinite dimensional system is projected onto a subspace of finite dimension that contains basis elements of the expected solution. By reducing the dimensionality of the system, higher order dynamics are not captured in the model and thus robustness should be taken into account. To transform PDE (\ref{eq2:dgdsigma}), the components of the strain field $\xi := (g^{-1}g')$ are approximated using a finite amount of shape functions as,
 
 \begin{equation}
     \xi_i(\sigma,t) \cong \sum_{i=1}^N \varphi_i(\sigma)q_i(t) + \xi_{i,0}(\sigma), \hspace{20pt} \forall \sigma \in \mathbb{X}, t \in \mathbb{T}
 \end{equation}
 
-in which, $\xi_{i,0}$ corresponds to the undeformed configuration of the robotic manipulator, $\mathbb{X}$ a spatial set, and time set $\mathbb{T} \subseteq \mathbb{R}$. Additionally, $\{\varphi_i\}_{i \in \mathbb{N}}$ is a set of basis shape functions and $q(t)$ are modal coefficients. These modal coefficients can be thought of as generalized coordinates of the finite-dimensional system. The $n$-th order strain expansion can be formulated as
+in which, $\xi_{i,0}$ corresponds to the undeformed configuration of the robotic manipulator. Additionally, $\{\varphi_i\}_{i \in \mathbb{N}}$ is a set of basis shape functions and $q(t)$ are modal coefficients. These modal coefficients can be thought of as generalized coordinates of the finite-dimensional system. \add{Several shape functions exist that can be used to approximate the solution, such as chebyshev polynomials and legendre polynomials. Each degree of shape-function gives the model a certain amount of flexibility. Therefore increasing the order of shape-functions allows the model to describe more complex robot configurations.}\todo{add more details about shapefunctions} It is important the shape functions are orthogonal which means that $\int_\mathbb{X} \varphi_i \varphi_j d \sigma = 0$ for any $i \neq j$ and non-zero otherwise. Given this, the $n$-th order strain expansion can be formulated as,
 
-%% maybe write about what shape functions were used
+%% maybe write about what shape functions were used, 
 
 \begin{equation}
 \begin{aligned}
@@ -62,7 +66,7 @@ in which, $\xi_{i,0}$ corresponds to the undeformed configuration of the robotic
     \vdots    & \ddots & \vdots    & \ddots    & \vdots & \ddots & \vdots \\
     0         & \dots  & 0         & \dots     & \varphi_1(\sigma) & \dots & \varphi_N (\sigma)
     \end{pmatrix}}_{\Phi(\sigma)} \begin{pmatrix} q_1(t) \\ \vdots \\ q_n(t) \end{pmatrix} +  \begin{pmatrix} \xi_{1,0} \\ \vdots \\ \xi_{n,0}   \end{pmatrix}
-    \end{aligned}
+    \end{aligned},
 \label{eq2:xishape}
 \end{equation}
 
@@ -85,26 +89,28 @@ where $Q$ is the quaternion representation of rotation matrix $R$, and $R(Q)$ a 
     \label{eq2:AK}
 \end{equation}
 
-where $K_i$ correspond to the entries of $xi(\sigma,t)$ shown in Equation (\ref{eq2:etaxi}). In Equation \ref{eq2:Qp} and \ref{eq2:AK} the dependency of $\sigma$ and $t$ has been omitted for the sake of readability.
+where $K_i$ correspond to the entries of $\xi(\sigma,t)$ shown in Equation (\ref{eq2:etaxi}). In Equation \ref{eq2:Qp} and \ref{eq2:AK} the dependency of $\sigma$ and $t$ has been omitted for the sake of readability.
 
-\subsection{Inverse kinematics of the planar robot}
+\subsection{Inverse kinematics}
 
-The developed forward kinematic model can be used for determining the inverse kinematics of the planar robot. This is done by a Jacobian search method. In essence, a desired position and orientation of the robot's end-effector is given. The Jacobian inverse technique is used to find the modal coordinates $q(t)$ mapping to desired end-effector position $x_d = [x,z,\theta]^\top$. For the forward kinematics the following can be stated,
+The developed forward kinematic model can be used for determining the inverse kinematics of the planar robot. This is done by a Jacobian search method. In essence, a desired position and orientation of the robot's end-effector is given. The Jacobian inverse technique is used to find the modal coordinates $q(t)$ mapping to desired end-effector position $x_d = [x,y]^\top$. For the forward kinematics the following can be stated,
 
 \begin{equation}
     x = f(q)
 \end{equation}
 
-where, $x \in \mathbb{R}^n$ is the position and orientation vector of the end-effector. For the planar robot $n = 3$, as two translations and one coupled rotation can be achieved. Modal coordinates are stored in vector $q \in \mathbb{R}^m$, which can take any size. Lastly, $f$ a function which describes the forward kinematics performing $x \mapsto q$. For the inverse kinematic problem we aim to find,
+where, $x \in \mathbb{R}^n$ is the position and orientation vector of the end-effector. For the planar robot $n = 3$, as two translations and one coupled rotation can be achieved. Modal coordinates are stored in vector $q \in \mathbb{R}^m$, which can take any size. Lastly, $f$ a function which describes the forward kinematics performing $x \mapsto q$. The inverse kinematic problem aims to find,
 
 \begin{equation}
     q = f^{-1}(x)
+    \label{eq2:q}
 \end{equation}
 
 The modal coordinates corresponding to the desired end-effector position and orientation can be found by using the inverse jacobian method, with the updating scheme as,
 
 \begin{equation}
     q_{k+1} = q_k + \alpha J^\dagger \beta e_k \hspace{20pt} \text{with} \hspace{10pt}  e_k = x_d - x_k
+    \label{eq2:qupdate}
 \end{equation}
 
 where $q_k$ are the modal coordinates at iteration $k$, $\alpha$ a learning gain used to enhance fast convergence $\beta$ is a diagonal matrix used to prioritize desired end-effector coordinates. In our case, the position in the $x-y$ plane is more important than the orientation $\theta$. Lastly, $J^\dagger$ is an adapted form of the damped Moore–Penrose pseudo inverse defined as,
@@ -118,6 +124,7 @@ In this equation $w$ is a diagonal weighing matrix used to prioritize modal coor
 
 \begin{equation}
 \eta(\sigma,t) = Ad_{g^{-1}(\sigma = l)} \int_{0}^{\sigma} Ad_g B_a \Phi(\sigma) d\sigma \dot{q} := J\dot{q}
+\label{eq2:J}
 \end{equation}
 
 where $J(\sigma,q) \in \mathbb{R}^{6 \times n}$ is the jacobian matrix mapping modal velocities to the time-twist field, and $Ad_g$ is defined as the adjoint mapping found by,
@@ -125,51 +132,34 @@ where $J(\sigma,q) \in \mathbb{R}^{6 \times n}$ is the jacobian matrix mapping m
 
 \begin{equation}
     Ad_g = \begin{pmatrix} R & 0 \\ \hat{r}R & R \end{pmatrix}
+    \label{eq2:Adg}
 \end{equation}
 
 in which, $R$ is the rotation matrix at space instant $\sigma$, and $\hat{r}$ a 3x3 skew-symmetric matrix for which holds that $\hat{r}V = r \times V$ for any $V \in \mathbb{R}^3$ \cite{Boyer2019}.
 
-Based on above equation an algorithm is formulated to obtain the inverse kinematics based on an initial guess $q_0$ as follows,
+An algorithm capable of finding a inverse kinematic solution is created based on Equation (\ref{eq2:q}) - (\ref{eq2:Adg}). The algorithm is initiated with a desired end-effector position $x_d$ and guess for modal coordinates $q_0$. Furthermore, the amount of shape functions used to approximate the end-effector position is user defined. This results in
+\todo{ cite source on pseudo inverse and inverse jacobian technique},
 
 
-\todo{finish algorithm, cite source on pseudo inverse and inverse jacobian technique}
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Numerical Inverse Kinematics}
-
 \begin{algorithmic}[1]
-\State q $\leftarrow$ $q_0$ \Comment{Initial condtion}
-\Procedure{$|| x_k - x_d || > \epsilon$}{}      \Comment{While error is larger than some $\epsilon$}
-    \State $x_k$ = $f(q_k)$
-    \State Read the value 
-    \If{$condition = True$}
-        \State Do this
-        \If{$Condition \geq 1$}
-        \State Do that
-        \ElsIf{$Condition \neq 5$}
-        \State Do another
-        \State Do that as well
-        \Else
-        \State Do otherwise
-        \EndIf
-    \EndIf
-
-    \While{$something \not= 0$}  \Comment{put some comments here}
-        \State $var1 \leftarrow var2$  \Comment{another comment}
-        \State $var3 \leftarrow var4$
-    \EndWhile 
+\State $q$ $\leftarrow$ $q_0$ \Comment{Initial condition}
+\While{$|| x_d - x_k || > \epsilon$}{}      \Comment{While error is larger than some $\epsilon$}
+    \State $x_k$ $\leftarrow$ $f(q_k)$  \Comment{Position at current generalized coordinate}
+     \State $e_k$ $\leftarrow$ $x_k - x_d$ \Comment{Current error}
+        \For{$0:\Delta \sigma:L$}
+            \State $J_{\sigma}$ $\leftarrow$  $J_{\sigma}$ + $Ad_{g(\Delta \sigma)} B_a \Phi(\Delta \sigma)$ \Comment{Numerical integration over length L}
+        \EndFor
+    \State \textbf{end}
+    \State $J$ $\leftarrow$ $Ad_{g^{-1},\sigma=L}$ $J_{\sigma}$ \Comment{Compute Jacobian}
+    \State $J^{\dagger}$ $\leftarrow$  $w$ $J^{\top}$ $(J^\top w J - \rho \mathbb{I}_6)^{-1}$ \Comment{Calculate pseudo inverse}
+    \State $q_{k+1}$  $\leftarrow$ $q_{k}$ + $\alpha$ $J^{\dagger} \beta e_k$ \Comment{Update generalized coordinates}
+\EndWhile 
+\State \textbf{end}
     \label{alg2:numericalinverse}
-\EndProcedure
-
 \end{algorithmic}
 \end{algorithm}
-
-
-
-
-
-
-
-
 
 
 
