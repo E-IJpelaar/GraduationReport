@@ -1,0 +1,68 @@
+\textbf{Questions/Remarks}
+\begin{itemize}
+\item We should once again discuss your ODE method, I understand how it works by now. But I am not yet sure if your model and mine solve it correctly. 
+\item I have implemented an ODE45 and a Heun's integratation scheme, both converge to the same result as long as $d\sigma$ is chosen sufficiently small (e.g. $\approx L_0/50$). 
+\item Work of this week is rather unsatisfactory from my point of view. I had trouble picking up the work again, and immediately "being stuck". Hopefully next week will result in more progress.
+\end{itemize}
+
+\section{ODE solving method}
+
+I will try to describe the problem I am currently facing, by explaining 2 methods the ODE can be solved. The problem boils down to the solving of the $Ad_{g(\sigma)^{-1}}$ before the integral. To obtain the end-effector Jacobian we should multiply the integral with $Ad_{g(\sigma = L_0)^{-1}}$. Instead, what happens now is that we multiply by $Ad_{g(\sigma = \sigma)^{-1}}$ instead.
+
+Consider,
+
+\begin{equation}
+    J = Ad_{g(\sigma)^{-1}} \underbrace{\int_0^{L_0} Ad_{g(\sigma)} B_a \Phi(\sigma) d\sigma}_{\Tilde{J}}
+\end{equation}
+
+And,
+
+\begin{equation}
+    M(q) = \int_0^{L_0} J^\top \mathcal{M}(\sigma) J d \sigma
+\end{equation}
+
+where $\mathcal{M}$ is $\text{diag}[J_1\hspace{2pt},J_2\hspace{2pt},J_3\hspace{2pt},\rho\hspace{2pt},\rho \hspace{2pt},\rho]$. Here, $J_i$ are the moments of inertia and $\rho$ the line density.
+
+\clearpage
+\textbf{Method 1}
+
+The method as presented by you and in your C++ script. Which solves,
+
+\begin{equation}
+    \Tilde{J} = \int_0^{L_0} Ad_{g(\sigma)} B_a \Phi(\sigma) d\sigma
+\end{equation}
+
+simultaneously with the rewritten equation,
+
+\begin{equation}
+    M(q) = \int_0^{L_0} (Ad_{g(\sigma = \sigma)^{-1}} \Tilde{J})^\top \mathcal{M}(\sigma) (Ad_{g(\sigma = \sigma)^{-1}} \Tilde{J}) d \sigma
+\end{equation}
+
+Using this method allows to obtain an expression for $M(q)$ by a single ODE function. Here we multiply $\Tilde{J}$ by the Lie adjoint inverse at $\sigma = \sigma$ ($Ad_{g(\sigma = \sigma)^{-1}}$). The thought here is that since we are solving a double integral on the same domain. The adjoint inverse can be solved along with the mass matrix, combining everything to a single ODE. However, as far as I understood it correctly we want to solve the following:
+
+\textbf{Method 2}
+
+We first solve $\Tilde{J}$ by solving this equation,
+
+\begin{equation}
+    \Tilde{J} = \int_0^{L_0} Ad_{g(\sigma)} B_a \Phi(\sigma) d\sigma
+\end{equation}
+
+Now we have solved this, we have an expression for $g$ on domain $[0,L_0]$. This allows us to calculate the Lie adjoint inverse for $g = L_0$ ($Ad_{g(\sigma = L_0)^{-1}}$). In the second ode we solve
+
+\begin{equation}
+    M(q) = \int_0^{L_0} (Ad_{g(\sigma = L_0)^{-1}} \Tilde{J})^\top \mathcal{M}(\sigma) (Ad_{g(\sigma = L_0)^{-1}} \Tilde{J}) d \sigma
+\end{equation}
+
+Method 2 needs 2 ode functions in order to come to an answer, since $g$ at $L_0$ needs to be known first. In method 1 we multiply $\Tilde{J}$ with the actual $\sigma$ not $\sigma = L_0$.
+
+Implementing both methods in Matlab give the following mass matrices
+
+\begin{equation}
+    \text{method 1} = \begin{bmatrix} 0.4492 & 0 \\ 0 & 0.0005 \end{bmatrix} \cdot 10^{-4}  \hspace{10pt}      \text{method 2} = \begin{bmatrix} 0.1248 & 0 \\ 0 & 0.0001 \end{bmatrix} \cdot 10^{-3}
+\end{equation}
+
+which differ one order from each other.
+
+
+

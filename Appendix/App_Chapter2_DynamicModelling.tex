@@ -1,0 +1,66 @@
+\subsection{Inverse kinematics}
+
+\hl{This subsection is not definite. 2 inverse kinematic scripts have been created. One in which only end-effector position $[x,y]$ is given. One where also the orientation is added $[x,y,\theta]$ . For only a single shape-function approximation (constant curvature approach), will find the shortest path. However, when increasing the amount of shape functions, both models will not come with the most shortest path. Therefore, the inverse kinematics as described here has not been used extensively.}
+
+
+Inverse kinematics allows to map the desired end-effector position to the corresponding modal coordinates. To determine this inverse mapping the Jacobian search method is exploited \cite{JacobianInverse}. Essentially, a desired position and orientation of the robot's end-effector is given. The derived forward kinematics can be regarded as,
+
+\begin{equation}
+    x = f(q),
+\end{equation}
+
+where, $x \in \mathbb{R}^n$ is the position and orientation vector of the end-effector. For the planar robot $n = 3$, as two translations and one coupled rotation can be achieved. Here, $f$ represents the forward kinematics mapping the modal coordinate $q \in \mathbb{R}^m$ to the end-effector position. Where $m$ depends on amount of shape functions used to desribe a given strain. The inverse kinematic problem aims to find a mapping $q\mapsto x$. This mapping is obtained by exploiting the inverse jacobian method according to an iterative updating scheme as,
+
+\begin{equation}
+    q_{k+1} = q_k + \alpha J^\dagger Q e_k \hspace{20pt} \text{with} \hspace{10pt}  e_k = x_d - x_k,
+    \label{eq2:qupdate}
+\end{equation}
+
+where $q_k$ is modal coordinate vector at iteration $k$, $\alpha > 0$ a learning gain to enhance fast convergence $Q \in \mathbb{R}^{n\times n}$ is a diagonal matrix used to prioritize desired end-effector coordinates. In our case, the position is prioritized over the orientation. Lastly, $J^\dagger$ is an adapted form of the damped Moore–Penrose pseudo inverse defined as,
+
+\begin{equation}
+    J^\dagger = WJ^\top(JWJ^\top + \rho^2 I)^{-1}
+    \label{eq2:pseudoinverse},
+\end{equation}
+
+where $W \in \mathbb{R}^{m\times m}$ is a diagonal weighing matrix that can be used to stress lower order shape functions. Put in other words, the algorithm aims to achieve the same error norm while prioritizing modal coordinates belonging to lower order shape functions. This can be used to decide on the amount of shape functions used in approximation. The factor $\rho^2 I \in \mathbb{R}^{6 \times 6}$ is introduced to avoid singularities of the jacobian matrix $J \in \mathbb{R}^{6 \times m}$. The Jacobian at each increment is determined with the following equation \cite{Caasenbrood2020},
+
+\begin{equation}
+J(\sigma,q)= \text{Ad}_{g^{-1}(\sigma = l)} \int_{0}^{\sigma} \text{Ad}_g B_a \Phi(\sigma) d\sigma ,
+\label{eq2:J}
+\end{equation}
+
+where, $\text{Ad}_g$ is defined as the adjoint mapping found by,
+
+
+\begin{equation}
+    Ad_g = \begin{pmatrix} R & 0 \\ \hat{r}R & R \end{pmatrix},
+    \label{eq2:Adg}
+\end{equation}
+
+in which, $R$ is the rotation matrix at space instant $\sigma$, and $\hat{r}$ a 3x3 skew-symmetric matrix for which holds that $\hat{r}V = r \times V$ for any $V \in \mathbb{R}^3$ \cite{Boyer2019}.
+
+An algorithm capable of finding a inverse kinematic solution is created based on Equation (\ref{eq2:qupdate}) - (\ref{eq2:Adg}). The algorithm is initiated with a desired end-effector position $x_d$ and guess for modal coordinates $q_0$. Furthermore, the amount of shape functions used to approximate the end-effector position is user defined. This results in,
+
+
+\begin{algorithm}[H]
+\caption{Numerical Inverse Kinematics}
+\begin{algorithmic}[1]
+\State $q$ $\leftarrow$ $q_0$ \Comment{Initial condition}
+\While{$|| x_d - x_k || > \epsilon$}{}      \Comment{While error is larger than some $\epsilon$}
+    \State $x_k$ $\leftarrow$ $f(q_k)$  \Comment{Position at current generalized coordinate}
+     \State $e_k$ $\leftarrow$ $x_k - x_d$ \Comment{Current error}
+        \For{$0:\Delta \sigma:L$}
+            \State $J_{\sigma}$ $\leftarrow$  $J_{\sigma}$ + $Ad_{g(\Delta \sigma)} B_a \Phi(\Delta \sigma)$ \Comment{Numerical integration over length L}
+        \EndFor
+    \State \textbf{end}
+    \State $J$ $\leftarrow$ $Ad_{g^{-1},\sigma=L}$ $J_{\sigma}$ \Comment{Compute Jacobian}
+    \State $J^{\dagger}$ $\leftarrow$  $w$ $J^{\top}$ $(J^\top w J - \rho \mathbb{I}_6)^{-1}$ \Comment{Calculate pseudo inverse}
+    \State $q_{k+1}$  $\leftarrow$ $q_{k}$ + $\alpha$ $J^{\dagger} \beta e_k$ \Comment{Update generalized coordinates}
+\EndWhile 
+\State \textbf{end}
+    \label{alg2:numericalinverse}
+\end{algorithmic}
+\end{algorithm}
+
+
