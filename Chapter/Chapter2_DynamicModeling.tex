@@ -1,4 +1,4 @@
-This chapter explains the dynamic model derivation of the soft robotic manipulator. Forward kinematics describe the robots configuration for a given set of initial conditions. These derived forward kinematics allows to derive a dynamic model 
+This chapter explains the dynamic model derivation of the soft robotic manipulator. Forward kinematics describe the robots configuration for a given set of initial conditions. These derived forward kinematics allow to derive a dynamic model. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,7 +41,7 @@ As mentioned, our modelling approach distinguishes itself from the constant curv
     \label{eq2:g}
 \end{equation}
 
-where $\mathbb{SE}(3)$ is the Lie group of rigid body transformations in $\mathbb{R}^3$ \cite{Sola2018}. The forward kinematic problem can be found by differentiating (\ref{eq2:g}) with respect to position. This results in the following partial differential equation (PDE), 
+where $\mathbb{SE}(3)$ is the Lie group of rigid body transformations in $\mathbb{R}^3$ \cite{Sola2018}. Essentially, function $g(\sigma,t)$ expresses stretch-strain in a local frame at $\sigma$. The forward kinematic problem can be found by differentiating (\ref{eq2:g}) with respect to position. This results in the following partial differential equation (PDE), 
 
 
 \begin{equation}
@@ -54,19 +54,27 @@ where $\hat{\xi}$ is the space-twist field. Here, $K_\times$ is a skew-symmetric
 To solve the PDE in (\ref{eq2:dgdsigma}), it transformed to an ordinary differential equation (ODE) by exploiting the Galerkin reduction method \cite{Galerkin}. Here, the infinite dimensional system is projected onto a subspace of finite dimension that contains basis elements of the expected solution. By reducing the dimensionality of the system, higher order dynamics are not captured in the model and thus robustness should be taken into account. To transform PDE (\ref{eq2:dgdsigma}), the components of the strain field $\xi(\sigma,t)$ are approximated using a finite amount of shape functions as,
 
 \begin{equation}
-    \xi_i(\sigma,t) \approx \sum_{i=1}^N \varphi_i(\sigma)q_i(t) + \xi_{i,0}(\sigma), \hspace{20pt} \forall \sigma \in \mathbb{X}, t \in \mathbb{T},
+    \xi_i(\sigma,t) \approx \sum_{i=0}^N \varphi_i(\sigma)q_i(t) + \xi_{i,0}(\sigma), \hspace{20pt} \forall \sigma \in \mathbb{X}, t \in \mathbb{T},
 \end{equation}
 
-in which, $\xi_{i,0}$ corresponds to the undeformed configuration of the robotic manipulator. Additionally, $\{\varphi_i\}_{i \in \mathbb{N}}$ is a set of basis shape functions and $q(t)$ are modal coefficients. These modal coefficients can be thought of as generalized coordinates of the finite-dimensional system. To be clear on this reduction method, integer $N$ is the amount of shape functions used to estimate strain field $\xi(\sigma,t)$. Hence, index $i$ represents the order of the shape function. Several shape functions exist that can be used to approximate the solution. Chebyshev polynomials and Legendre polynomials are a few of those \cite{Galerkin}. Each degree of shape-function gives the model a certain amount of flexibility. Therefore increasing the order of shape-functions allows the model to describe more complex robot configurations. To avoid coupling between shape functions,  it is important that these shape functions are orthogonal. This means that $\int_\mathbb{X} \varphi_i \varphi_j d \sigma = 0$ for any $i \neq j$ and non-zero otherwise. Given this, the $n$-th order strain expansion can be formulated as,
+in which, $\xi_{i,0}$ corresponds to the undeformed configuration of the robotic manipulator. Additionally, $\{\varphi_i\}_{i \in \mathbb{N}}$ is a set of basis shape functions and $q(t)$ are modal coefficients. These modal coefficients can be thought of as generalized coordinates of the finite-dimensional system. To be clear on this reduction method, integer $N$ is the amount of shape functions used to estimate strain field $\xi(\sigma,t)$. Hence, index $i$ represents the order of the shape function. Multiple types shape function polynomials exist to approximate strain \cite{Galerkin}. The Chebyshev polynomial, Polynomial and Legendre polynomials are respectively given by,
+
+\begin{equation}
+    \varphi_{i,cheby}(\sigma) = \cos(i \sigma), \hspace{40pt} \varphi_{i,poly} = \sigma^i, \hspace{40pt} \varphi_{i,legend} = \frac{1}{2^i i!} \frac{d^i}{d\sigma^i}(\sigma^2-1)^i.
+    \label{eq2:shapefunction}
+\end{equation}
+
+
+Each degree of shape-function gives the model a certain amount of flexibility. Therefore increasing the order of shape-functions allows the model to describe more complex robot configurations. To avoid coupling between shape functions,  it is important that these shape functions are orthogonal. This means that $\int_\mathbb{X} \varphi_i \varphi_j d \sigma = 0$ for any $i \neq j$ and non-zero otherwise. Given this, the $n$-th order strain expansion can be formulated as,
 
 %% maybe write about what shape functions were used, 
 
 \begin{equation}
 \begin{aligned}
-    \xi(\sigma,t) \cong & \hspace{5pt}  (B_a \otimes [ \varphi_1 \dots \varphi_N ])q(t)\\ = &  \underbrace{ \begin{pmatrix}
+    \xi(\sigma,t) \cong & \hspace{5pt}  (B_a \otimes [ \varphi_0 \dots \varphi_N ])q(t)\\ = &  \underbrace{ \begin{pmatrix}
     \varphi_1(\sigma) & \dots  & \varphi_N(\sigma) & \dots     & 0      & \dots  &  0 \\
     \vdots    & \ddots & \vdots    & \ddots    & \vdots & \ddots & \vdots \\
-    0         & \dots  & 0         & \dots     & \varphi_1(\sigma) & \dots & \varphi_N (\sigma)
+    0         & \dots  & 0         & \dots     & \varphi_0(\sigma) & \dots & \varphi_N (\sigma)
     \end{pmatrix}}_{\Phi(\sigma)} \begin{pmatrix} q_1(t) \\ \vdots \\ q_n(t) \end{pmatrix} +  \begin{pmatrix} \xi_{1,0} \\ \vdots \\ \xi_{n,0}   \end{pmatrix}
     \end{aligned},
 \label{eq2:xishape}
@@ -81,11 +89,17 @@ where $\Phi \in \mathbb{R}^{m \times n}$ is a shape function matrix in which $n$
     \end{bmatrix}^\top
 \end{equation}
 
-as is has one free curvature-torsion strain and one stretch-shear strain, This implies that $m = 2$. The amount of shape functions used to approximate a strain affects the value of $n$. Approximating the two strains with a single shape functions gives $n = 2$. 
+as is has one free curvature-torsion strain and one stretch-shear strain, This implies that $m = 2$. The amount of shape functions used to approximate a strain affects the value of $n$. Approximating the two strains with a single shape ($i=0$) gives $n = 2$. Furthermore, the undeformed configuration $\xi_{i,0}$ is given by,
 
-It should be emphasized that when using a single shape function this Cosserat model reduces to the constant curvature model. In this case the modal coordinates $q(t)$ will be equal to $\kappa$ and $\epsilon$, respectively. 
+\begin{equation}
+    \xi_{i,0} = \begin{bmatrix}  0 & 0 & 0 & 1 & 0 & 0 \end{bmatrix}^\top, 
+\end{equation}
 
-The forward kinematic problem is programmed in Matlab. Given modal coordinates $q(t)$ and initial conditions at $\sigma = 0$, the actuator position can be calculated. To reduce computation time, the rotation matrix in (\ref{eq2:g}) is reformulated using quaternion formulation \cite{Boyer2019}. This allows to express any rotation by a vector of length 4, instead of 3 by 3 matrix. Therefore $g(\sigma,t)$ can significantly be reduced from 16 entries, to only 7 entries when using quaternion formulation. Any rotation matrix $R(\sigma,t)$ can be rewritten to quaternions by,
+and implies that the actuator has an initial length in $\epsilon_1$. direction.
+
+It should be emphasized that when using a single shape function this Cosserat model reduces to the constant curvature model. As can be seen from (\ref{eq2:shapefunction}), all shape functions yield 1 for $i=0$. In this case the modal coordinates $q(t)$ will be equal to $\kappa$ and $\epsilon$, respectively. 
+
+The forward kinematic problem of (\ref{eq2:dgdsigma}) is programmed in \MATLAB \cite{MATLAB2020}. Given modal coordinates $q(t)$ and initial conditions at $\sigma = 0$, the actuator position can be calculated. To reduce computation time, the rotation matrix in (\ref{eq2:g}) is reformulated using quaternion formulation \cite{Boyer2019}. This allows to express any rotation by a vector of length 4, instead of 3 by 3 matrix. Therefore $g(\sigma,t)$ can significantly be reduced from 16 entries, to only 7 entries when using quaternion formulation. Any rotation matrix $R(\sigma,t)$ can be rewritten to quaternions by,
 
 
 \begin{equation}
@@ -103,6 +117,20 @@ where $Q \in \mathbb{R}^4$ is the quaternion representation of rotation matrix $
 
 where $K_i$ correspond to the entries of $\xi(\sigma,t)$ shown in (\ref{eq2:dgdsigma}). In  (\ref{eq2:Qp}) and (\ref{eq2:AK}) the dependency of $\sigma$ and $t$ has been omitted for the sake of readability.
 
+Figure (\ref{fig1:forward_kinematic}) shows the result of the forward kinematic model for a first order approximation. The initial position is obtained for zero curvature and elongation. Here it can be seen that the initial length of the actuator is 64.5 mm. To obtain the deformed modal coordinate $q$ was chosen equal to $[-17,0.1]^\top$. 
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.7\textwidth]{Figures/Chapter2/fkin1701.eps}
+    \caption{Initial position and deformed position for a first order shape function approximation of the kinematic model.}
+    \label{fig1:forward_kinematic}
+\end{figure}
+
+Besides a forward kinematic model, a numerical inverse kinematic solver was programmed. This allows to define a position in planar Cartesian coordinates. The algorithm will minimize the distance between the desired end-effector position and reachable end-effector position given an amount of shape functions. It shows the model's flexibility when using multiple shape functions. The algorithm is further detailed in Appendix \ref{app:chap2}. 
+
+\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -110,10 +138,10 @@ where $K_i$ correspond to the entries of $\xi(\sigma,t)$ shown in (\ref{eq2:dgds
 
 \section{Dynamic Modelling}
 
-Our goal is to develop a dynamic model that can be applied for real-time control. Therefore it should be computationally low, while capturing the basic dynamic behaviour. As a first approximation, the behaviour of the soft-robotic actuator is viewed as a non-linear mass-spring-damper system. To this end, an analytical expression for the non-linear mass matrix is derived. Furthermore, damping and non-linear stiffness matrices are introduced.
 
+To study the dynamic behaviour of the soft actuator a dynamic model is created. A relatively simple approximation is used to get insight of the basic dynamics of the actuator. In this we propose a non-linear mass-spring-damper model. The developed model incorporates non-linear mass and non-linear stiffness matrix in an effort to increase model accuracy. The system is approximated by a first order shape function. In this section an analytical expression for the mass matrix is provided. Additionally damping and stiffness matrices are provided. For which the entries are determined in Chapter \ref{chap3}.
 
-Previous section describes the kinematics of the soft manipulator. In formulating the forward kinematic problem we differentiated backbone curve $g(\sigma,t)$ with respect to $\sigma$. Here, the time dependency of the backbone curve was neglected. For deriving the dynamics of the actuator it is necessary to regard the temporal derivative as,
+Previous section described the kinematics of the soft manipulator. In formulating the forward kinematic problem backbone curve $g(\sigma,t)$ is differentiated with respect to spatial variable $\sigma$. Here, the time dependency of the backbone curve was omitted. In deriving the dynamics of the actuator it is necessary to regard the temporal derivative as,
 
 
 \begin{equation}
@@ -121,25 +149,29 @@ Previous section describes the kinematics of the soft manipulator. In formulatin
     \label{eq2:dgdt}
 \end{equation}
 
-which describes the time-twist field. Here, $\Omega_\times$ is a skew-symmetric matrix expressing angular velocity, and vector $V = (v_1,v_2,v_3)^\top $ contains linear velocities. Therefore, $\eta$ effectively describes velocities among the backbone curve. Again, the skew-symmetric matrix $\Omega_\times$ can be represented as a vector $\Omega = [\omega_1,\omega_2,\omega_3]^\top$ \cite{Sola2018}. These velocities are stored in vector $\eta(\sigma,t) = [\Omega \hspace{5pt} V]^\top$.
+which describes the time-twist field in a local frame at $\sigma$. Here, $\Omega_\times$ is a skew-symmetric matrix expressing angular velocity, and vector $V = (v_1,v_2,v_3)^\top $ contains linear velocities. Therefore, $\eta$ effectively describes velocities among the backbone curve. Again, the skew-symmetric matrix $\Omega_\times$ can be represented as a vector $\Omega = [\omega_1,\omega_2,\omega_3]^\top$ \cite{Sola2018}. These velocities are stored in vector $\eta(\sigma,t) = [\Omega \hspace{5pt} V]^\top$.
 
-A similar expression for $\eta(\sigma,t)$ can be found based on the geometric Jacobian and model coordinate velocities \cite{Boyer2019} \cite{Caasenbrood2020}. Without going into further detail on its derivation, this expression is,
+
+A similar expression for $\eta(\sigma,t)$ can be found based on the geometric Jacobian and model coordinate velocities \cite{Boyer2019} \cite{Caasenbrood2020}. This allows to map modal coordinate position to Cartesian coordinates. The Jacobian derivation is based on the principle of mixed partials, and is detailed in \cite{Caasenbrood2020}. Without showing this derivation, the expression is found to be,
 
 \begin{equation}
-    \eta(\sigma,t) = \underbrace{\text{Ad}_{g^{-1}} \int_0^{L_0} \text{Ad}_{g} B_a \Phi(\sigma) d \sigma}_{J(\sigma)} \dot{q}
+    \eta(\sigma,t) = \underbrace{\text{Ad}_{g^{-1}} \int_0^{\sigma} \text{Ad}_{g} B_a \Phi(\sigma) d \sigma}_{J(\sigma)} \dot{q}
     \label{eq2:J}
 \end{equation}
 
-where $\text{Ad}_g \in \mathbb{R}^{6 \times 6}$ and $\text{Ad}_{g^{-1}}  \in \mathbb{R}^{6 \times 6}$ are the adjoint and inverse adjoint mapping of $g$, respectively \cite{Sola2018}. Domain $\sigma$ is bounded by undeformed actuator length $L_0$, since elongation effects are deemed small. The geometric Jacobian $J \in \mathbb{R}^{6\times n}$ maps modal coordinate velocity to linear and angular velocities among the backbone curve. This results in a Jacobian matrix which is non-linear with respect to position. 
+where $\text{Ad}_g \in \mathbb{R}^{6 \times 6}$ and $\text{Ad}_{g^{-1}}  \in \mathbb{R}^{6 \times 6}$ are the adjoint and inverse adjoint mapping of $g$, respectively \cite{Sola2018}. As mentioned function $g(\sigma,t)$ expresses stress-strain behaviour in a local frame. The adjoint action can be viewed as a mapping from local frame to ground frame ($\sigma$ = 0) or end-effector frame $\sigma = L$. Domain $\sigma$ is bounded by undeformed actuator length $L_0$, as the effect of elongation on the Jacobian is deemed small. Furthermore, $\Dot{q}$ are modal coordinate velocities. 
 
-This expression for velocity allows to formulate a the kinetic energy of the actuator as function on modal coordinates as,
+The geometric Jacobian $J \in \mathbb{R}^{6\times n}$ maps modal coordinate velocity to linear and angular velocities among the backbone curve. This results in a Jacobian matrix which is non-linear with respect to position. 
+
+Based on the Lagrangian method used to describe the soft actuator's  dynamics in \cite{Caasenbrood2020}. An expression for the modal coordinate velocity allows a formulation of the total kinetic energy of the actuator. This kinetic energy is given by, 
 
 \begin{equation}
-    \mathcal{T} = \frac{1}{2}\int_0^{L_0} \eta(\sigma,t)^\top \mathcal{M} \eta(\sigma,t) d \sigma 
+    \mathcal{T} = \frac{1}{2}\int_0^{\sigma} \eta(\sigma,t)^\top \mathcal{M} \eta(\sigma,t) d \sigma 
     \label{eq2:T}
 \end{equation}
 
-where $\mathcal{M} \in \mathbb{R}^{6\times6}$ is a diagonal mass matrix. Since mass properties are assigned to the 1 dimensional backbone curve, the discretized mass is equal to the line density. This approximation holds when the backbone curve is discretized well enough. The inertial properties are estimated by viewing each discretized slice as a solid cuboid. Hence, the mass matrix is,
+where $\mathcal{M} \in \mathbb{R}^{6\times6}$ is a diagonal mass matrix. Up to this point, the system has been viewed as a 1 dimensional backbone curve. To this curve mass properties are assigned. By discretizing this curve we can assign mass properties to this infinitesimal part based on the actuators geometry. To this end, the inertial properties are estimated by viewing each discretized slice as a solid cuboid. Hence, the mass matrix is,
+\hl{add a figure of this discretization}
 
 \begin{equation}
     \mathcal{M} = \begin{pmatrix} \frac{1}{12}\rho (w^2 + d^2) & 0 & 0 & 0 & 0 & 0 \\
@@ -150,20 +182,48 @@ where $\mathcal{M} \in \mathbb{R}^{6\times6}$ is a diagonal mass matrix. Since m
                                   0 & 0 & 0 & 0 & 0 & \rho \end{pmatrix}\hspace{5pt} \text{with} \hspace{5pt} \rho = \frac{m_{tot}}{L_0}
 \end{equation} 
 
-where $m_{tot}$ is the total mass of the actuator. Parameters $w$,$d$ and $h$ the width,depth and height of the discretized cuboid, respectively. Substitution of (\ref{eq2:J}) into (\ref{eq2:T}) results in an expression for the non-linear mass matrix as,
+
+
+
+where $m_{tot}$ is the total mass of the actuator. Parameters $w$,$d$ and $h$ the width,depth and height of the discretized cuboid, respectively. The first three diagonal entries relate to curvature of the actuator. The last three entries relate to linear movement.
+
+
+Substitution of (\ref{eq2:J}) into (\ref{eq2:T}) results in an expression for the non-linear mass matrix as,
 
 
 \begin{equation}
-    M(q) = \int_0^{L_0} J(\sigma)^\top \mathcal{M}(\sigma)J(\sigma) d \sigma.
+    M(q) = \int_0^{\sigma} J(\sigma)^\top \mathcal{M}(\sigma)J(\sigma) d \sigma.
 \end{equation}
 
 
-We assume that damping properties are linear and can be estimated from experiments. Furthermore, it is assumed the material proprieties of the actuator behave non-linear. The simplified actuator dynamics can therefore be described by,
+\hl{include the derivation of this based on PDE of the continuous dynamics as in Caasenbrood Thesis} \cite{Caasenbrood2020} 
+
+Now an expression for the mass matrix based on modal coordinates is obtained, we can postulate the model describing the dynamics of the soft actuator. To this, we assume linear damping properties. Furthermore it is known that the material of which the actuator is composed behaves non-linearly. Therefore a non-linear stiffness matrix is introduced. The actuator dynamics that are obtained are then given by,
 
 \begin{equation}
-    M(q)\Ddot{q} + D\dot{q} + K(q)q = u \hspace{10pt} \text{with} \hspace{10pt} u = Hp
+    M(q)\Ddot{q} + D\dot{q} + K(q)q = \tau  hspace{10pt} \text{with} \hspace{10pt} \tau = Hp
+    \label{eq2:simp_model}
 \end{equation}
 
-where $D \in \mathbb{R}^{2 \times 2}$ and $K(q) \in \mathbb{R}^{2 \times 2}$ are damping and non-linear stiffness matrix, respectively. Since the experimental set-up allows for pressure control, a mapping matrix $H \in \mathbb{R}^{2\times2}$ is necessary. This matrix maps input pressure $p \in \mathbb{R}^2$ to force and torque input vector $u \in \mathbb{R}^2$. The determination the damping, stiffness and mapping matrix are elucidated in the Chapter \ref{chap3}.
+where $D \in \mathbb{R}^{2 \times 2}$ and $K(q) \in \mathbb{R}^{2 \times 2}$ are damping and non-linear stiffness matrix, respectively. Vector $\tau \in \mathbb{R}^2$ describes the input moment and force causing curvature and elongation, respectively. The experimental set-up allows for pressure regulation, a to be determined mapping matrix $H \in \mathbb{R}^{2\times2}$ is introduced. This matrix maps input pressure $p \in \mathbb{R}^2$ to force and torque input vector $\tau$. Chapter \ref{chap3} elucidates on the determination of the stiffness parameters and force mapping. Furthermore, system parameters will be presented to calculate the mass matrix. Damping properties will be chosen intuitively and are presented when simulation results are shown.
 
 
+
+% hspace{10pt} \text{with} \hspace{10pt} u = Hp
+
+%Since the experimental set-up allows for pressure control, a mapping matrix $H \in \mathbb{R}^{2\times2}$ is necessary. This matrix maps input pressure $p \in \mathbb{R}^2$ to force and torque input vector $u \in \mathbb{R}^2$.
+
+
+%As mentioned, the work of \cite{Caasenbrood2020} describes the %actuator dynamics based on a Lagrangian formulation. This includes the derivation of the Coriolis and gravitational effects. Here the Coriolis effects are described by,
+
+%\begin{equation}
+%    C(q,\dot{q}) = \int_0^\sigma J^\top(\mathcal{M})\Dot{J} + J^\top(\mathcal{M}\text{ad}_\eta - \text{ad}_\eta^\top \mathcal{M})J d \sigma,
+%\end{equation}
+
+%where $\Dot{J}$ represents the time derivative of the Jacobian matrix. Furthermore, $\text{ad}_\eta$ represents the adjoint action of velocity vector $\eta$. Additionally gravitational effects are captured by,
+
+%\begin{equation}
+%    g(q) = \int_0^\sigma J^\top \mathcal{M} \text{Ad}_{g^{-1}} a_z d\sigma
+%\end{equation}
+
+%where $a_z \in \mathbb{R}^6$ is a matrix representing the gravitational acceleration. Therefore $a_z = [0,0,0,-9.81,0,0]^\top$.

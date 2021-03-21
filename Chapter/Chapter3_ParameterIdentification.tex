@@ -1,13 +1,14 @@
 \label{chap3}
 
-This chapter details the parameter identification of the soft robotic actuator. First, material properties and dimensions of the soft robotic manipulator are provided. Then, determination of actuator stiffness is explained. Consequently, pressure to force input mapping is explained. Lastly, estimation of the damping parameters are detailed.
+This chapter details the parameter identification of the soft robotic actuator. First, material properties and dimensions of the soft robotic manipulator are provided. Then, determination of actuator stiffness is explained. Consequently, pressure to force input mapping is explained. At this point it should be emphasized that during experimental analysis the soft actuator, on which this parameter study is based, was too porous. This allowed too much air to escape and therefore was not suitable for further use. Therefore, the methodology of acquiring stiffness data and pressure mapping should be valued instead of found parameters. 
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Actuator parameters}
 
-Parameter identification is necessary for the development of the dynamic model. Actuator mass and dimensions were presented in an earlier work \cite{berkers}. Since the robotic manipulator is manufactured by an external company, some material properties are classified. To our best knowledge, the Young's Modulus and Poisson ratio are equal to those presented in Table (\ref{tab4:parameters}). These properties allow to calculate shear modulus $\mu$ as $\frac{E}{2(1+\nu)}$ and bulk modulus $\kappa$ as $\frac{E}{3(1-2\nu)}$. It is assumed that the robotic manipulator deforms non-linearly following Neo-Hookeon behaviour \cite{Caasenbrood2020StiffnessModel}. For consistency with linear elasticity these moduli are reformulated as $C_{10} = \frac{\mu}{2}$ and $D_{1} = \frac{2}{\kappa}$ as used for Finite Element Analysis (FEA) \cite{neohookean}.
+Parameter identification is necessary for model simulation as well as experimental validation. Key actuator parameters such as actuator mass and dimensions were presented in an earlier work \cite{berkers}. Since the robotic manipulator is manufactured by an external company, some material properties are classified. To our best knowledge, the Young's Modulus and Poisson ratio are equal to those presented in Table (\ref{tab4:parameters}). These properties allow to calculate shear modulus $\mu$ as $\frac{E}{2(1+\nu)}$ and bulk modulus $\kappa$ as $\frac{E}{3(1-2\nu)}$. It is assumed that the robotic manipulator deforms non-linearly following Neo-Hookeon behaviour \cite{Caasenbrood2020StiffnessModel}. For consistency with linear elasticity these moduli are reformulated as $C_{10} = \frac{\mu}{2}$ and $D_{1} = \frac{2}{\kappa}$ as used for Finite Element Analysis (FEA) \cite{neohookean}. 
 
 
 \begin{table}[H]
@@ -30,18 +31,25 @@ Parameter identification is necessary for the development of the dynamic model. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Finite Element Analysis (FEA)}
+
+In an effort to determine stiffness properties, finite element software \verb+Abaqus/CAE+ is used. Various loads can be applied to the computer model of the soft actuator. By studying the deformation induced by the loads, stiffness properties can be approximated. Figure () shows the model in the finite element software. In the analysis, the bottom plate of the actuator will be constrained in all directions of motion and rotation. Furthermore, the out-of-plane motion of the actuator is not considered since the body is symmetric, and applied loads act perpendicular to this motion. A mesh refinement analysis has been done to determine an accurate mesh size, see Appendix \ref{app:chap3}. For determining the stiffness properties gravitational effects are omitted. An elongation and curvature analysis of the robot manipulator is considered. These help to obtain elongation and rotation stiffness, respectively. The results of the FEA are further processed in Matlab. The process of acquiring nodal information from \verb+Abaqus/CAE+ is further elucidated in Appendix \ref{app:chap3}. The post-processing of this data in Matlab is explained in Section \ref{sec3:KinematicModelFit}  \todo{write appendix on data post processing}
+
+
+
 \section{Input mapping}
 \label{sec3:InputMapping}
 
-Stiffness is the ratio between applied force and elongation. To determine  stiffness for elongation and curvature, applied forces and direction of deformation is necessary. For the physical set-up, individual bellow pressure $p_i \in \mathbb{R}^{\geq 0}$ with $i$ $\mathbb{N} \in \{1,2\}$ can be regulated. However, the control input in the dynamic model is force $F \in \mathbb{R}$ and moment $M \in \mathbb{R}$. Therefore, $H \in \mathbb{R}^{2 \times 2}$ is necessary to perform mapping $p \mapsto F$ and $p \mapsto M$ as,
+Stiffness is the ratio between applied force and elongation. To determine  stiffness for elongation and curvature, applied forces and direction of deformation is necessary. For the physical set-up, individual bellow pressure $p_i \in \mathbb{R}^{\geq 0}$ with $i$ $\mathbb{N} \in \{1,2\}$ can be regulated. Therefore force input vector $\tau$ is mapped to pressure by some mapping matrix $H \in \mathbb{R}^{2 \times 2}$. The relation between force input and control input is given as, 
 
 \begin{equation}
-     \begin{bmatrix} F \\ M \end{bmatrix}     = \underbrace{\begin{bmatrix}  a_1 & a_2 \\ a_3 & a_4 \end{bmatrix}}_{H}         \begin{bmatrix}  p_1 \\ p_2 \end{bmatrix}, \label{eq3:H}
+   \tau =   \begin{bmatrix} M \\ F \end{bmatrix}     = \underbrace{\begin{bmatrix}  a_1 & a_2 \\ a_3 & a_4 \end{bmatrix}}_{H}         \begin{bmatrix}  p_1 \\ p_2 \end{bmatrix}, \label{eq3:H}
 \end{equation}
 
-where entries of $H$ are to be determined. Our aim is to decouple rotation and elongation. Therefore, it is important to understand that $F$ causes elongation of the soft robotic actuator. Whereas, $M$ results in a curvature of the actuator. Therefore, the entries of $a_1$ and $a_2$ represent an effective surface area on which the pressure acts. Constant $a_3$ and $a_4$ represent a combination of effective surface area and lever on which the force acts. Due to symmetry properties it must hold that $a_1 = a_2$ and $a_3 = -a_4$.
+where entries of $H$ are to be determined. Our aim is to decouple rotation and elongation. Therefore, it is important to understand that $F$ causes elongation of the soft robotic actuator. Whereas, $M$ results in a curvature of the actuator. Therefore, the entries of $a_3$ and $a_4$ represent an effective surface area on which the pressure acts. Constant $a_1$ and $a_2$ represent a combination of effective surface area and lever on which the force acts. Due to symmetry properties it must hold that $a_1 = a_3$ and $a_1 = -a_2$.
 
-First, the relation between pressure and force tried to be obtained. This will be done by using the finite element software again. The idea is to map pressure to force by using elongation. Pressurizing both bellows equally, resulted in almost ``pure" elongation. Effectively, the same result can be achieved by applying an equally distributed force on the top plate of the actuator. To this end, simulations for a set of forces applied to the top of actuator are simulated. The results for this simulation are presented in Figure (\ref{fig3:forcemap}). The horizontal axis show the modal coordinates, determined using the inverse kinematic fit as discussed previously. The contribution to the curvature is for both pressure and force simulation is again small. The scaling of the of the vertical axis already reveals that a linear relation can be found.
+First, the relation between pressure and force tried to be obtained. This will be done by using finite element software as mentioned. The idea is to map pressure to force by using elongation. Pressurizing both bellows equally, resulted in almost ``pure" elongation. Effectively, the same result can be achieved by applying an equally distributed force on the top plate of the actuator. To this end, simulations for a set of forces applied to the top of actuator are simulated. The results for this simulation are presented in Figure (\ref{fig3:forcemap}). The horizontal axis show the modal coordinates, determined using the inverse kinematic fit as discussed previously. The contribution to the curvature is for both pressure and force simulation is again small. The scaling of the of the vertical axis already reveals that a linear relation can be found.
 
 
 \begin{figure}[H]
@@ -69,12 +77,13 @@ The linear mapping coefficient, can be found by solving least squares problem as
 \label{eq3:forcefitting}
 \end{equation}
 
-were $i$ indicated each sample point. The effective pressure area is found to be equal to 0.1462. Since $a_1 = a_2$ the mapping of pressure in kilo Pascals and force in Newton is obtained. Figure (\ref{fig3:forcetopressure}) shows the results of the input mapping for the elongation. It can be seen that the pressure maps fairly accurate to the force.
+were $i$ indicated each sample point. The effective pressure area is found to be equal to 0.1462. Since $a_3 = a_4$ the mapping of pressure in kPa and force in Newton is obtained. Figure (\ref{fig3:forcetopressure}) shows the results of the input mapping for the elongation. It can be seen that the pressure maps fairly accurate to the force.
 
-Now the effective pressure area has been determined, the mapping to the moment can be calculated. It is assumed that the force acts on the top plate at a given radius form the backbone curve. The measured lever on which the force acts is equal to 12.56 mm. This allows to calculate $a_3$ and $a_4$by multiplying $a_1$ with this distance. The mapping matrix $H$ then follows as,
+Now the effective pressure area has been determined, the mapping to the moment can be calculated. It is assumed that the force acts on the top plate at a given radius form the backbone curve. The measured lever on which the force acts is equal to 12.56 mm. This allows to calculate $a_1$ and $a_2$ by multiplying $a_3$ with this distance. The mapping matrix $H$ then follows as,
 
 \begin{equation}
-    H =  \begin{bmatrix} 0.14526 & 0.14526 \\1.8245e-3 & -1.8245e-3\end{bmatrix}  
+    H =  \begin{bmatrix} 1.8245e-3 & -1.8245e-3 \\
+    0.14526 & 0.14526\end{bmatrix}  
 \end{equation}
 
 
@@ -83,104 +92,9 @@ Now the effective pressure area has been determined, the mapping to the moment c
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Stiffness properties}
-
-The force mapping and the inverse kinematic fit to the FEA can be used to determine the elongation and curvature stiffness. A non-linear trend in elongation and curvature as function of pressure was already observed. Therefore, it is assumed that the stiffness can be captured by the hyper-elastic stiffness model as formulated in \cite{Caasenbrood2020StiffnessModel}. This non-linear stiffness model poses that stiffness $k(q_i) \in \mathbb{R}^{\geq 0}$ and meets condition $\underbar{$k$} < k(q_i) < \Bar{k}$. The model used to describe elongation is described by,
-
-\begin{equation}
-    K_\epsilon(\alpha,q_\epsilon) =  \alpha_1 + \alpha_2 [\tanh({\alpha_3 \epsilon})^2 -1]
-\end{equation}
-
-
-where $\alpha_i$ and  for $i \in \{1,2,3\} $ are positive stiffness parameters to be found. It is assumed that negative pressures, e.g. creating a vacuum, result in equal elongation yet in opposite direction. Hence, self contact of the bellows is neglected. This assumption is deemed valid as this situation will not occur with the current set-up. These parameters can be found by solving the non linear constraint optimisation described by,
-
-
-\begin{equation}
-\begin{aligned}
-\min_{\alpha_1,\alpha_2,\alpha_3} \hspace{5pt} \sum_{i=1}^{N}(F_i -  (\alpha_1 + \alpha_2 [\tanh({\alpha_3 \epsilon_i})^2 -1])\epsilon_i)^2    \\ 
-\text{s.t.} \hspace{5pt} \alpha_1 > \alpha_2 > 0 \\
-\alpha_3 > 0 \\ 
-\label{eq3:Keopt}
-\end{aligned}
-\end{equation}
-
-which objective is to minimize the the sum of the errors between the mapped force, and force resulting from the stiffness model. As for the elongation stiffness, the curvature stiffness can be characterized by,
-
-\begin{equation}
-    K_\kappa(\beta,q_\kappa) =  \beta_1 + \beta_2 [\tanh({\beta_3 \kappa})^2 -1]
-\end{equation}
-
-
-where $\beta_i$ for $i \in \{1,2,3\} $ are positive stiffness parameters to be found. These parameters can be found by solving,
-
-\begin{equation}
-\begin{aligned}
-\min_{\beta_1,\beta_2,\beta_3} \hspace{5pt} \sum_{i=1}^{N}(M_i -  (\beta_1 + \beta_2 [\tanh({\beta_3 {\kappa_i}})^2 -1]){\kappa_i})^2    \\ 
-\text{s.t.} \hspace{5pt} \beta_1 > \beta_2 > 0 \\
-\beta_3 > 0 \\ 
-\label{eq3:Kkopt}
-\end{aligned}
-\end{equation}
 
 
 
-where the objective is to minimize the sum of errors between the mapped moment Solving the optimization problems described in (\ref{eq3:Keopt}) and (\ref{eq3:Kkopt}) result in the stiffness parameters as presented in Table (\ref{tab3:stiffnessparameters})
-
-\begin{table}[H]
-    \centering
-        \caption{Parameters for hyper-stiffness model.}
-\begin{tabular}{|c|c|c|c|} \hline
-            &  $i = $ 1      &    $i = $    2   &  $i = $ 3  \\ \hline
-   $\alpha_i \hspace{2pt}[N]$    &    1.3936e+3    & 1.3776e+3    & 2.7865e-1 \\ \hline
-   $\beta_i \hspace{2pt}  [Nm^2] $     &  3.0322 & 3.0309    &  3.3755e-3\\ \hline
-\end{tabular}
-    \label{tab3:stiffnessparameters}
-\end{table}
-
-Figure (\ref{fig3:elongvsforce}) shows the result of solving the regression problem of (\ref{eq3:Keopt})
-
-
-\begin{figure}[H]
-    \centering
-\begin{minipage}{0.5\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{Figures/Chapter3/mappedforcevselongation.eps}
-        \caption{Fitted stiffness model for elongation.}
-        \label{fig3:elongvsforce}
-    \end{minipage}\hfill
-    \begin{minipage}{0.5\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{Figures/Chapter3/mappedmomentvscurvature.eps} 
-        \caption{Fitted stiffness model for curvature.}
-        \label{fig3:curvsmoment}
-    \end{minipage}
-\end{figure}
-
-\todo{coupling is neglected}
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Damping properties}
-
-
-
-
-
-
-
-
-
-
-
-\section{Finite Element Analysis (FEA)}
-
-In an effort to determine stiffness properties, finite element software
-\verb+Abaqus/CAE+ is used.Various loads can be applied to the computer model of the soft actuator. By studying the deformation induced by the loads, stiffness properties can be approximated. Figure () shows the model in the finite element software. In the analysis, the bottom plate of the actuator will be constrained in all directions of motion and rotation. Furthermore, the out-of-plane motion of the actuator is not considered since the body is symmetric, and applied loads act perpendicular to this motion. A mesh refinement analysis has been done to determine an accurate mesh size, see Appendix \ref{app:chap3}. For determining the stiffness properties gravitational effects are omitted. An elongation and curvature analysis of the robot manipulator is considered. These help to obtain elongation and rotation stiffness, respectively. The results of the FEA are further processed in Matlab. The process of acquiring nodal information from \verb+Abaqus/CAE+ is further elucidated in Appendix \ref{app:chap3}. The post-processing of this data in Matlab is explained in Section \ref{sec3:KinematicModelFit}  \todo{write appendix on data post processing}
 
 
 
@@ -295,11 +209,163 @@ Figure (\ref{fig3:nodalfitelong}) and (\ref{fig3:nodalfitcurv}) show the result 
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
-\section{Input mapping}
+\section{Stiffness properties}
+
+The force mapping and the inverse kinematic fit to the FEA can be used to determine the elongation and curvature stiffness. A non-linear trend in elongation and curvature as function of pressure was already observed. Therefore, it is assumed that the stiffness can be captured by the hyper-elastic stiffness model as formulated in \cite{Caasenbrood2020StiffnessModel}. This non-linear stiffness model poses that stiffness $k(q_i) \in \mathbb{R}^{\geq 0}$ and meets condition $\underbar{$k$} < k(q_i) < \Bar{k}$. The model used to describe elongation is described by,
+
+\begin{equation}
+    K_\epsilon(\alpha,q_\epsilon) =  \alpha_1 + \alpha_2 [\tanh({\alpha_3 \epsilon})^2 -1]
+\end{equation}
+
+
+where $\alpha_i$ and  for $i \in \{1,2,3\} $ are positive stiffness parameters to be found. It is assumed that negative pressures, e.g. creating a vacuum, result in equal elongation yet in opposite direction. Hence, self contact of the bellows is neglected. This assumption is deemed valid as this situation will not occur with the current set-up. These parameters can be found by solving the non linear constraint optimisation described by,
+
+
+\begin{equation}
+\begin{aligned}
+\min_{\alpha_1,\alpha_2,\alpha_3} \hspace{5pt} \sum_{i=1}^{N}(F_i -  (\alpha_1 + \alpha_2 [\tanh({\alpha_3 \epsilon_i})^2 -1])\epsilon_i)^2    \\ 
+\text{s.t.} \hspace{5pt} \alpha_1 > \alpha_2 > 0 \\
+\alpha_3 > 0 \\ 
+\label{eq3:Keopt}
+\end{aligned}
+\end{equation}
+
+which objective is to minimize the the sum of the errors between the mapped force, and force resulting from the stiffness model. As for the elongation stiffness, the curvature stiffness can be characterized by,
+
+\begin{equation}
+    K_\kappa(\beta,q_\kappa) =  \beta_1 + \beta_2 [\tanh({\beta_3 \kappa})^2 -1]
+\end{equation}
+
+
+where $\beta_i$ for $i \in \{1,2,3\} $ are positive stiffness parameters to be found. These parameters can be found by solving,
+
+\begin{equation}
+\begin{aligned}
+\min_{\beta_1,\beta_2,\beta_3} \hspace{5pt} \sum_{i=1}^{N}(M_i -  (\beta_1 + \beta_2 [\tanh({\beta_3 {\kappa_i}})^2 -1]){\kappa_i})^2    \\ 
+\text{s.t.} \hspace{5pt} \beta_1 > \beta_2 > 0 \\
+\beta_3 > 0 \\ 
+\label{eq3:Kkopt}
+\end{aligned}
+\end{equation}
+
+
+
+where the objective is to minimize the sum of errors between the mapped moment Solving the optimization problems described in (\ref{eq3:Keopt}) and (\ref{eq3:Kkopt}) result in the stiffness parameters as presented in Table (\ref{tab3:stiffnessparameters})
+
+\begin{table}[H]
+    \centering
+        \caption{Parameters for hyper-stiffness model.}
+\begin{tabular}{|c|c|c|c|} \hline
+            &  $i = $ 1      &    $i = $    2   &  $i = $ 3  \\ \hline
+   $\alpha_i \hspace{2pt}[N]$    &    1.3936e+3    & 1.3776e+3    & 2.7865e-1 \\ \hline
+   $\beta_i \hspace{2pt}  [Nm^2] $     &  3.0322 & 3.0309    &  3.3755e-3\\ \hline
+\end{tabular}
+    \label{tab3:stiffnessparameters}
+\end{table}
+
+Figure (\ref{fig3:elongvsforce}) shows the result of solving the regression problem of (\ref{eq3:Keopt})
+
+
+\begin{figure}[H]
+    \centering
+\begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/Chapter3/mappedforcevselongation.eps}
+        \caption{Fitted stiffness model for elongation.}
+        \label{fig3:elongvsforce}
+    \end{minipage}\hfill
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/Chapter3/mappedmomentvscurvature.eps} 
+        \caption{Fitted stiffness model for curvature.}
+        \label{fig3:curvsmoment}
+    \end{minipage}
+\end{figure}
+
 
 
 \section{Stiffness results}
+
+\section{Pump Dynamics}
+
+
+In the proposed control architecture, the high level Jacobian controller is accompanied by a lower level pressure controller. The reference pressure is determined by the Jacobian controller by some force to pressure mapping. To this end, the pump dynamics need to be determined. Initially, we solely determine the pump dynamics. Using this dynamics will result to poor performance once connected to the soft actuator. To suppress noise levels and provide capture the actual system dynamics the set-up is slightly adapted.
+
+To determine the pump dynamics the pump is connected directly to the pressure sensor using a short flexible silicone hose. The pump is powered by an electric 12V DC motor, and uses membranes to create pressure. The pump characteristics are obtained by observing the systems response for various volt step inputs between 1 and 6 Volt. Although the pumps are able to operate at 12 Volt, only a maximum step input of 6V is possible for this set-up. The pressure sensor measures absolute pressures between 0 and 25 PSI, which is equivalent to a maximum of 172 kPa. Depending on weather conditions, the maximum theoretically measurable pressure is around 72 kPa. However, experiments have shown results up to 80 kPa are possible. The volt input is regulated via pulse width modulation (PWM). Since the Raspberry PI is equipped with a 12bit ADC (analog-digital converter), it is possible calculate the PWM input as, $\textit{PWM} = \frac{2^{12} V}{V_{max}} $, where $V_{max}$ is equal to 12 volt.  The resulting step responses are shown in Figure (\ref{fig1:pump_dynamcis}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.6\textwidth]{Figures/Chapter3/stepresponsdirect16V.eps}
+    \caption{Step response for volt step input between 1V and 6V.}
+    \label{fig1:pump_dynamcis}
+\end{figure}
+
+From Figure (\ref{fig1:pump_dynamcis}) multiple observations can be made. The step response indicates first order system behaviour as the pressure increase is proportional to the actual pressure. However, the steady-state pressure is not proportional to the input volt. The reason for this behaviour is friction. For 1 and 2 volt input static friction dominates, resulting in no to very small pressure increase.
+At 3 volt the transition between dry and kinetic friction is observed. The first order system characteristic becomes more visible, although the pressure response is chattering. Furthermore, we see a rise time of comparable order for step inputs of 4V and above. After around 0.5 seconds the steady-state pressure is reached. For all step inputs oscillations are observed around the steady-state pressure. This phenomena is caused by the fact that there is almost no passive leakage from the small control volume. When the pump valves open and air is pressed into the system the air waves are created. For the step input of 5 volt the valve dynamics can be clearly seen, as the dense red spikes.
+
+An improved pump model can be made by altering the set-up. To this end, the actuator and an air vessel are connected to the system. Previous research showed that adding an air vessel will reduce oscillatory behaviour, at the cost of bandwidth \cite{proper}. The air vessel will increase the control volume of the entire system. When the valves open and additional air is pressed in the system, the relative pressure change is smaller. Additionally, when the actuator expands the relative volume increase will also be smaller. This will cause the system to respond slower to a step input. Furthermore, the maximum achievable pressure is lower. The addition of air vessel and actuator will increase the passive leakage of the system.
+
+For the adapted system the step response is determined for volt steps between 2 and 12 volt. The results are shown in Figure \ref{fig3:pump_dynamics_adapted}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.6\textwidth]{Figures/Chapter3/step212V.eps}
+    \caption{Step response for volt step input between 2V and 12V for the system including air vessel and actuator.}
+    \label{fig3:pump_dynamics_adapted}
+\end{figure}
+
+
+Based on the step responses of Figure (\ref{fig3:pump_dynamics_adapted}) we try to capture the pump dynamics in a model. The time response of a first order linear system responding to a step input is given by, 
+
+\begin{equation}
+    p(t,V) = K(1-e^{-t/\tau})V,
+    \label{eq3:firstordermodel}
+\end{equation}
+
+where $p$ is the pressure at time $t$ in kPa. And constant DC gain $K$ [kPa/V] determines the maximum pressure, time constant $\tau$ [1/s] determines the growth rate of the exponential function. Furthermore, $V$ is the input volt. 
+
+An attempt to fit the linear first order model of (\ref{eq3:firstordermodel}) did not result in an accurate description of the pump dynamics for all step inputs. Therefore an alternative description of the pump dynamics is proposed. In this description constant $K$ is replaced by a nonlinear function $K(V)$. Additionally, a linear function $\tau(V)$ is proposed. 
+
+Based on (\ref{eq3:firstordermodel}) an indication of the gradient between constant $K$ and $V$ can be estimated. The steady-state pressure for each step is estimated by taken the mean over the last 10 seconds of the step response. This pressure is then divided by the corresponding volt input. A similar approach is done for determining time constant $\tau$. For a first order system it can be proven that this time constant is equal to time at which 63\% of the steady state value is reached. The corresponding relations for $K(V)$ and $\tau(V)$ are shown in Figure \ref{fig3:Kest} and Figure \ref{fig3:tauest}, respectively.
+
+\begin{figure}[H]
+\begin{minipage}[b]{0.48\linewidth}
+\centering
+\includegraphics[width=\textwidth]{Figures/Chapter3/Kest.eps}
+\caption{Experimental estimate of `constant' $K$ and fourth order fit.}
+\label{fig3:Kest}
+\end{minipage}
+\begin{minipage}[b]{0.48\linewidth}
+\centering
+\includegraphics[width=\textwidth]{Figures/Chapter3/tauest.eps}
+\caption{Experimental estimate of time `constant' $\tau$ and linear fit.}
+\label{fig3:tauest}
+\end{minipage}
+\end{figure}
+
+Figure (\ref{fig3:Kest}) shows a fourth-order polynomial fit to DC-gain $K$. For this fit all data samples were used. Figure (\ref{fig3:tauest}) shows that the estimated time constants for 2 and 3 volt do not follow linear trend line from 4 volt and above. Therefore, in determining the time `constant' $\tau$, only data point from 4 volt onward are used. A possible explanation for these outliers is the friction acting at these voltage inputs, and are therefore not reliable. Furthermore, from a physical point of view, relating time constant $\tau$ to input $V$ is doubtful. Instead, one would prefer defining $\tau$ based on system parameters. However, from a modelling point of view, this method allows to capture the actual model dynamics fairly accurate.
+
+The obtained measurement fits for $K$ and $\tau$ can be substituted in (\ref{eq3:firstordermodel}) resulting in an expression as,
+
+\begin{equation}
+    p(t,V) = K(V)(1-e^{-t/\tau(V)})V.
+    \label{eq3:firstodernonlinearmodel}
+    \end{equation}
+
+The derived first order model of (\ref{eq3:firstodernonlinearmodel}) can be plotted against the experimental results of Figure (\ref{fig3:pump_dynamics_adapted}), this is shown in Figure (\ref{fig3:expvsfitpres}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Figures/Chapter3/expfit.eps}
+    \caption{Experimental results and the derived nonlinear pressure model.}
+    \label{fig3:expvsfitpres}
+\end{figure}
+
+Above figure shows that the derived model captures the behaviour of the system with actuator and air vessel accurately. The steady-state pressure is close to the experimental value for all volt step inputs. As expected, the rise time for the 1 and 2 volt step inputs are not captured that well by this model.
 

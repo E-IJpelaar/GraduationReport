@@ -34,37 +34,37 @@ Previous section discussed the contrast between rigid robots and soft robots. It
 The work of Thuruthel et al.(2018) \cite{george2018control} presents an overview of recent findings in soft robotic control for pneumatic actuated and tendon-driven soft robots. In this work, three control approaches are distinguished, namely, model-free, hybrid and model-based control. A model free control strategy does not use any kind of kinematic or dynamical description in its control approach. Instead, it exploits learning-based algorithms to dynamically control the robotic system. Hybrid controllers combine learning or empirical elements with a model-based approach. The model-based controllers rely on a analytical description of robotic system. Furthermore, for each control approach, a sub-division between kinematic and dynamical control is made. Here, kinematic control is defined as a zero order input-output relation. A change in input is directly observed in output, therefore this approach is lower-level compared to dynamical control. For the latter, the configuration space and/or task space variables' velocities are used in the control algorithm. 
 
 
-Research conducted on the Bionic Handling Assistant (BHA), as shown in Figure \ref{fig1:softexample}, demonstrates that there is no unique control approach to control BHA. The theory presented in \cite{rolf2013efficient}, used a model-free control approach. Here a data-driven method is used to learn the inverse kinematic model, instead of using an analytically obtained inverse model for control.
-
-Later, a hybrid controller for the BHA was proposed in \cite{reinhart2017hybrid}. In this approach, an inverse kinematic model was used together with a learning model. Previous to this hybrid controller, a model-based controller was implemented on the BHA \cite{mahl2014bhakin}. However, this model-based controller only used a kinematic description of the soft robot. Later, a dynamic controller for the BHA was designed by \cite{falkenhahn2016dynamic}. In its attempt to control the system, a nonlinear length controller based on feedback linearization was used, together with linear PD and feedforward control. 
+Research conducted on the Bionic Handling Assistant (BHA), as shown in Figure \ref{fig1:softexample}, demonstrates that multiple control methods can be applied to the same robot. A model-free control approach was implemented in \cite{rolf2013efficient}. The inverse kinematics of the robot were obtained through machine learning, instead of model-derivation. Later work shows the implementation of a hybrid controller \cite{reinhart2017hybrid}. In this approach, an inverse kinematic model was used together with a learning model. Previous to this hybrid controller, a model-based controller was proposed by \cite{mahl2014bhakin}. However, this model-based controller only used a kinematic description of the soft robot. This research was followed up by \cite{falkenhahn2016dynamic}, which developed a dynamic controller. In this work the system is controlled with a nonlinear length controller based on feedback linearization. This controller was further supported by linear PD and feedforward control. 
 
 In \cite{wang2013visual} visual servo control is used to control a cable-driven soft robotic manipulator. The manipulator, inspired by an octopus' tentacle, is shaped like a cone. On the outer surface of the soft robot four cables are uniformly distributed. These cables are on one end connected to the tip of the manipulator and on the other side connected to pulleys. By winding and unwinding the cables on the pulleys, the end-effector can be positioned in the task space. A kinematic-based visual servo controller is designed, based on linear PD feedback control with gravity compensation. Position sensing is done by a camera mounted at the tip of the robot, and a fixed feature point. Based on this visual information, a jacobian matrix is estimated, which is used in the kinematic controller.
 
-In \cite{zhang2017visual} also visual servo control was implemented to control a tendon-driven soft robotic manipulator. Again, kinematic control is used for a reference tracking problem. Contrary to the previous research, where a jacobian matrix is estimated, here the jacobian is calculated by running a real-time FEM model. A control architecture is set-up in which the reference input is ran through the FEM model, which outputs a jacobian and expected end-effector position. The jacobian is used in the controller to control the actual manipulator. The FEM model's expected end-effector position and actual end-effector position are used in a second controller to enhance jacobian estimation in the FEM model.
+In \cite{zhang2017visual} also visual servo control was implemented to control a tendon-driven soft robotic manipulator. Again, kinematic control is used for a reference tracking problem. Contrary to the previous research, where a jacobian matrix is estimated, here the jacobian is calculated by running a real-time FEM model parallel. A control architecture is set-up in which the reference input is ran through the FEM model, which outputs a jacobian and expected end-effector position. The jacobian is used in the controller to control the actual manipulator. The FEM model's expected end-effector position and actual end-effector position are used in a second controller to enhance jacobian estimation in the FEM model.
 
 A model-based controller that uses a dynamical model in its control loop is presented in \cite{della2020model}. The robots infinite dimensionality is resolved by regarding the robot being composed of six individual actuatable segments. A Piecewise Constant Curvature (PCC) approach was used to describe the kinematics of the robotic actuator. For each segment Denavit-Hartenberg (DH) is used to describe the rigid robot equivalent, which is then used to derive a dynamic model. The proposed controller essentially is a computed torque controller with an additional PD controller. 
 
-In aforementioned work, \cite{della2020model}, the infinite dimensionality of the soft robot is solved by assuming the robot consists of a fixed amount of segments. The robot that we will be developing a controller for theoretically has infinite degrees of freedom too, making it highly under-actuated. In the developed dynamic model \cite{caasenbrood2020} the degrees of freedom are limited by approximating strains with shape functions. The more shape functions used to describe the strain in the robot, the higher accuracy is achieved. However, the physical system will always be under-actuated. Therefore, control theories applied to under-actuated (soft) robots need to be applied in order to develop a model-based controller.
+In aforementioned work, \cite{della2020model}, the infinite dimensionality of the soft robot is solved by assuming the robot consists of a fixed amount of segments. In this way the infinite dimensionality of the system can be approximated by fixed amount of degrees of freedom. This makes controller design easier. Of course, the reduction of degrees of freedom is at the cost of model accuracy. 
 
-In order to design a model-based controller to the under-actuated soft robot, theory presented in \cite{della2019exact} might be of use. This paper provides a theory that allows conversion of specific controllers designed for fully actuated systems, to be used in reduced input cases. To apply this theory, mappings from the task space to the \textit{synergy space} need to be determined. These mappings allows us to use the developed dynamical in the control loop to a higher extend, as more degrees of freedom can be taken into account than strictly can be actuated. 
-
-Inspiration for the model-based controller that we aim to develop is drawn from \cite{spong1996energy}. In this paper an energy based control strategy is presented, applied to classic under-actuated mechanical systems. Our aim is to apply theory that was originally developed for classic robotic control to the field of soft robotics.
-
-The soft robots redundancy gives rise to problems from a control perspective. 
-
-\subsection{Dynamic modelling of soft robots}
 
 
 
 \section{Thesis outline and contribution}
 
+The fundamentals of this research are provided in  \cite{Caasenbrood2020}, which developed a frame work to model the soft robot used in this work \hl{foto robot}. This soft robot also has a theoretical infinite degrees of freedom, as it is composed of flexible polymer. Furthermore it is pneumatically actuated, inducing additional dynamics into the control system, and a major limiting factor on achievable bandwidth. The sensing is done with inertial measurement unit (IMU) and an optical vision sensor. With this work we aim at developing a model-based control strategy for the pneumatically actuator planar soft robot to perform reference tracking problem. 
 
+This thesis has the following structure. In Chapter ...
+
+\hl{chapter 3}
+\hl{chapter 4}
+\hl{chapter 5}
+
+
+Recapitulating, this thesis includes the following:
 
 
 \begin{itemize}
-    \item Validate dynamic model
+    \item Development of a simplified non-linear dynamic model
     \item Parameter estimation
-    \item Build and assemble a 2-link soft-robot set-up with gripper
-    \item Develop a model-based control algorithm
-    \item Validate feedback control
+    \item Create a set-up for the planar soft robot 
+    \item Development of a model-based control law
+    \item Validation of the controller in experiments
 \end{itemize}
