@@ -1,12 +1,3 @@
-This thesis details a control method to perform setpoint regulation for a soft robotic actuator. The proposed method combines classic control theory with additional control methods to fit the purpose of controlling soft robots. This introductory chapter provides context in which this research is performed. First, a detailed description of soft robots is provided. Illustrations of already developed soft robots are included. Furthermore, parallels and differences are drawn between soft robots and classic rigid robots. This helps to understand the need for new control methodologies for solving control problems applied to soft robots. This chapter is concluded by detailing the research outline and its research objectives.
-
-
-\section{Background}
-
-
-
-\subsection{Introduction to soft robotics}
-
 In recent years, the field of soft robotics has received a substantial increase of interest. Soft robots reshape the idea of using robots for industrial processes. Currently, rigid robots dominate the field of industrial automation. As they excel in accuracy, repeatability and load capacity. However, these robots tend to be unsafe to operate in human-centred environments. Classic robots are made from rigid material and accelerate to high velocities, creating a dangerous setting for humans. Additionally, these robots have limited degrees of freedom, making it harder to avoid obstacles. To evade the risks of potential harm, soft robots are made from flexible material. Furthermore, their inherently dexterous structure allows soft robots to move around obstacles. This makes soft robots robust in constantly changing environments. The foundation of soft robotic design is often found in nature. This includes inspiration for material, locomotion, and morphology. A few examples of bio-inspired soft robots include emulated trunks \cite{hannan2003kinematics} inspired by the proboscis of an elephant, robots based on the arm of octopus \cite{wang2013visual}, and robots that replicate the movement of fish \cite{marchese2014}. Figure (\ref{fig1:softexample}) shows a few experimental soft robots. 
 
 
@@ -27,7 +18,7 @@ Robot actuation another major difference between the two robot types. Rigid robo
 
 Lastly, most soft robots do not allow to use conventional sensing mechanisms. For hard robots their joint design allows to incorporate encoders to measure rotation and other sensory devices. As a result, position sensing, and determining the robots kinematic configuration is relatively easy. For soft robots, the compliant and lightweight nature often prevents to integrate conventional sensors, such as encoders, strain gauges and inertial measurement units (IMU's) \cite{Rus2015}, \cite{Lee2017}. Alternative sensory techniques are often needed. These methods include for instance optical sensors and stretch sensors based on macrobend fibres \cite{Sareh2015}.
 
-\subsection{Control of soft robots}
+\section{Control of soft robots}
 
 Previous section discussed the contrast between rigid robots and soft robots. It showed that soft actuators distinct themselves from traditional robots on three fronts. Their inherent soft body leads to a theoretical infinite degree system. Resulting in non-uniqueness of solutions given an end-effector position. The actuation of soft robots introduces additional dynamics caused by the actuators. Furthermore, conventional sensory mechanism can often not be applied to soft robots, and therefore demand more complex sensory devices. These factors all effect the way soft robots can be controlled. Recent literature often tries to convey ready existing control theories and apply those to soft robotics.
 

@@ -1,0 +1,26 @@
+
+This chapter describes the controller design used for setpoint regulation. To this end, a Jacobian controller is implemented with some additional features. The controller as presented here is a variation as the one presented in \cite{MOOSAVIAN20071226}. Furthermore, the control architecture in which the Jacobian controller operates is elucidated. The experimental set-up allows to regulate pressure levels as well. Therefore the high-level Jacobian controller is ran at low bandwidth and supported 
+
+
+
+
+
+
+
+To control the dynamic system a Jacobian controller is proposed. The method implemented uses the Jacobian transposed as presented in . This work shows that a computed torque controller can be approximated by a more straightforward control law involving the Jacobian transpose. This approximation holds if high enough control gains are used. This Jacobian transposed control law is given by,
+
+\begin{equation}
+    \tau = J^\top (K_p e + K_d \dot{e}) \hspace{10pt} \text{with}  \hspace{10pt} \dot{x} = J\dot{q}
+    \label{eq:tau}
+\end{equation}
+
+where $\tau$ is the input force, $J$ the Jacobian matrix as expressed in (\ref{eq2:J}). Furthermore, $K_p \in \mathbb{R}^{2\times 2}$ and $K_d \in \mathbb{R}^{2\times 2}$ are diagonal gain matrices that correct for the error and the error derivative expressed in task space variables, respectively. 
+
+It is our goal to control the end-effector position of the soft robotic manipulator. To this end, Jacobian at the end-effector needs to be known. An expression for the end-effector Jacobian is given in \cite{Boyer2019} as,
+
+\begin{equation}
+    J(\sigma) = \text{Ad}^{-1}_{g(\sigma)} \int_0^\sigma \text{Ad}_g(s) B_a \Phi(s)d\sigma
+\end{equation}
+
+
+where $\text{Ad}_g$ and  $\text{Ad}^{-1}_g$ are the adjoint and inverse adjoint mapping for position vector $g$ at instance $s$, respectively. Although the length of the actuator varies, we assume $\sigma$ equal to undeformed actuator length $L_0$. Matrix $\text{B}_a$ is a selection matrix of free strains and curvatures. Shape function matrix $\Phi(s)$ evaluates the shape function at instance $s$. In the dynamic simulations this Jacobian is updated at every time instant given the robot configuration. This allows us to include model information to our control law.  In an effort to improve tracking performance. For the real life control system we are aiming to recreate the state with the means of sensors. In this way the Jacobian can be calculated in real-time while carrying out a reference trajectory.

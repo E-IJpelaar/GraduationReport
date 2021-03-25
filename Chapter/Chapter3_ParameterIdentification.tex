@@ -38,53 +38,6 @@ In an effort to determine stiffness properties, finite element software \verb+Ab
 
 
 
-\section{Input mapping}
-\label{sec3:InputMapping}
-
-Stiffness is the ratio between applied force and elongation. To determine  stiffness for elongation and curvature, applied forces and direction of deformation is necessary. For the physical set-up, individual bellow pressure $p_i \in \mathbb{R}^{\geq 0}$ with $i$ $\mathbb{N} \in \{1,2\}$ can be regulated. Therefore force input vector $\tau$ is mapped to pressure by some mapping matrix $H \in \mathbb{R}^{2 \times 2}$. The relation between force input and control input is given as, 
-
-\begin{equation}
-   \tau =   \begin{bmatrix} M \\ F \end{bmatrix}     = \underbrace{\begin{bmatrix}  a_1 & a_2 \\ a_3 & a_4 \end{bmatrix}}_{H}         \begin{bmatrix}  p_1 \\ p_2 \end{bmatrix}, \label{eq3:H}
-\end{equation}
-
-where entries of $H$ are to be determined. Our aim is to decouple rotation and elongation. Therefore, it is important to understand that $F$ causes elongation of the soft robotic actuator. Whereas, $M$ results in a curvature of the actuator. Therefore, the entries of $a_3$ and $a_4$ represent an effective surface area on which the pressure acts. Constant $a_1$ and $a_2$ represent a combination of effective surface area and lever on which the force acts. Due to symmetry properties it must hold that $a_1 = a_3$ and $a_1 = -a_2$.
-
-First, the relation between pressure and force tried to be obtained. This will be done by using finite element software as mentioned. The idea is to map pressure to force by using elongation. Pressurizing both bellows equally, resulted in almost ``pure" elongation. Effectively, the same result can be achieved by applying an equally distributed force on the top plate of the actuator. To this end, simulations for a set of forces applied to the top of actuator are simulated. The results for this simulation are presented in Figure (\ref{fig3:forcemap}). The horizontal axis show the modal coordinates, determined using the inverse kinematic fit as discussed previously. The contribution to the curvature is for both pressure and force simulation is again small. The scaling of the of the vertical axis already reveals that a linear relation can be found.
-
-
-\begin{figure}[H]
-    \centering
-\begin{minipage}{0.5\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{Figures/Chapter3/forcepressuremodal.eps}
-        \caption{Modal coordinates $\kappa$ and $\epsilon$ for elongation analysis and force analysis.}
-        \label{fig3:forcemap}
-    \end{minipage}\hfill
-    \begin{minipage}{0.5\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{Figures/Chapter3/pressureforceelongation.eps} 
-        \caption{Elongation expressed for force analysis and force with input mapping.}
-        \label{fig3:forcetopressure}
-    \end{minipage}
-\end{figure}
-
-The linear mapping coefficient, can be found by solving least squares problem as,
-
-
-
-\begin{equation}
-\min_{a_1} \sum_{i=1}^{N} (F_i - 2 a_1 p_i)^2
-\label{eq3:forcefitting}
-\end{equation}
-
-were $i$ indicated each sample point. The effective pressure area is found to be equal to 0.1462. Since $a_3 = a_4$ the mapping of pressure in kPa and force in Newton is obtained. Figure (\ref{fig3:forcetopressure}) shows the results of the input mapping for the elongation. It can be seen that the pressure maps fairly accurate to the force.
-
-Now the effective pressure area has been determined, the mapping to the moment can be calculated. It is assumed that the force acts on the top plate at a given radius form the backbone curve. The measured lever on which the force acts is equal to 12.56 mm. This allows to calculate $a_1$ and $a_2$ by multiplying $a_3$ with this distance. The mapping matrix $H$ then follows as,
-
-\begin{equation}
-    H =  \begin{bmatrix} 1.8245e-3 & -1.8245e-3 \\
-    0.14526 & 0.14526\end{bmatrix}  
-\end{equation}
 
 
 
@@ -137,7 +90,8 @@ The acquired data from the FEA is post-processed in Matlab to estimate the elong
 \end{equation}
 
 
-
+Figures (\ref{fig3:FEMun}) and (\ref{fig3:FEMdef}) show the undeformed and deformed robotic manipulator in the finite element software, respectively. Their post-processed nodal image is shown in  Figures (\ref{fig3:FEMun}) and (\ref{fig3:FEMdef}), respectively. These images represent a curvature analysis where the left bellow is pressurized to 60 kPa. The nodal image shows clusters of nodes. The top and bottom plates, and backbone curve can clearly be distinguished. For the small clusters of nodes representing the backbone curve, the mass middle point has been determined. Denoted as
+vector  $\Bar{x}_{mid} \in \mathbb{R}^{2\times n}$ containing the coordinates of each mass middle point. The approximate length of the backbone curve can be determined by using the function \verb+arc_length.m+ \cite{arclength}. This functions uses vector $\Bar{x}_{mid}$  to approximate the arc length of this collection of coordinates. This estimated arc length is represented as  $\Bar{x}_{length} \in \mathbb{R}^+ $ is Matlab function \verb+affine_fit.m+ \cite{affinefit} is used to determine the orientation of the plane, hence the displayed normal vectors. Additionally, this function determines the mass middle point of the cluster of nodes representing the top plate. This point will be denoted as $\Bar{x}_{end} \in \mathbb{R}^{2\times 1}$representing the coordinate of the end-effector.
 
 \begin{figure}[H] 
   \begin{minipage}[b]{0.5\linewidth}
@@ -171,11 +125,11 @@ The acquired data from the FEA is post-processed in Matlab to estimate the elong
 \end{figure}
 \todo{in this figure add crosses at the center cluster of nodes representing the backbone curve}
 
-Figures (\ref{fig3:FEMun}) and (\ref{fig3:FEMdef}) show the undeformed and deformed robotic manipulator in the finite element software, respectively. Their post-processed nodal image is shown in  Figures (\ref{fig3:FEMun}) and (\ref{fig3:FEMdef}), respectively. These images represent a curvature analysis where the left bellow is pressurized to 60 kPa. The nodal image shows clusters of nodes. The top and bottom plates, and backbone curve can clearly be distinguished. For the small clusters of nodes representing the backbone curve, the mass middle point has been determined. Denoted as 
-vector  $\Bar{x}_{mid} \in \mathbb{R}^{2\times n}$ containing the coordinates of each mass middle point. The approximate length of the backbone curve can be determined by using the function \verb+arc_length.m+ \cite{arclength}. This functions uses vector $\Bar{x}_{mid}$  to approximate the arc length of this collection of coordinates. This estimated arc length is represented as  $\Bar{x}_{length} \in \mathbb{R}^+ $ is Matlab function \verb+affine_fit.m+ \cite{affinefit} is used to determine the orientation of the plane, hence the displayed normal vectors. Additionally, this function determines the mass middle point of the cluster of nodes representing the top plate. This point will be denoted as $\Bar{x}_{end} \in \mathbb{R}^{2\times 1}$representing the coordinate of the end-effector.
 
-An inverse kinematic configuration can fitted through the nodal displacement data. This is done via optimization with \verb+fmincon.m+  To this end, the actuator is scaled to have length 1. This can be done by dividing all coordinates by the actuator length. The minimization problem that follows is,
 
+The inverse kinematic solver as detailed in Appendix \ref{app:chap2} did not result in satisfactory results. When only the end-effector position is provided. Therefore an inverse kinematic configuration is fitted through the nodal displacement data. This is done via optimization with \verb+fmincon.m+. The minimization problem that follows is,
+
+\hl{check if weighing factors are still correct}
 
 \begin{equation}
 \begin{aligned}
@@ -205,6 +159,56 @@ Figure (\ref{fig3:nodalfitelong}) and (\ref{fig3:nodalfitcurv}) show the result 
         \label{fig3:nodalfitcurv}
     \end{minipage}
 \end{figure}
+
+
+\section{Input mapping}
+\label{sec3:InputMapping}
+
+Stiffness is the ratio between applied force and elongation. To determine  stiffness for elongation and curvature, applied forces and direction of deformation is necessary. For the physical set-up, individual bellow pressure $p_i \in \mathbb{R}^{\geq 0}$ with $i$ $\mathbb{N} \in \{1,2\}$ can be regulated. Therefore force input vector $\tau$ is mapped to pressure by some mapping matrix $H \in \mathbb{R}^{2 \times 2}$. The relation between force input and control input is given as, 
+
+\begin{equation}
+   \tau =   \begin{bmatrix} M \\ F \end{bmatrix}     = \underbrace{\begin{bmatrix}  a_1 & a_2 \\ a_3 & a_4 \end{bmatrix}}_{H}         \begin{bmatrix}  p_1 \\ p_2 \end{bmatrix}, \label{eq3:H}
+\end{equation}
+
+where entries of $H$ are to be determined. Our aim is to decouple rotation and elongation. Therefore, it is important to understand that $F$ causes elongation of the soft robotic actuator. Whereas, $M$ results in a curvature of the actuator. Therefore, the entries of $a_3$ and $a_4$ represent an effective surface area on which the pressure acts. Constant $a_1$ and $a_2$ represent a combination of effective surface area and lever on which the force acts. Due to symmetry properties it must hold that $a_1 = a_3$ and $a_1 = -a_2$.
+
+First, the relation between pressure and force tried to be obtained. This will be done by using finite element software as mentioned. The idea is to map pressure to force by using elongation. Pressurizing both bellows equally, resulted in almost ``pure" elongation. Effectively, the same result can be achieved by applying an equally distributed force on the top plate of the actuator. To this end, simulations for a set of forces applied to the top of actuator are simulated. The results for this simulation are presented in Figure (\ref{fig3:forcemap}). The horizontal axis show the modal coordinates, determined using the inverse kinematic fit as discussed previously. The contribution to the curvature is for both pressure and force simulation is again small. The scaling of the of the vertical axis already reveals that a linear relation can be found.
+
+
+\begin{figure}[H]
+    \centering
+\begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/Chapter3/forcepressuremodal.eps}
+        \caption{Modal coordinates $\kappa$ and $\epsilon$ for elongation analysis and force analysis.}
+        \label{fig3:forcemap}
+    \end{minipage}\hfill
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/Chapter3/pressureforceelongation.eps} 
+        \caption{Elongation expressed for force analysis and force with input mapping.}
+        \label{fig3:forcetopressure}
+    \end{minipage}
+\end{figure}
+
+The linear mapping coefficient, can be found by solving least squares problem as,
+
+
+
+\begin{equation}
+\min_{a_1} \sum_{i=1}^{N} (F_i - 2 a_1 p_i)^2
+\label{eq3:forcefitting}
+\end{equation}
+
+were $i$ indicated each sample point. The effective pressure area is found to be equal to 0.1462. Since $a_3 = a_4$ the mapping of pressure in kPa and force in Newton is obtained. Figure (\ref{fig3:forcetopressure}) shows the results of the input mapping for the elongation. It can be seen that the pressure maps fairly accurate to the force.
+
+Now the effective pressure area has been determined, the mapping to the moment can be calculated. It is assumed that the force acts on the top plate at a given radius form the backbone curve. The measured lever on which the force acts is equal to 12.56 mm. This allows to calculate $a_1$ and $a_2$ by multiplying $a_3$ with this distance. The mapping matrix $H$ then follows as,
+
+\begin{equation}
+    H =  \begin{bmatrix} 1.8245e-3 & -1.8245e-3 \\
+    0.14526 & 0.14526\end{bmatrix}  
+\end{equation}
+
 
 
 
@@ -288,14 +292,10 @@ Figure (\ref{fig3:elongvsforce}) shows the result of solving the regression prob
     \end{minipage}
 \end{figure}
 
-
-
-\section{Stiffness results}
-
+\newpage
 \section{Pump Dynamics}
 
-
-In the proposed control architecture, the high level Jacobian controller is accompanied by a lower level pressure controller. The reference pressure is determined by the Jacobian controller by some force to pressure mapping. To this end, the pump dynamics need to be determined. Initially, we solely determine the pump dynamics. Using this dynamics will result to poor performance once connected to the soft actuator. To suppress noise levels and provide capture the actual system dynamics the set-up is slightly adapted.
+Besides soft robot actuator properties also the actuator properties need to be involved. To this end pump dynamics need to be determined. In the proposed control architecture, the high level Jacobian controller is accompanied by a lower level pressure controller. The reference pressure is determined by the Jacobian controller by some force to pressure mapping. To this end, the pump dynamics need to be determined. Initially, we solely determine the pump dynamics. Using this dynamics will result to poor performance once connected to the soft actuator. To suppress noise levels and provide capture the actual system dynamics the set-up is slightly adapted.
 
 To determine the pump dynamics the pump is connected directly to the pressure sensor using a short flexible silicone hose. The pump is powered by an electric 12V DC motor, and uses membranes to create pressure. The pump characteristics are obtained by observing the systems response for various volt step inputs between 1 and 6 Volt. Although the pumps are able to operate at 12 Volt, only a maximum step input of 6V is possible for this set-up. The pressure sensor measures absolute pressures between 0 and 25 PSI, which is equivalent to a maximum of 172 kPa. Depending on weather conditions, the maximum theoretically measurable pressure is around 72 kPa. However, experiments have shown results up to 80 kPa are possible. The volt input is regulated via pulse width modulation (PWM). Since the Raspberry PI is equipped with a 12bit ADC (analog-digital converter), it is possible calculate the PWM input as, $\textit{PWM} = \frac{2^{12} V}{V_{max}} $, where $V_{max}$ is equal to 12 volt.  The resulting step responses are shown in Figure (\ref{fig1:pump_dynamcis}).
 

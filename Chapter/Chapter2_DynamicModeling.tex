@@ -28,7 +28,7 @@ The soft actuator studied in this thesis is shown in Figure \ref{fig2:kinematics
       \end{minipage}
   \end{minipage}
 
-\add{Figure should be adapted with sorotoki one, this looks nicer.}\\
+\add{adapt to nicer figures}\\
 
 
 A kinematic description of the actuator is necessary to describe the position in 3D space. Before deriving our kinematic model, we will be briefly discuss constant curvature modeling. Which is a widely used model to describe simplified kinematics of soft actuators \cite{ccapproach},\cite{berkers},\cite{Falkenhahn2015}. A schematic drawing of the constant curvature modelling approach is shown in Figure \ref{fig2:ccapproach}. Although we will not be using this exact methodology, it is important to understand the basics. The constant curvature describes the position of the actuator by three coordinates. Parameter $l$ is the curved length of the actuator measured from the fixed bottom to the tip. Coordinate $\kappa$ expresses the curvature of the actuator. It is assumed that the deformed actuator describes a perfect arc, hence radius $r$ is equal to $\frac{l}{k}$. This allows to write the orientation of the actuator's tip as $\theta = l\kappa$. Lastly, parameter $\phi$ describes the rotation of the actuator with respect to the ground. 
@@ -49,7 +49,7 @@ where $\mathbb{SE}(3)$ is the Lie group of rigid body transformations in $\mathb
     \label{eq2:dgdsigma}
 \end{equation}
 
-where $\hat{\xi}$ is the space-twist field. Here, $K_\times$ is a skew-symmetric matrix expressing curvature-torsion strain, and $E = [\epsilon_1,\epsilon_2,\epsilon_3]^\top$ a vector containing stretch-shear strain. The entries of $E$ represent  degrees-of-freedom that allow elongation in all three directions. Likewise, the skew-symmetric matrix $K_{\times}$ holds three rotational degrees of freedom.  From this skew-symmetric matrix, vector $K = [\kappa_1,\kappa_2,\kappa_3]^\top$ can be derived \cite{Sola2018}. For the planar robot, it shall be clear that there is one elongation and one rotational degree-of-freedom. In order to include these degrees-of-freedom in the kinematic model, $\epsilon_1$ and $\kappa_2$ will have value 1. All other degrees-of-freedom will take value 0. Defining $\xi(\sigma,t)$ as $[K \hspace{2pt} E]^\top$ results in vector $[0,1,0,1,0,0]^\top$. Throughout this work we will use "elongation" or $\epsilon$ to address strain $\epsilon_1$. Likewise, "curvature" or $\kappa$ is used to refer to curvature $\kappa_2$.
+where $\hat{\xi}$ is the space-twist field. Here, $K_\times$ is a skew-symmetric matrix expressing curvature-torsion strain, and $E = [\epsilon_1,\epsilon_2,\epsilon_3]^\top$ a vector containing stretch-shear strain. The entries of $E$ represent  degrees-of-freedom that allow elongation in all three directions. Likewise, the skew-symmetric matrix $K_{\times}$ holds three rotational degrees of freedom.  From this skew-symmetric matrix, vector $K = [\kappa_1,\kappa_2,\kappa_3]^\top$ can be derived \cite{Sola2018}. For the planar robot, it shall be clear that there is one elongation and one rotational degree-of-freedom. In order to include these degrees-of-freedom in the kinematic model, $\epsilon_3$ and $\kappa_2$ will have value 1. All other degrees-of-freedom will take value 0. Defining $\xi(\sigma,t)$ as $[K \hspace{2pt} E]^\top$ results in vector $[0,1,0,0,0,1]^\top$. Throughout this work we will use "elongation" or $\epsilon$ to address strain $\epsilon_3$. Likewise, "curvature" or $\kappa$ is used to refer to curvature $\kappa_2$.
 
 To solve the PDE in (\ref{eq2:dgdsigma}), it transformed to an ordinary differential equation (ODE) by exploiting the Galerkin reduction method \cite{Galerkin}. Here, the infinite dimensional system is projected onto a subspace of finite dimension that contains basis elements of the expected solution. By reducing the dimensionality of the system, higher order dynamics are not captured in the model and thus robustness should be taken into account. To transform PDE (\ref{eq2:dgdsigma}), the components of the strain field $\xi(\sigma,t)$ are approximated using a finite amount of shape functions as,
 
@@ -85,17 +85,17 @@ where $\Phi \in \mathbb{R}^{m \times n}$ is a shape function matrix in which $n$
 \begin{equation}
     B_a = \begin{bmatrix}
     0 & 1 & 0 & 0 & 0 & 0 \\
-    0 & 0 & 0 & 1 & 0 & 0 \\
+    0 & 0 & 0 & 0 & 0 & 1 \\
     \end{bmatrix}^\top
 \end{equation}
 
 as is has one free curvature-torsion strain and one stretch-shear strain, This implies that $m = 2$. The amount of shape functions used to approximate a strain affects the value of $n$. Approximating the two strains with a single shape ($i=0$) gives $n = 2$. Furthermore, the undeformed configuration $\xi_{i,0}$ is given by,
 
 \begin{equation}
-    \xi_{i,0} = \begin{bmatrix}  0 & 0 & 0 & 1 & 0 & 0 \end{bmatrix}^\top, 
+    \xi_{i,0} = \begin{bmatrix}  0 & 0 & 0 & 0 & 0 & 1 \end{bmatrix}^\top, 
 \end{equation}
 
-and implies that the actuator has an initial length in $\epsilon_1$. direction.
+and implies that the actuator has an initial length in $\epsilon_3$. direction.
 
 It should be emphasized that when using a single shape function this Cosserat model reduces to the constant curvature model. As can be seen from (\ref{eq2:shapefunction}), all shape functions yield 1 for $i=0$. In this case the modal coordinates $q(t)$ will be equal to $\kappa$ and $\epsilon$, respectively. 
 
@@ -201,7 +201,7 @@ Substitution of (\ref{eq2:J}) into (\ref{eq2:T}) results in an expression for th
 Now an expression for the mass matrix based on modal coordinates is obtained, we can postulate the model describing the dynamics of the soft actuator. To this, we assume linear damping properties. Furthermore it is known that the material of which the actuator is composed behaves non-linearly. Therefore a non-linear stiffness matrix is introduced. The actuator dynamics that are obtained are then given by,
 
 \begin{equation}
-    M(q)\Ddot{q} + D\dot{q} + K(q)q = \tau  hspace{10pt} \text{with} \hspace{10pt} \tau = Hp
+    M(q)\Ddot{q} + D\dot{q} + K(q)q = \tau  \hspace{10pt} \text{with} \hspace{10pt} \tau = Hp
     \label{eq2:simp_model}
 \end{equation}
 
