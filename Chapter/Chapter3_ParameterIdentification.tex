@@ -1,14 +1,9 @@
 \label{chap3}
 
-This chapter details the parameter identification of the soft robotic actuator. First, material properties and dimensions of the soft robotic manipulator are provided. Then, determination of actuator stiffness is explained. Consequently, pressure to force input mapping is explained. At this point it should be emphasized that during experimental analysis the soft actuator, on which this parameter study is based, was too porous. This allowed too much air to escape and therefore was not suitable for further use. Therefore, the methodology of acquiring stiffness data and pressure mapping should be valued instead of found parameters. 
+This chapter details the parameter identification of the soft robotic actuator. First, material properties and dimensions of the soft robotic manipulator are provided. Then, determination of actuator stiffness for elongation and curvature explained. Consequently, pressure to force input mapping is detailed. At this point it should be emphasized that during experimental analysis the soft actuator, on which this parameter study is based, was too porous. This allowed too much air to escape and therefore was not suitable for further use. Therefore, the methodology of acquiring stiffness data and pressure mapping should be valued instead of found parameters. During experimental analysis a geometric equivalent planar actuator is used. 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Actuator parameters}
-
-Parameter identification is necessary for model simulation as well as experimental validation. Key actuator parameters such as actuator mass and dimensions were presented in an earlier work \cite{berkers}. Since the robotic manipulator is manufactured by an external company, some material properties are classified. To our best knowledge, the Young's Modulus and Poisson ratio are equal to those presented in Table (\ref{tab4:parameters}). These properties allow to calculate shear modulus $\mu$ as $\frac{E}{2(1+\nu)}$ and bulk modulus $\kappa$ as $\frac{E}{3(1-2\nu)}$. It is assumed that the robotic manipulator deforms non-linearly following Neo-Hookeon behaviour \cite{Caasenbrood2020StiffnessModel}. For consistency with linear elasticity these moduli are reformulated as $C_{10} = \frac{\mu}{2}$ and $D_{1} = \frac{2}{\kappa}$ as used for Finite Element Analysis (FEA) \cite{neohookean}. 
+Parameter identification is necessary for model simulation as well as experimental validation. Key actuator parameters such as actuator mass and dimensions were presented in an earlier work \cite{berkers}. Since the robotic manipulator is manufactured by an external company, some material properties are classified. To our best knowledge, the Young's Modulus and Poisson ratio are equal to those presented in Table (\ref{tab4:parameters}). These properties allow to calculate shear modulus $\mu$ as $\frac{E}{2(1+\nu)}$ and bulk modulus $\kappa$ as $\frac{E}{3(1-2\nu)}$. It is assumed that the robotic manipulator deforms non-linearly following Neo-Hookeon behaviour \cite{Caasenbrood2020StiffnessModel}. For consistency with linear elasticity these moduli are reformulated as $C_{10} = \frac{\mu}{2}$ and $D_{1} = \frac{2}{\kappa}$ as used for Finite Element Analysis (FEA) \cite{neohookean}. The geometrical properties are presented in Figure \ref{fig3:dim}.
 
 
 \begin{table}[H]
@@ -26,7 +21,20 @@ Parameter identification is necessary for model simulation as well as experiment
     \label{tab4:parameters}
 \end{table}
 
-
+\begin{figure}[H] 
+    \begin{minipage}[b]{0.5\linewidth}
+     \centering
+    \includegraphics[width=\linewidth]{Figures/Chapter3/dimensions.png} 
+    \caption{Schematic overview of the undeformed actuator with its dimensions.} 
+    \label{fig3:dim} 
+       \end{minipage} 
+    \begin{minipage}[b]{0.5\linewidth}
+     \centering
+    \includegraphics[width=0.7\linewidth]{Figures/Chapter3/undeformed2.png} 
+    \caption{Undeformed meshed Finite Element model of the planar actuator.} 
+    \label{fig3:FemModel} 
+    \end{minipage} 
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -34,54 +42,73 @@ Parameter identification is necessary for model simulation as well as experiment
 
 \section{Finite Element Analysis (FEA)}
 
-In an effort to determine stiffness properties, finite element software \verb+Abaqus/CAE+ is used. Various loads can be applied to the computer model of the soft actuator. By studying the deformation induced by the loads, stiffness properties can be approximated. Figure () shows the model in the finite element software. In the analysis, the bottom plate of the actuator will be constrained in all directions of motion and rotation. Furthermore, the out-of-plane motion of the actuator is not considered since the body is symmetric, and applied loads act perpendicular to this motion. A mesh refinement analysis has been done to determine an accurate mesh size, see Appendix \ref{app:chap3}. For determining the stiffness properties gravitational effects are omitted. An elongation and curvature analysis of the robot manipulator is considered. These help to obtain elongation and rotation stiffness, respectively. The results of the FEA are further processed in Matlab. The process of acquiring nodal information from \verb+Abaqus/CAE+ is further elucidated in Appendix \ref{app:chap3}. The post-processing of this data in Matlab is explained in Section \ref{sec3:KinematicModelFit}  \todo{write appendix on data post processing}
+In an effort to determine stiffness properties, finite element software \verb+Abaqus/CAE+ is used. This software allows to study deformation of the actuator under various loads. Stiffness can be approximated by relating applied forces to the magnitude of deformation. Here we want to relate pressure, and its resulting force to elongation and curvature. Figure  \ref{fig3:FemModel} shows the meshed model used in the finite element software. In the analysis, the bottom plate of the actuator will be constrained in all directions of motion and rotation. Furthermore, the out-of-plane motion of the actuator is not considered since the body is symmetric, and applied loads act perpendicular to this motion. Additionally the following assumption is made. 
+
+\begin{theorem}
+The actuator is assumed to be symmetrical along its longitudinal axis. Both bellows therefore deform uniformly.
+\end{theorem}
 
 
+In this finite element analysis we only consider the curvature induced by pressurizing a single bellow. Due to symmetry we assume that inflating the other bellow will result in equal rotation but in opposite direction. Furthermore, a mesh refinement analysis is done to determine an accurate mesh size, see Appendix \ref{app:chap3}. In determining the stiffness properties gravitational effects are omitted. Two different analysis are performed. The first analysis focuses on elongation, the second analysis targets curvature. 
 
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
+Before we can show the results of this analysis we briefly explain how the FEA results are post-processed to obtain elongation and curvature.
 
 
 \subsection{Elongation analysis}
 
 
-The elongation analysis aims to measure pure elongation of the soft actuator. This allows for determining elongation stiffness, as rotating effects of the top of the robot are small. ``Pure'' elongation is induced by pressurizing both bellows equally. By doing this for a set of different pressures, a relation between elongation and pressure can be found. Figure (\ref{fig3:elongationvspressure}) shows the relation between elongation function of pressure. Additionally, the curvature of the manipulator is shown for various pressures. It can be seen that pressurizing the bellows equally results in a near pure elongation. This allows to determine the elongation stiffness as effects of rotation are deemed negligible. The elongation rate decreases as pressure increases, this is the result of a non-linear material parameters. Before the non-linear stiffness can be determined, the pressure to force mapping should be found. This is discussed in Section \ref{sec3:InputMapping}.
+The elongation analysis aims to measure pure elongation of the soft actuator. This allows for determining elongation stiffness, as rotating effects of the top of the robot are small. ``Pure'' elongation is induced by pressurizing both bellows equally. Doing this for a set of different pressures, a relation between elongation and pressure can be found. Figure (\ref{fig3:elongationvspressure}) shows the relation between elongation function of pressure. Additionally, the curvature of the manipulator is shown for various pressures. It can be seen that pressurizing the bellows equally results in a near pure elongation. The maximum obtained curvature is equal to 0.07 [1/m], which is equivalent to a rotation of around 0.32 degrees. This allows to determine the elongation stiffness as effects of rotation are deemed negligible. The elongation rate decreases as pressure increases, this is the result of a non-linear material parameters. Before the non-linear stiffness can be determined, the pressure to force mapping should be found. This is discussed in Section \ref{sec3:InputMapping}.
 
 \begin{figure}[H]
     \centering
 \begin{minipage}{0.5\textwidth}
         \centering
         \includegraphics[width=\textwidth]{Figures/Chapter3/elongationvspressure.eps} 
-        \caption{Elongation analysis, elongation and curvature as function of pressure.}
+        \caption{Elongation analysis, elongation and curvature as function of pressure. As can be seen curvature is negligibly small. }
         \label{fig3:elongationvspressure}
     \end{minipage}\hfill
     \begin{minipage}{0.5\textwidth}
         \centering
         \includegraphics[width=\textwidth]{Figures/Chapter3/rotationvspressure.eps} 
-        \caption{Curvature analysis, elongation and curvature as function of pressure.}
+        \caption{Curvature analysis, elongation and curvature as function of pressure. The elongation is $\pm$ half of the elongation experiment.}
         \label{fig3:rotationvspressure}
     \end{minipage}
 \end{figure}
 
-\todo{mention the coupling?}
 \subsection{Curvature analysis}
 
-The curvature analysis allows to determine rotation stiffness of the robot manipulator. For this analysis only a single bellow is pressurized, while the other bellow pressure is kept zero. The pressurized bellow will result in a force. This force induces a moment around the center of the actuator, causing the actuator to curve. This results in a curvature as well as an elongation of the backbone curve. The result of this analysis is shown in Figure \ref{fig3:elongationvspressure}. It can be seen that the curvature and elongation rates decrease as pressure increases. From this experiment the rotation stiffness can be determined when the input mapping is known.  
+The curvature analysis allows to determine rotation stiffness of the robot manipulator. For this analysis only a single bellow is pressurized, while the other bellow pressure is kept zero. The pressurized bellow will result in a force. This force induces a moment around the center of the actuator, causing the actuator to curve. This results in a curvature as well as an elongation of the backbone curve. This measured elongation is about half compared to the elongation analysis. This observation tells that the curvature and elongation are largely decoupled. The result of this analysis is shown in Figure \ref{fig3:elongationvspressure}. It can be seen that the curvature and elongation rates decrease as pressure increases. From this experiment the rotation stiffness can be determined when the input mapping is known.  
 
+
+
+
+
+%The process of acquiring nodal information from \verb+Abaqus/CAE+ is further elucidated in Appendix \ref{app:chap3}. The post-processing of this data in Matlab is explained in Section \ref{sec3:KinematicModelFit}  \todo{write appendix on data post processing}
+
+
+
+
+
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Kinematic Model Fit}
 \label{sec3:KinematicModelFit}
 
-The acquired data from the FEA is post-processed in Matlab to estimate the elongation and curvature of the analysis. This is done with the aid of the developed kinematic model. The kinematic model will be fitted through the nodal output of the FEA. The user can define the amount of shape functions used to approximate the shape of simulations. Increasing the amount of shape-functions will result in more flexibility. Therefore it can describe the actual deformation pattern better. However, fairly accurate approximations can be obtained when using a single-shape function. This means that each free strain, e.g. elongation and curvature, is described with a shape function polynomial of degree 1. Implying that the modal coordinates can be expressed as in Equation (\ref{eq3:q}). Expressing the curvature of the manipulator
+After applying loads to the finite element model, nodal displacements by can be outputted from $\verb+Abaqus+$. The acquired data is post-processed in Matlab to estimate the elongation and curvature. 
+
+Initially, this is done with the aid of the developed inverse kinematic model as detailed in Appendix \ref{app:chap2}. An inverse kinematic solution can be found based on the end-effector position. A collection of nodes located at the tip of actuator's imaginary backbone curve are isolated. The mean displacement of these nodes is calculated, and is regarded as the end-effector position. The x,y-coordinate is set as desired end-effector position, and the inverse kinematic algorithm gives the required elongation and curvature. 
+
+This method did not yield satisfactory results as can be seen in J
+
+This end-effector position was determined using the displacement of nodes at through the geometrical centre of the actuator.
+
+
+. The user can define the amount of shape functions used to approximate the shape of simulations. Increasing the amount of shape-functions will result in more flexibility. Therefore it can describe the actual deformation pattern better. However, fairly accurate approximations can be obtained when using a single-shape function. This means that each free strain, e.g. elongation and curvature, is described with a shape function polynomial of degree 1. Implying that the modal coordinates can be expressed as in Equation (\ref{eq3:q}). Expressing the curvature of the manipulator
  $\kappa \in \mathbb{R}$ $[\frac{1}{m}]$ . and elongation $\epsilon \in \mathbb{R}$ $[m]$.  This means that the simulation results are approximated using the constant curvature approach.
 
 \begin{equation}
@@ -90,8 +117,7 @@ The acquired data from the FEA is post-processed in Matlab to estimate the elong
 \end{equation}
 
 
-Figures (\ref{fig3:FEMun}) and (\ref{fig3:FEMdef}) show the undeformed and deformed robotic manipulator in the finite element software, respectively. Their post-processed nodal image is shown in  Figures (\ref{fig3:FEMun}) and (\ref{fig3:FEMdef}), respectively. These images represent a curvature analysis where the left bellow is pressurized to 60 kPa. The nodal image shows clusters of nodes. The top and bottom plates, and backbone curve can clearly be distinguished. For the small clusters of nodes representing the backbone curve, the mass middle point has been determined. Denoted as
-vector  $\Bar{x}_{mid} \in \mathbb{R}^{2\times n}$ containing the coordinates of each mass middle point. The approximate length of the backbone curve can be determined by using the function \verb+arc_length.m+ \cite{arclength}. This functions uses vector $\Bar{x}_{mid}$  to approximate the arc length of this collection of coordinates. This estimated arc length is represented as  $\Bar{x}_{length} \in \mathbb{R}^+ $ is Matlab function \verb+affine_fit.m+ \cite{affinefit} is used to determine the orientation of the plane, hence the displayed normal vectors. Additionally, this function determines the mass middle point of the cluster of nodes representing the top plate. This point will be denoted as $\Bar{x}_{end} \in \mathbb{R}^{2\times 1}$representing the coordinate of the end-effector.
+Figures (\ref{fig3:FEMun}) and (\ref{fig3:FEMdef}) show the undeformed and deformed robotic manipulator in the finite element software, respectively. Their post-processed nodal image is shown in  Figures (\ref{fig3:FEMun}) and (\ref{fig3:FEMdef}), respectively. These images represent a curvature analysis where the left bellow is pressurized to 60 kPa. The nodal image shows clusters of nodes. The top and bottom plates, and backbone curve can clearly be distinguished. For the small clusters of nodes representing the backbone curve, the mass middle point has been determined. Denoted as vector  $\Bar{x}_{mid} \in \mathbb{R}^{2\times n}$ containing the coordinates of each mass middle point. The approximate length of the backbone curve can be determined by using the function \verb+arc_length.m+ \cite{arclength}. This functions uses vector $\Bar{x}_{mid}$  to approximate the arc length of this collection of coordinates. This estimated arc length is represented as  $\Bar{x}_{length} \in \mathbb{R}^+ $ is Matlab function \verb+affine_fit.m+ \cite{affinefit} is used to determine the orientation of the plane, hence the displayed normal vectors. Additionally, this function determines the mass middle point of the cluster of nodes representing the top plate. This point will be denoted as $\Bar{x}_{end} \in \mathbb{R}^{2\times 1}$representing the coordinate of the end-effector.
 
 \begin{figure}[H] 
   \begin{minipage}[b]{0.5\linewidth}
@@ -159,6 +185,11 @@ Figure (\ref{fig3:nodalfitelong}) and (\ref{fig3:nodalfitcurv}) show the result 
         \label{fig3:nodalfitcurv}
     \end{minipage}
 \end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 \section{Input mapping}
@@ -292,80 +323,4 @@ Figure (\ref{fig3:elongvsforce}) shows the result of solving the regression prob
     \end{minipage}
 \end{figure}
 
-\newpage
-\section{Pump Dynamics}
-
-Besides soft robot actuator properties also the actuator properties need to be involved. To this end pump dynamics need to be determined. In the proposed control architecture, the high level Jacobian controller is accompanied by a lower level pressure controller. The reference pressure is determined by the Jacobian controller by some force to pressure mapping. To this end, the pump dynamics need to be determined. Initially, we solely determine the pump dynamics. Using this dynamics will result to poor performance once connected to the soft actuator. To suppress noise levels and provide capture the actual system dynamics the set-up is slightly adapted.
-
-To determine the pump dynamics the pump is connected directly to the pressure sensor using a short flexible silicone hose. The pump is powered by an electric 12V DC motor, and uses membranes to create pressure. The pump characteristics are obtained by observing the systems response for various volt step inputs between 1 and 6 Volt. Although the pumps are able to operate at 12 Volt, only a maximum step input of 6V is possible for this set-up. The pressure sensor measures absolute pressures between 0 and 25 PSI, which is equivalent to a maximum of 172 kPa. Depending on weather conditions, the maximum theoretically measurable pressure is around 72 kPa. However, experiments have shown results up to 80 kPa are possible. The volt input is regulated via pulse width modulation (PWM). Since the Raspberry PI is equipped with a 12bit ADC (analog-digital converter), it is possible calculate the PWM input as, $\textit{PWM} = \frac{2^{12} V}{V_{max}} $, where $V_{max}$ is equal to 12 volt.  The resulting step responses are shown in Figure (\ref{fig1:pump_dynamcis}).
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = 0.6\textwidth]{Figures/Chapter3/stepresponsdirect16V.eps}
-    \caption{Step response for volt step input between 1V and 6V.}
-    \label{fig1:pump_dynamcis}
-\end{figure}
-
-From Figure (\ref{fig1:pump_dynamcis}) multiple observations can be made. The step response indicates first order system behaviour as the pressure increase is proportional to the actual pressure. However, the steady-state pressure is not proportional to the input volt. The reason for this behaviour is friction. For 1 and 2 volt input static friction dominates, resulting in no to very small pressure increase.
-At 3 volt the transition between dry and kinetic friction is observed. The first order system characteristic becomes more visible, although the pressure response is chattering. Furthermore, we see a rise time of comparable order for step inputs of 4V and above. After around 0.5 seconds the steady-state pressure is reached. For all step inputs oscillations are observed around the steady-state pressure. This phenomena is caused by the fact that there is almost no passive leakage from the small control volume. When the pump valves open and air is pressed into the system the air waves are created. For the step input of 5 volt the valve dynamics can be clearly seen, as the dense red spikes.
-
-An improved pump model can be made by altering the set-up. To this end, the actuator and an air vessel are connected to the system. Previous research showed that adding an air vessel will reduce oscillatory behaviour, at the cost of bandwidth \cite{proper}. The air vessel will increase the control volume of the entire system. When the valves open and additional air is pressed in the system, the relative pressure change is smaller. Additionally, when the actuator expands the relative volume increase will also be smaller. This will cause the system to respond slower to a step input. Furthermore, the maximum achievable pressure is lower. The addition of air vessel and actuator will increase the passive leakage of the system.
-
-For the adapted system the step response is determined for volt steps between 2 and 12 volt. The results are shown in Figure \ref{fig3:pump_dynamics_adapted}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = 0.6\textwidth]{Figures/Chapter3/step212V.eps}
-    \caption{Step response for volt step input between 2V and 12V for the system including air vessel and actuator.}
-    \label{fig3:pump_dynamics_adapted}
-\end{figure}
-
-
-Based on the step responses of Figure (\ref{fig3:pump_dynamics_adapted}) we try to capture the pump dynamics in a model. The time response of a first order linear system responding to a step input is given by, 
-
-\begin{equation}
-    p(t,V) = K(1-e^{-t/\tau})V,
-    \label{eq3:firstordermodel}
-\end{equation}
-
-where $p$ is the pressure at time $t$ in kPa. And constant DC gain $K$ [kPa/V] determines the maximum pressure, time constant $\tau$ [1/s] determines the growth rate of the exponential function. Furthermore, $V$ is the input volt. 
-
-An attempt to fit the linear first order model of (\ref{eq3:firstordermodel}) did not result in an accurate description of the pump dynamics for all step inputs. Therefore an alternative description of the pump dynamics is proposed. In this description constant $K$ is replaced by a nonlinear function $K(V)$. Additionally, a linear function $\tau(V)$ is proposed. 
-
-Based on (\ref{eq3:firstordermodel}) an indication of the gradient between constant $K$ and $V$ can be estimated. The steady-state pressure for each step is estimated by taken the mean over the last 10 seconds of the step response. This pressure is then divided by the corresponding volt input. A similar approach is done for determining time constant $\tau$. For a first order system it can be proven that this time constant is equal to time at which 63\% of the steady state value is reached. The corresponding relations for $K(V)$ and $\tau(V)$ are shown in Figure \ref{fig3:Kest} and Figure \ref{fig3:tauest}, respectively.
-
-\begin{figure}[H]
-\begin{minipage}[b]{0.48\linewidth}
-\centering
-\includegraphics[width=\textwidth]{Figures/Chapter3/Kest.eps}
-\caption{Experimental estimate of `constant' $K$ and fourth order fit.}
-\label{fig3:Kest}
-\end{minipage}
-\begin{minipage}[b]{0.48\linewidth}
-\centering
-\includegraphics[width=\textwidth]{Figures/Chapter3/tauest.eps}
-\caption{Experimental estimate of time `constant' $\tau$ and linear fit.}
-\label{fig3:tauest}
-\end{minipage}
-\end{figure}
-
-Figure (\ref{fig3:Kest}) shows a fourth-order polynomial fit to DC-gain $K$. For this fit all data samples were used. Figure (\ref{fig3:tauest}) shows that the estimated time constants for 2 and 3 volt do not follow linear trend line from 4 volt and above. Therefore, in determining the time `constant' $\tau$, only data point from 4 volt onward are used. A possible explanation for these outliers is the friction acting at these voltage inputs, and are therefore not reliable. Furthermore, from a physical point of view, relating time constant $\tau$ to input $V$ is doubtful. Instead, one would prefer defining $\tau$ based on system parameters. However, from a modelling point of view, this method allows to capture the actual model dynamics fairly accurate.
-
-The obtained measurement fits for $K$ and $\tau$ can be substituted in (\ref{eq3:firstordermodel}) resulting in an expression as,
-
-\begin{equation}
-    p(t,V) = K(V)(1-e^{-t/\tau(V)})V.
-    \label{eq3:firstodernonlinearmodel}
-    \end{equation}
-
-The derived first order model of (\ref{eq3:firstodernonlinearmodel}) can be plotted against the experimental results of Figure (\ref{fig3:pump_dynamics_adapted}), this is shown in Figure (\ref{fig3:expvsfitpres}).
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = 0.8\textwidth]{Figures/Chapter3/expfit.eps}
-    \caption{Experimental results and the derived nonlinear pressure model.}
-    \label{fig3:expvsfitpres}
-\end{figure}
-
-Above figure shows that the derived model captures the behaviour of the system with actuator and air vessel accurately. The steady-state pressure is close to the experimental value for all volt step inputs. As expected, the rise time for the 1 and 2 volt step inputs are not captured that well by this model.
 
