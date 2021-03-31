@@ -274,19 +274,19 @@ where $m_{tot}$ is the total mass of the actuator. The first three entries expre
     M(q) = \int_0^{\sigma} J(\sigma)^\top \mathcal{M}(\sigma)J(\sigma) d \sigma.
 \end{equation}
 
-\add{Furthermore damping and stiffness properties are assigned to the actuator. We assume that the polymer of which the actuator is made has linear damping characteristics. An expression for the damping matrix is obtained by,}
+Furthermore damping and stiffness properties are assigned to the actuator. We assume that the polymer of which the actuator is made has linear damping characteristics. An expression for the damping matrix is obtained by,
 
 \begin{equation}
     D = \int_0^\sigma B_a^\top  \mathcal{D} B_a d\sigma,
 \end{equation}
 
-\add{where $\mathcal{D} \in \mathbb{R}^{6 \times 6}$ is a diagonal damping matrix. For a fact, we know that polymer has non-linear stiffness properties. Therefore stiffness matrix $K$ is position variant, and is therefore given by,}
+where $\mathcal{D} \in \mathbb{R}^{6 \times 6}$ is a diagonal damping matrix. For a fact, we know that polymer has non-linear stiffness properties. Therefore stiffness matrix $K$ is position variant, and is therefore given by,
 
 \begin{equation}
     K(q) = \int_0^\sigma B_a ^\top \mathcal{K}(q) B_a d\sigma,
 \end{equation}
 
-\add{where $\mathcal{K} \in \mathbb{R}^{6 \times 6}$ is a diagonal stiffness matrix. The actuator dynamics that are obtained are then given by,}
+where $\mathcal{K} \in \mathbb{R}^{6 \times 6}$ is a diagonal stiffness matrix. The actuator dynamics that are obtained are then given by,
 
 \begin{equation}
     M(q)\Ddot{q} + D\dot{q} + K(q)q = \tau  \hspace{10pt} \text{with} \hspace{10pt} \tau = Hp,
