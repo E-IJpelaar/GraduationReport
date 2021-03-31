@@ -1,7 +1,21 @@
 \ProvidesPackage{UsePackages}
 
 % PACKAGES
-\usepackage[a4paper,width=150mm,top=25mm,bottom=25mm]{geometry}
+%\usepackage[a4paper,width=150mm,top=25mm,bottom=25mm]{geometry}
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ %total= {210mm,297mm},
+ left=25mm,
+ top=25mm,
+ right = 25mm,
+ bottom = 25mm ,
+ }
+
+
+
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{subfig}
@@ -10,13 +24,15 @@
 
 
 
-
-
 \usepackage{fullpage}
 \usepackage{microtype}
 \usepackage[toc,page]{appendix}
 \usepackage[utf8]{inputenc}
+
+
 \usepackage[parfill]{parskip}
+
+
 \usepackage[para,online]{threeparttable}
 \usepackage{booktabs}
 \usepackage[hidelinks]{hyperref}
@@ -38,7 +54,6 @@
 \usepackage[super]{nth}
 \usepackage{pdfpages}
 \usepackage{array}
-\usepackage{fullpage}
 \usepackage{color,soul}
 %\usepackage[style=numeric]{biblatex}
 \usepackage{multicol}
@@ -47,7 +62,6 @@
 \usepackage{cleveref}
 \usepackage{color}
 \usepackage{tabularx}
-\usepackage[compact]{titlesec}
 \usepackage{pdflscape}
 \usepackage{rotating}
 \usepackage{listings}

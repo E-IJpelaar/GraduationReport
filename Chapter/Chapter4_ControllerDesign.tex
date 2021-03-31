@@ -1,40 +1,39 @@
-
-This chapter describes the controller design used for setpoint regulation. To this end, a Jacobian controller is implemented with some additional features. The controller as presented here is a variation as the one presented in \cite{MOOSAVIAN20071226}. Furthermore, the control architecture in which the Jacobian controller operates is elucidated. The experimental set-up allows to regulate pressure levels as well. Therefore the high-level Jacobian controller is ran at low bandwidth and supported 
-
+This chapter details the controller design of the model based controller. The performance of the controller is tested with the aid of a simulation model. In order to so, the pump characteristics need to be determined, as they have a major impact on the dynamics of the entire system. 
 
 
+\section{Jacobian control}
 
 
+The controller designed in this study includes jacobian information. Jacobian control is a widely used type of model-based controller for positioning classic robots. As mentioned in Chapter \ref{chap1}, jacobian controllers only use model information on velocity and position level. Thus, system dynamics are not used in this control law.
 
 
-To control the dynamic system a Jacobian controller is proposed. The method implemented uses the Jacobian transposed as presented in . This work shows that a computed torque controller can be approximated by a more straightforward control law involving the Jacobian transpose. This approximation holds if high enough control gains are used. This Jacobian transposed control law is given by,
+The Jacobian controller proposed is an adapted version of the one presented in \cite{MOOSAVIAN20071226}. This work shows that a computed torque controller can be approximated by a more straightforward control law involving the Jacobian transpose. This approximation holds if high enough control gains are used. This work only uses a proportional and derivative action to reduce the error. In order to remove the steady-state error, an integrator gain is added this controller. This Jacobian transposed control law is given by,
+
 
 \begin{equation}
-    \tau = J^\top (K_p e + K_d \dot{e}) \hspace{10pt} \text{with}  \hspace{10pt} \dot{x} = J\dot{q}
+    \tau_{set} = \begin{bmatrix}J(\sigma,t)\end{bmatrix}^\top \Big(K_p e + K_i \int_0^t e \hspace{2pt} ds +  K_d \dot{e}\Big), 
     \label{eq:tau}
 \end{equation}
 
-where $\tau$ is the input force, $J$ the Jacobian matrix as expressed in (\ref{eq2:J}). Furthermore, $K_p \in \mathbb{R}^{2\times 2}$ and $K_d \in \mathbb{R}^{2\times 2}$ are diagonal gain matrices that correct for the error and the error derivative expressed in task space variables, respectively. 
+where $\tau_{set} \in \mathbb{R}^2$ is the control input vector with control input moment and force. The Jacobian is determined with equation \ref{eq2:J}. Furthermore, $K_p,K_i and K_d \in \mathbb{R}^{2\times 2}$ are diagonal gain matrices. Here $K_p$ penalizes proportional to the error, $K_i$ contributes to the sum of the error over time, and $K_d$ penalized the error derivative. The error $e \in \mathbb{R}^2$ is defined as the difference between reference position and the actual position in the (x,y)-plane. Therefore not the entire Jacobian of dimension $6 \times 2$, but only the entries mapping modal coordinate velocity to linear velocity in x-y plane. As mentioned this Jacobian is space-time variant. Therefore, in the control law this Jacobian is calculated real-time based on the actual kinematic configuration of the actuator. 
 
-It is our goal to control the end-effector position of the soft robotic manipulator. To this end, Jacobian at the end-effector needs to be known. An expression for the end-effector Jacobian is given in \cite{Boyer2019} as,
+The actual system does not allow to induce forces and moments directly. Therefore this control input should be mapped to pressure. This is done by the input mapping, as determined in Chapter \ref{chap3}. Based on the desired control input, a reference pressure can be formulated as,
 
 \begin{equation}
-    J(\sigma) = \text{Ad}^{-1}_{g(\sigma)} \int_0^\sigma \text{Ad}_g(s) B_a \Phi(s)d\sigma
+    p_{ref} = H^{-1}\tau,
 \end{equation}
 
 
-where $\text{Ad}_g$ and  $\text{Ad}^{-1}_g$ are the adjoint and inverse adjoint mapping for position vector $g$ at instance $s$, respectively. Although the length of the actuator varies, we assume $\sigma$ equal to undeformed actuator length $L_0$. Matrix $\text{B}_a$ is a selection matrix of free strains and curvatures. Shape function matrix $\Phi(s)$ evaluates the shape function at instance $s$. In the dynamic simulations this Jacobian is updated at every time instant given the robot configuration. This allows us to include model information to our control law.  In an effort to improve tracking performance. For the real life control system we are aiming to recreate the state with the means of sensors. In this way the Jacobian can be calculated in real-time while carrying out a reference trajectory.
+where $p_{ref} \in \mathbb{R}^2$ is the reference pressure for each bellow. In order for this reference pressure to be reached a second controller is necessary. This low-level controller is used to set the input voltage that is supplied to the pumps.  The volt input is regulated via pulse width modulation (pwm). Since the Raspberry PI is equipped with a 12bit ADC (analog-digital converter), it is possible calculate the pwm input as, $\textit{pwm} = \frac{2^{12} V}{V_{max}} $, where $V_{max}$ is equal to 12 volt. This control law is given by,
+
+
+\begin{equation}
+    pwm_{set} = K_{pp}e_p \hspace{10pt} \text{with} \hspace{10pt} e_p = p_{ref} - p,
+\end{equation}
 
 
 
-
-
-
-
-
-
-
-
+where $PWM_{set}$ is the input voltage and $K_{pp} \in \mathbb{R}^{2\times 2}$ a diagonal gain matrix. Furthermore, $e_p$ is the pressure error, which is the difference between reference pressure and actual pressure. Observe that only a proportional action is used. The integral action of the jacobian controller will already ensure no steady-state error.
 
 
 \section{Pump Dynamics}
@@ -47,7 +46,7 @@ It is assumed that both air pumps have the equal pump characteristics
 
 Besides soft robot actuator properties also the actuator properties need to be involved. To this end pump dynamics need to be determined. In the proposed control architecture, the high level Jacobian controller is accompanied by a lower level pressure controller. The reference pressure is determined by the Jacobian controller by some force to pressure mapping. To this end, the pump dynamics need to be determined. Initially, we solely determine the pump dynamics. Using this dynamics will result to poor performance once connected to the soft actuator. To suppress noise levels and provide capture the actual system dynamics the set-up is slightly adapted.
 
-To determine the pump dynamics the pump is connected directly to the pressure sensor using a short flexible silicone hose. The pump is powered by an electric 12V DC motor, and uses membranes to create pressure. The pump characteristics are obtained by observing the systems response for various volt step inputs between 1 and 6 Volt. Although the pumps are able to operate at 12 Volt, only a maximum step input of 6V is possible for this set-up. The pressure sensor measures absolute pressures between 0 and 25 PSI, which is equivalent to a maximum of 172 kPa. Depending on weather conditions, the maximum theoretically measurable pressure is around 72 kPa. However, experiments have shown results up to 80 kPa are possible. The volt input is regulated via pulse width modulation (PWM). Since the Raspberry PI is equipped with a 12bit ADC (analog-digital converter), it is possible calculate the PWM input as, $\textit{PWM} = \frac{2^{12} V}{V_{max}} $, where $V_{max}$ is equal to 12 volt.  The resulting step responses are shown in Figure (\ref{fig1:pump_dynamcis}).
+To determine the pump dynamics the pump is connected directly to the pressure sensor using a short flexible silicone hose. The pump is powered by an electric 12V DC motor, and uses membranes to create pressure. The pump characteristics are obtained by observing the systems response for various volt step inputs between 1 and 6 Volt. Although the pumps are able to operate at 12 Volt, only a maximum step input of 6V is possible for this set-up. The pressure sensor measures absolute pressures between 0 and 25 PSI, which is equivalent to a maximum of 172 kPa. Depending on weather conditions, the maximum theoretically measurable pressure is around 72 kPa. However, experiments have shown results up to 80 kPa are possible. The resulting step responses are shown in Figure (\ref{fig1:pump_dynamcis}).
 
 \begin{figure}[H]
     \centering
@@ -118,3 +117,38 @@ The derived first order model of (\ref{eq3:firstodernonlinearmodel}) can be plot
 \end{figure}
 
 Above figure shows that the derived model captures the behaviour of the system with actuator and air vessel accurately. The steady-state pressure is close to the experimental value for all volt step inputs. As expected, the rise time for the 1 and 2 volt step inputs are not captured that well by this model.
+
+
+
+\section{Controller in Simulation}
+
+A simplified dynamic model is derived in an effort to capture the dynamics of the soft manipulator. It is assumed that the dynamics of the system can be formulated as, 
+
+\begin{equation}
+    M(q)\Ddot{q} + C\dot{q} + K(q)q = u \hspace{10pt} \text{with} \hspace{10pt} u = Hp
+\end{equation}
+
+which resembles a non-linear mass-spring-damper system. Here, $M(q)  \in \mathbb{R}^{n\times n}$ is a non-linear mass matrix, $C   \in \mathbb{R}^{n\times n}$ a linear damping matrix, and $K(q)   \in \mathbb{R}^{n\times n}$ a non-linear stiffness matrix. Matrix $H   \in \mathbb{R}^{2\times 2}$ maps input pressure $p$ to forces and moments $u$.
+
+Above dynamic model allows for numeric solving by reformulating the model to a second order state-space formulation as,
+
+\begin{equation}
+     \begin{bmatrix} \dot{x}  \end{bmatrix}   =      \begin{bmatrix} O_2 & I_2 \\ -M(q)^{-1}K(q)  & -M(q)^{-1} C \end{bmatrix}      \begin{bmatrix} x \end{bmatrix}  +      \begin{bmatrix} O_2 \\ M(q)^{-1}H   \end{bmatrix}       \begin{bmatrix} p_1\\ p_2   \end{bmatrix} 
+\end{equation}
+
+where $x \in \mathbb{R}^{n}$ is the state vector. Assuming the constant curvature approach ($n = 2$) the entries of of $x$ are $ \begin{bmatrix} \epsilon \hspace{3pt} \kappa \hspace{3pt} \dot{\epsilon}  \hspace{3pt} \dot{\kappa}  \end{bmatrix}^{\top}  $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
