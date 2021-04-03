@@ -1,3 +1,5 @@
+\label{chap2}
+
 This chapter describes the dynamic model derivation of the soft robotic manipulator. First, forward kinematics are used to describe the robots configuration in space. These forward kinematics allow to derive a dynamic model. 
 
 
@@ -9,7 +11,7 @@ This chapter describes the dynamic model derivation of the soft robotic manipula
 A kinematic description of the actuator is necessary to describe the position in three-dimensional space. Before deriving our kinematic model, we will be briefly discuss constant curvature modeling. Which is a widely used model to describe simplified kinematics of soft actuators \cite{ccapproach},\cite{berkers},\cite{Falkenhahn2015}. A schematic drawing of the constant curvature modelling approach is shown in Figure \ref{fig2:ccapproach}. Although we will not be using this exact methodology, it is important to understand the basics. The constant curvature describes the position of the actuator by three coordinates. Parameter $l$ is the curved length of the actuator measured from the fixed bottom to the tip. Coordinate $\kappa$ expresses the curvature of the actuator. It is assumed that the deformed actuator describes a perfect arc, hence radius $r$ is equal to $\frac{l}{k}$. This allows to write the orientation of the actuator's tip as $\theta = l\kappa$. Lastly, parameter $\phi$ describes the rotation of the actuator with respect to the ground. 
 
 
-
+\begin{figure}[H]
   \begin{minipage}{\linewidth}
       \centering
       \begin{minipage}{0.45\linewidth}
@@ -29,7 +31,7 @@ A kinematic description of the actuator is necessary to describe the position in
           \end{figure}
       \end{minipage}
   \end{minipage}
-
+\end{figure}
 
 As mentioned, our modelling approach distinguishes itself from the constant curvature model. To describe the kinematics of the soft actuator, a Cosserat beam model is used \cite{Boyer2019}. This beam model can be thought of as a continuous one-dimensional curve representing the robot's backbone. This backbone is represented in Figure (\ref{fig2:kinematicschematic}) as the black dashed curve. This curve describes the configuration of the soft robot as a function of space and time. To this end, a spatial coordinate  $\sigma \in \mathbb{X}$ within bounded domain $\mathbb{X} \in [0,l] \subset \mathbb{R}$ is introduced. Furthermore, a temporal coordinate $t \in  \mathbb{T}$ with $\mathbb{T} \subseteq \mathbb{R}$ is defined. This allows to describe position $p(\sigma,t) \in \mathbb{R}^3$ and rotation $R(\sigma,t) \in \mathbb{SO}(3)$ for any point $\sigma$ and time instance $t$ among the backbone of the soft manipulator by \cite{Caasenbrood2020},
 

@@ -13,7 +13,7 @@ Parameter identification is necessary for model simulation as well as experiment
       \textbf{Parameter}   &  \textbf{Value} & \textbf{Unit} \\ \hline
       Mass $m$             &    0.0332       & $[kg]$ \\ 
       Nominal length $L_0$ &    0.0644       & $[m]$  \\ 
-      Actuator width       &    0.0664       & $[m]$  \\ 
+      Actuator width  $w$     &    0.0664       & $[m]$  \\
       Lever length $r$     &    0.01256      & $[m]$  \\ 
       Young's Modulus $E$  &    69           & $[MPa]$\\ 
       Poisson ration $\nu$ &    0.45         & $[-]$ \\ \hline
@@ -22,13 +22,13 @@ Parameter identification is necessary for model simulation as well as experiment
 \end{table}
 
 \begin{figure}[H] 
-    \begin{minipage}[b]{0.5\linewidth}
+    \begin{minipage}[b]{0.49\linewidth}
      \centering
     \includegraphics[width=\linewidth]{Figures/Chapter3/dimensions.png} 
     \caption{Schematic overview of the undeformed actuator with its dimensions.} 
     \label{fig3:dim} 
        \end{minipage} 
-    \begin{minipage}[b]{0.5\linewidth}
+    \begin{minipage}[b]{0.49\linewidth}
      \centering
     \includegraphics[width=0.7\linewidth]{Figures/Chapter3/undeformed2.png} 
     \caption{Undeformed meshed Finite Element model of the planar actuator.} 
@@ -156,7 +156,7 @@ Repeating this experiment for a set of pressures, a relation between elongation 
 At this point we have derived modal coordinates as function pressure. However, to determine the stiffness this pressure needs to be mapped to force and moment. This is discussed in Section \ref{sec3:InputMapping}.
 
 
-\hl{adapt some figure axis}
+\hl{adapt some figure axis,explain $f(q)$ in optimization problem, weigh factors}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -290,5 +290,3 @@ Figure (\ref{fig3:elongvsforce}) shows the result of solving the regression prob
         \label{fig3:curvsmoment}
     \end{minipage}
 \end{figure}
-
-
