@@ -57,7 +57,7 @@ In this finite element analysis we only consider the curvature induced by pressu
 The curvature analysis allows to determine rotation stiffness of the robot manipulator. For this analysis only a single bellow is pressurized, while the other bellow pressure is kept zero. The force created by this pressurized bellow causes a moment around the center of the actuator. This will case the actuator to curve and elongate. Figure \ref{fig3:schematiccurvature} shows the deformation the actuator undergoes during a curvature simulation. Here the undeformed actuator is visualized in blue. For the black actuator the left bellow is pressurized to 60 kPa.
 
 
-After applying loads to the finite element model, nodal displacements by can be outputted from $\verb+Abaqus+$. The acquired data is post-processed in \MATLAB to estimate the elongation and curvature. A post-proccessed image of the deformation is shown in Figure \ref{fig3:nodalcurvatrue}. This image is created by isolating specific nodes, necessary to reconstruct the backbone curve. In this figure, top and bottom plate of the actuator are clearly visible. Using \MATLAB function \verb+affine_fit.m+ \cite{affinefit} the orientation of both planes with their normal vector can be obtained. Furthermore, this function determines the weighted average of all nodes of the top plate. Which coincides with the end-effector position of the actuator. Lastly, the nodes that are situated at the exact geometrical mid over the longitudinal axis are isolated. These clusters of nodes are used to reconstruct the backbone curve. 
+After applying loads to the finite element model, nodal displacements can be outputted from $\verb+Abaqus+$. The acquired data is post-processed in \MATLAB to estimate the elongation and curvature. A post-processed image of the deformation is shown in Figure \ref{fig3:nodalcurvatrue}. This image is created by isolating specific nodes, necessary to reconstruct the backbone curve. In this figure, top and bottom plate of the actuator are clearly visible. Using \MATLAB function \verb+affine_fit.m+ \cite{affinefit} the orientation of both planes with their normal vector can be obtained. Furthermore, this function determines the weighted average of all nodes of the top plate. Which coincides with the end-effector position of the actuator. Lastly, the nodes that are situated at the exact geometrical mid over the longitudinal axis are isolated. These clusters of nodes are used to reconstruct the backbone curve. 
 
 
 The post-processed image can be used for kinematic model fitting. This is the last step to obtain modal coordinates $\epsilon$ and $\kappa$ from the finite element simulation. Figure \ref{fig3:nodalfitcurv} shows this kinematic model fit. Here the black cross again indicates the end-effector position. Initially, the kinematic fitting is done with the aid of the developed inverse kinematic model as detailed in Appendix \ref{app:chap2}. An inverse kinematic solution can be found based on the end-effector position and rotation. The solution to this kinematic fitting procedure is indicated by the purple curve. This result was deemed insufficiently accurate. Therefore an optimization method is proposed. This optimization method takes into account the curvature of the entire backbone curve. For each cluster of nodes among the backbone the weighted average is calculated. Those are indicated with a blue cross and denoted as vector $\Bar{x}_{mid} \in \mathbb{R}^{2\times N}$. Furthermore, the length of the backbone curve is determined using the function \verb+arc_length.m+ \cite{arclength}. This functions uses vector $\Bar{x}_{mid}$ to approximate the arc length using splines. This estimated arc length is represented as  $\Bar{x}_{length} \in \mathbb{R}^+ $. The optimization is done via optimization with \verb+fmincon.m+. The minimization problem that follows is,
@@ -72,7 +72,9 @@ The post-processed image can be used for kinematic model fitting. This is the la
 \end{equation}
 
 
-where $Q$ is $\text{diag}([0.01,1])$ is a weighing matrix used to penalize the value of the modal coordinates. Additional weighing factors $\Phi_i \in \mathbb{R}^+$ and $i \in \{1,2,3\}$ are applied to penalize individual terms and equal to $1e5$,$1e5$ and $5e4$, respectively. The imposed constrained affects the elongation of the manipulator. Physically this constraint implies that the actuator can shorten in length, but the length can not become negative. The modal coordinates find through optimization for this simulation are $q = [\kappa,\epsilon]^\top = [14,0.24]^\top$.
+where $f(q)$ is a function describing the forward kinematics based on modal coordinate vector $q$. Furthermore, $Q$ is $\text{diag}([0.001,0.001])$ is a weighing matrix used to penalize the value of the modal coordinates. Additional weighing factors $\Phi_i \in \mathbb{R}^+$ and $i \in \{1,2,3\}$ are applied to penalize individual terms and equal to $5e4$,$5e4$ and $1e4$, respectively. This weighing factors can used to scale individual error terms, and stress relative importance. The imposed constrained affects the elongation of the manipulator. Physically this constraint implies that the actuator can shorten in length, but the length can not become negative. As a note, for a single shape-function approximation, solving the minimization problem only results in little better modal coordinate estimates. For studying more complex actuator deformations, that involve estimations with multiple shape functions, this optimization is necessary. An inverse jacobian search singularly based on end-effector position will not be enough then. Some reconstruction of the backbone curve will be necessary for such cases. The modal coordinates belonging to the deformation of Figure \ref{fig3:nodalfitcurv} find through optimization for this simulation are $q = [\kappa,\epsilon]^\top = [-14,0.24]^\top$.
+
+
 
 
 Above described inverse kinematic optimization is ran for multiple finite element analysis conducted various pressures. The results are displayed in Figure \ref{fig3:rotationvspressure}. Here the obtained curvature and elongation are plotted as a function of bellow pressure. It can be seen that the curvature and elongation rates increase by increments in pressure. Also the non-linear relation between pressure and deformation is visible.
@@ -93,18 +95,19 @@ Above described inverse kinematic optimization is ran for multiple finite elemen
     \end{minipage}
 \begin{minipage}{0.5\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{Figures/Chapter3/nodalfit.eps}
-        \caption{Inverse kinematic fit for an elongation analysis. Both bellows pressurized to 60kPa.}
+        \includegraphics[width=\textwidth]{Figures/Chapter3/rot60kpa.eps}
+        \caption{Inverse kinematic fit for an curvature analysis. Left bellow pressurized to 60kPa.}
         \label{fig3:nodalfitcurv}
     \end{minipage}\hfill
     \begin{minipage}{0.5\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{Figures/Chapter3/rotationvspressure.eps} 
+        \includegraphics[width=\textwidth]{Figures/Chapter3/curvanalysiscurveps.eps} 
         \caption{Curvature analysis, elongation and curvature as function of pressure.}
         \label{fig3:rotationvspressure}
     \end{minipage}
 \end{figure}
 
+\newpage
 
 
 
@@ -119,6 +122,7 @@ As for the curvature analysis, a post-processed image of the deformation is show
 
 Repeating this experiment for a set of pressures, a relation between elongation and pressure can be found. Figure (\ref{fig3:elongationvspressure}) shows the relation between elongation function of pressure. Additionally, the curvature of the manipulator is shown for various pressures. It can be seen that pressurizing the bellows equally results in a near pure elongation. The maximum obtained curvature is equal to 0.07 [1/m], which is equivalent to a rotation of around 0.32 degrees. This allows to determine the elongation stiffness as effects of rotation are deemed negligible. The elongation rate decreases as pressure increases, this is the result of a non-linear material parameters. As a remark, the found elongation for the elongation analysis is about double to those found for curvature analysis. For instance, the found elongation for the elongation experiment at 90 kPa is $0.55$, whereas for the curvature analysis the elongation at this pressure is $0.27$. This observation tells that the curvature and elongation are largely decoupled.
 
+\newpage
 
 
 
@@ -138,25 +142,22 @@ Repeating this experiment for a set of pressures, a relation between elongation 
     \end{minipage}
 \begin{minipage}{0.5\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{Figures/Chapter3/nodalfitelong.eps}
+        \includegraphics[width=\textwidth]{Figures/Chapter3/elong60kpa.eps}
         \caption{Inverse kinematic fit for an elongation analysis. Both bellows pressurized to 60kPa.}
         \label{fig3:nodalfitelong}
     \end{minipage}\hfill
     \begin{minipage}{0.5\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{Figures/Chapter3/elongationvspressure.eps} 
+        \includegraphics[width=\textwidth]{Figures/Chapter3/elonganalysiscurveps.eps} 
         \caption{Elongation analysis, elongation and curvature as function of pressure. As can be seen curvature is negligibly small.}
         \label{fig3:elongationvspressure}
     \end{minipage}
 \end{figure}
 
-\newpage
-
 
 At this point we have derived modal coordinates as function pressure. However, to determine the stiffness this pressure needs to be mapped to force and moment. This is discussed in Section \ref{sec3:InputMapping}.
 
 
-\hl{adapt some figure axis,explain $f(q)$ in optimization problem, weigh factors}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -175,8 +176,8 @@ Stiffness is the ratio between applied force and elongation. To determine stiffn
 
 where entries of $H$ are to be determined. Our aim is to decouple rotation and elongation. Therefore, it is important to understand that $F$ causes elongation of the soft robotic actuator. Whereas, $M$ results in a curvature of the actuator. Therefore, the entries of $a_3$ and $a_4$ represent an effective surface area on which the pressure acts. Constant $a_1$ and $a_2$ represent a combination of effective surface area and lever on which the force acts. Due to symmetry properties it must hold that $a_1 = a_3$ and $a_1 = -a_2$.
 
-First, the relation between pressure and force tried to be obtained. This will be done by using finite element software as mentioned. The idea is to map pressure to force by using elongation. Pressurizing both bellows equally, resulted in almost ``pure" elongation. Effectively, the same deformation can be achieved by applying an equally distributed force on the top plate of the actuator. To this end, simulations for a set of forces applied to the top of actuator are simulated. The results for this simulation are presented in Figure (\ref{fig3:forcemap}). The horizontal axis show the modal coordinates, determined using the inverse kinematic fit as discussed previously. The contribution to the curvature is for both pressure and force simulation comparable. The scaling of the of the vertical axis already reveals that a linear relation can be found.
-\newpage
+First, the relation between pressure and force tried to be obtained. This will be done by using finite element software as mentioned. The idea is to map pressure to force using elongation. Pressurizing both bellows equally, resulted in almost ``pure" elongation. Effectively, the same deformation can be achieved by applying an equally distributed force on the top plate of the actuator. To this end, simulations for a set of forces applied to the top of actuator are simulated. The results for this simulation are presented in Figure (\ref{fig3:forcemap}). The horizontal axis show the modal coordinates, determined using the inverse kinematic fit as discussed previously. The contribution to the curvature is for both pressure and force simulation comparable. The scaling of the of the vertical axis already reveals that a linear relation can be found.
+
 
 \begin{figure}[H]
     \centering
