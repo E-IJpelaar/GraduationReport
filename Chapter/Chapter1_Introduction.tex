@@ -76,3 +76,10 @@ Recapitulating, this thesis includes the following:
     \caption{Caption}
     \label{fig:my_label}
 \end{figure}
+
+
+
+
+%A kinematic description of the actuator is necessary to describe the position in three-dimensional space. A widely adopted method for describing the configuration of soft robots is piece-wise constant curvature (PCC) modelling \cite{ccapproach}. Previous research used this model to describe forward kinematics of soft actuators are \cite{mahl2014bhakin}, \cite{berkers},\cite{Falkenhahn2015}, \cite{ccapproach}, \cite{runge2017framework}. A schematic drawing of the constant curvature modelling approach is shown in Figure \ref{fig2:ccapproach}. Although we will not be using this exact methodology, it is important to understand the basics. The constant curvature describes the position of the actuator by three coordinates. Parameter $l$ is the curved length of the actuator measured from the fixed bottom to the tip. Coordinate $\kappa$ expresses the curvature of the actuator. It is assumed that the deformed actuator describes a perfect arc, hence radius $r$ is equal to $\frac{l}{k}$. This allows to write the orientation of the actuator's tip as $\theta = l\kappa$. Lastly, parameter $\phi$ describes the rotation of the actuator with respect to the ground. A single constant curvature is not able to describe complex actuator configurations. To this end, multiple of these curves are stacked onto each other, thereby discretizing the actuator. This allows to describe more complex configurations. This methodology is used in for instance \cite{Falkenhahn2015}.
+
+%The PCC approach has some limitations, due to its piece-wise character the actuator configuration is not described by a single continuous function. This makes it harder to find analytical expressions for for instance derivatives. Additionally, this PCC approach only allows to assign material properties to particular points. This makes dynamical models generally less accurate. One method to overcome this problem is using partial differential equations (PDE's) to describe actuator configurations. These PDE's are more suitable for deriving continuum dynamic models. 
