@@ -3,7 +3,7 @@
 This chapter details the parameter identification of the soft robotic actuator. First, material properties and dimensions of the soft robotic manipulator are provided. Then, determination of actuator stiffness for elongation and curvature explained. Consequently, pressure to force input mapping is detailed. At this point it should be emphasized that during experimental analysis the soft actuator, on which this parameter study is based, was too porous. This allowed too much air to escape and therefore was not suitable for further use. Therefore, the methodology of acquiring stiffness data and pressure mapping should be valued instead of found parameters. During experimental analysis a geometric equivalent planar actuator is used. 
 
 
-Parameter identification is necessary for model simulation as well as experimental validation. Key actuator parameters such as actuator mass and dimensions were presented in an earlier work \cite{berkers}. Since the robotic manipulator is manufactured by an external company, some material properties are classified. To our best knowledge, the Young's Modulus and Poisson ratio are equal to those presented in Table (\ref{tab4:parameters}). These properties allow to calculate shear modulus $\mu$ as $\frac{E}{2(1+\nu)}$ and bulk modulus $\kappa$ as $\frac{E}{3(1-2\nu)}$. It is assumed that the robotic manipulator deforms non-linearly following Neo-Hookeon behaviour \cite{Caasenbrood2020StiffnessModel}. For consistency with linear elasticity these moduli are reformulated as $C_{10} = \frac{\mu}{2}$ and $D_{1} = \frac{2}{\kappa}$ as used for Finite Element Analysis (FEA) \cite{neohookean}. The geometrical properties are presented in Figure \ref{fig3:dim}.
+Parameter identification is necessary for model simulation as well as experimental validation. Key actuator parameters such as actuator mass and dimensions were presented in an earlier work \cite{berkers}. Since the robotic manipulator is manufactured by an external company, some material properties are classified. To our best knowledge, the Young's Modulus and Poisson ratio are equal to those presented in Table (\ref{tab4:parameters}). These properties allow to calculate shear modulus $G$ as $\frac{E}{2(1+\nu)}$ and bulk modulus $K$ as $\frac{E}{3(1-2\nu)}$. It is assumed that the robotic manipulator deforms non-linearly following Neo-Hookeon behaviour \cite{Caasenbrood2020StiffnessModel}. For consistency with linear elasticity these moduli are reformulated as $C_{10} = \frac{\mu}{2}$ and $D_{1} = \frac{2}{\kappa}$ as used for Finite Element Analysis (FEA) \cite{neohookean}. The geometrical properties are presented in Figure \ref{fig3:dim}.
 
 
 \begin{table}[H]
@@ -16,7 +16,7 @@ Parameter identification is necessary for model simulation as well as experiment
       Actuator width  $w$     &    0.0664       & $[m]$  \\
       Lever length $r$     &    0.01256      & $[m]$  \\ 
       Young's Modulus $E$  &    69           & $[MPa]$\\ 
-      Poisson ration $\nu$ &    0.45         & $[-]$ \\ \hline
+      Poisson ratio $\nu$ &    0.45         & $[-]$ \\ \hline
     \end{tabular}
     \label{tab4:parameters}
 \end{table}
@@ -394,32 +394,3 @@ The obtained dynamic response is arguable from a physical point of view. The dyn
 \hl{In this section sinusoidal response of the pump model should be added for experimental verification}
 
 
-\section{Controller in Simulation}
-
-The dynamical model that was derived in Chapter \ref{chap2} can be used to test the applicability of the Jacobian controller. Recall the dynamic model as, 
-
-
-\begin{equation}
-    M(q)\Ddot{q} + D\dot{q} + K(q)q = \tau \hspace{10pt} \text{with} \hspace{10pt} \tau = Hp.
-    \label{eq4:dynamicmodel}
-\end{equation}
-
-The parameter identification allows to obtain the entries of mass matrix $M$ and stiffness matrix $K$. With the determined stiffness' matrix $K = \text{diag}([K_\kappa \hspace{3pt} K_\epsilon])$. The diagonal damping matrix is equal is represented by $D = \text{diag}([D_\kappa \hspace{3pt} D_\epsilon]) = \text{diag}([4e-5 \hspace{3pt} 0.3])$. Damping properties have not been determined experimentally, as the actuator cannot be actuated such that a measurable free excitation is induced in a single axis. Therefore the damping parameters are chosen iteratively. In Appendix \ref{app4}, a free oscillation of the dynamic model is presented. Here the effect of damping on the systems response is further elucidated. Furthermore an analysis on the accuracy of the model is provided.
-
-The dynamic model of (\ref{eq4:dynamicmodel}) allows for numeric solving by reformulating the model to a second order state-space formulation as,
-
-\begin{equation}
-     \begin{bmatrix} \dot{x}  \end{bmatrix}   = \underbrace{  \begin{bmatrix} O_2 & I_2 \\ -M(q)^{-1}K(q)  & -M(q)^{-1} D \end{bmatrix}   }_{A} \begin{bmatrix} x \end{bmatrix}  +      \underbrace{\begin{bmatrix} O_2 \\ M(q)^{-1}H   \end{bmatrix}   }_{B}    \begin{bmatrix} p_1\\ p_2  
-     \end{bmatrix}, 
-     \label{eq4:SS}
-\end{equation}
-
-with state vector $x = \begin{bmatrix} \kappa \hspace{3pt} \epsilon \hspace{3pt} \dot{\kappa}  \hspace{3pt} \dot{\epsilon}  \end{bmatrix}^{\top}$. Here matrix $A \in \mathbb{R}^{4\times 4}$ contains all elements with respect to the system dynamics. Matrix $B\in\mathbb{R}^{4 \times 2}$ is the control input vector. Mind the substitution of the mapping matrix, hence control input is pressure instead of force and moment. 
-
-Above state-space does not allow to give an accurate system description as the pump dynamics are not included in this representation. Therefore an adapted state space formulation is presented as,
-
-\begin{equation}
-     \begin{bmatrix} \dot{x}  \end{bmatrix}   =   \underbrace{ \begin{bmatrix} O_2 & I_2 & O_2 \\ -M(q)^{-1}K(q)  & -M(q)^{-1} D & O_2 \\
-     O_2 & O_2    & -\frac{1}{\tau_s(V)}I_2\ \end{bmatrix}   }_A   \begin{bmatrix} x \end{bmatrix}  + \underbrace{      \begin{bmatrix} O_2 & O_2 \\ M(q)^{-1}H & O_2 \\ O_2 & \frac{K(V)}{\tau_s(V)} I_2 \end{bmatrix} }_B      \begin{bmatrix} p_1 \\ p_2  \\ V_1 \\ V_2 \end{bmatrix},
-     \label{eq:ssp}
-\end{equation}

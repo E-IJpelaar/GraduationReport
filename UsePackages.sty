@@ -99,3 +99,32 @@
 %\pagestyle{fancy}
 
 %\setlength{\headheight}{15pt}
+
+
+
+\usepackage{float}
+
+
+
+\usepackage{multicol}
+\usepackage{nomencl}
+%\setlength{\nomitemsep}{-\parsep}
+\setlength{\nomitemsep}{-1.5\parsep}
+\makenomenclature
+
+% -----------------------------------------
+%% This code creates the groups
+% -----------------------------------------
+\usepackage{etoolbox}
+\renewcommand\nomgroup[1]{%
+  \item[\bfseries
+  \ifstrequal{#1}{S}{Symbols}{%
+  \ifstrequal{#1}{A}{Abbreviations}{%
+  \ifstrequal{#1}{I}{Indices}{}}}%
+]}
+% -----------------------------------------
+
+
+
+\renewcommand{\nompreamble}{\begin{multicols}{2}}
+\renewcommand{\nompostamble}{\end{multicols}}
