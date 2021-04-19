@@ -171,10 +171,10 @@ At this point we have derived modal coordinates as function pressure. However, t
 Stiffness is the ratio between applied force and elongation. To determine stiffness for elongation and curvature, applied forces and direction of deformation is necessary. For the physical set-up, individual bellow pressure $p_i \in \mathbb{R}^{\geq 0}$ with $i$ $\mathbb{N} \in \{1,2\}$ can be regulated. Therefore force input vector $\tau$ is mapped to pressure by some mapping matrix $H \in \mathbb{R}^{2 \times 2}$. The relation between force input and pressure is given as, 
 
 \begin{equation}
-   \tau =   \begin{bmatrix} M \\ F \end{bmatrix}     = \underbrace{\begin{bmatrix}  a_1 & a_2 \\ a_3 & a_4 \end{bmatrix}}_{H}         \begin{bmatrix}  p_1 \\ p_2 \end{bmatrix}, \label{eq3:H}
+   \tau =   \begin{bmatrix} M \\ F \end{bmatrix}     = \underbrace{\begin{bmatrix}  H_{1,1} & H_{1,2} \\ H_{2,1} & H_{2,2} \end{bmatrix}}_{H}         \begin{bmatrix}  p_1 \\ p_2 \end{bmatrix}, \label{eq3:H}
 \end{equation}
 
-where entries of $H$ are to be determined. Our aim is to decouple rotation and elongation. Therefore, it is important to understand that $F$ causes elongation of the soft robotic actuator. Whereas, $M$ results in a curvature of the actuator. Therefore, the entries of $a_3$ and $a_4$ represent an effective surface area on which the pressure acts. Constant $a_1$ and $a_2$ represent a combination of effective surface area and lever on which the force acts. Due to symmetry properties it must hold that $a_1 = a_3$ and $a_1 = -a_2$.
+where entries of $H$ are to be determined. Our aim is to decouple rotation and elongation. Therefore, it is important to understand that $F$ causes elongation of the soft robotic actuator. Whereas, $M$ results in a curvature of the actuator. Therefore, the entries of $H_{2,1}$ and $H_{2,2}$ represent an effective surface area on which the pressure acts. Constant $H_{1,1}$ and $H_{1,2}$ represent a combination of effective surface area and lever on which the force acts. Due to symmetry properties it must hold that $H_{2,1} = H_{2,2}$ and $H_{1,1} = -H_{1,2}$.
 
 First, the relation between pressure and force tried to be obtained. This will be done by using finite element software as mentioned. The idea is to map pressure to force using elongation. Pressurizing both bellows equally, resulted in almost ``pure" elongation. Effectively, the same deformation can be achieved by applying an equally distributed force on the top plate of the actuator. To this end, simulations for a set of forces applied to the top of actuator are simulated. The results for this simulation are presented in Figure (\ref{fig3:forcemap}). The horizontal axis show the modal coordinates, determined using the inverse kinematic fit as discussed previously. The contribution to the curvature is for both pressure and force simulation comparable. The scaling of the of the vertical axis already reveals that a linear relation can be found.
 
@@ -198,13 +198,13 @@ First, the relation between pressure and force tried to be obtained. This will b
 The linear mapping coefficient, can be found by solving least squares problem as,
 
 \begin{equation}
-\min_{a_1} \sum_{i=1}^{N} (F_i - 2 a_1 p_i)^2
+\min_{H_{2,2}} \sum_{i=1}^{N} (F_i - 2 H_{2,2} p_i)^2
 \label{eq3:forcefitting}
 \end{equation}
 
-where $i$ indicates each sample point. The effective pressure area is found to be equal to 0.1462. Since $a_3 = a_4$ the mapping of pressure in kPa to force in Newton is obtained. Figure (\ref{fig3:forcetopressure}) shows the results of the input mapping for the elongation. It can be seen that the pressure maps fairly accurate to the force.
+where $i$ indicates each sample point. The effective pressure area is found to be equal to 0.1462. Since $H_{2,1} = H_{2,2}$ the mapping of pressure in kPa to force in Newton is obtained. Figure (\ref{fig3:forcetopressure}) shows the results of the input mapping for the elongation. It can be seen that the pressure maps fairly accurate to the force.
 
-Now the effective pressure area has been determined, the mapping to the moment can be calculated. It is assumed that the force acts on the top plate at a given radius form the backbone curve. The lever on which the force acts is equal to 12.56 mm, as can be seen in Figure \ref{fig3:dim}. This allows to calculate $a_1$ and $a_2$ by multiplying $a_3$ with this distance. The mapping matrix $H$ then follows as,
+Now the effective pressure area has been determined, the mapping to the moment can be calculated. It is assumed that the force acts on the top plate at a given radius form the backbone curve. The lever on which the force acts is equal to 12.56 mm, as can be seen in Figure \ref{fig3:dim}. This allows to calculate $H_{1,1}$ and $H_{2,1}$ by multiplying $H_{2,1}$ with this distance. The mapping matrix $H$ then follows as,
 
 \begin{equation}
     H =  \begin{bmatrix} 1.8245e-3 & -1.8245e-3 \\

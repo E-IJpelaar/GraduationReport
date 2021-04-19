@@ -7,113 +7,51 @@
 \centering
     \begin{tabular}{p{1.5cm} p{5cm}} \hline
     \textbf{Symbol}    &   \textbf{Description }\\ \hline
-    $a_1$     &  Effective surface area \\
-    $a_2$     &  Effective surface area \\
-    $a_3$     &  Effective surface area times lever length \\
-    $a_4$     &  Effective surface area times lever length \\
     A      &  System matrix \\
-    Ad     &  Adjoint mapping \\
     B     &  Input matrix \\
     $C_{10}$     &  Elasticity modulus \\
     D     &  Damping matrix \\
     $D_1$     &  Elasticity modulus \\
-    e     & error \\
+    $e$     & error \\
     E     &  Young's modulus \\
-    f     & Forward kinematics function \\
+    $f$     & Forward kinematics function \\
     F     & Force \\
     g     &  Bacbone curve \\
     G     &  Shear modulus \\
-    h     &  height \\
+    $h$     &  height \\
     H     &  Mapping matrix \\
     I     &  Identity matrix \\
     J     &  Jacobian matrix \\
     K     &  Bulk modulus \\
     K     &  Stiffness matrix \\
     K     &  Diagonal gain matrix \\
-    l     &  Actuator length \\
+    $l$     &  Actuator length \\
     L     &  Actuator length \\
-    m     &  Matrix dimension \\
-    m     &  Meter \\
+    m     &  Matrix rows \\
+    $m$     &  Meter \\
     M     &  Mass matrix \\
     M     &  Moment \\
+    n     &  Matrix collumns \\
     N     & Order of approximation \\
     O     &  Zero matrix \\
-    p     & Position vector \\
-    p     & Pressure vector \\
+    $p$     & Position vector \\
+    $p$     & Pressure vector \\
     q     & Modal coordinate vector \\
     Q     & Weighing matrix \\
-    r     & Position vector in Cartesian coordinates \\
-    r     & Lever length \\
+    $r$     & Position vector in Cartesian coordinates \\
+    $r$     & Lever length \\
     R     & Rotation matrix \\
     S     & Force input matrix \\
-    t     & Time \\
+    $t$     & Time \\
     T     & Time domain \\
-    w     & Width \\
+    $w$     & Width \\
     W     & Weighing matrix \\
-    x     & Cartesian x-direction \\
-    x     & State vector \\
-    y     & Cartesian y-direction \\
-    y     & Sensor value data input \\
-    Y     & Sensor value \\
-    z     & Cartesian z-direction \\ \hline
-    \end{tabular}
-\end{table}
-
-
-\begin{table}[H]
-\centering
-    \begin{tabular}{p{1.5cm} p{5cm}} \hline
-    \textbf{Index}    &   \textbf{Superscript / subscript punctuation marks}\\ \hline
-    0     &  Initial condition or order of approximation \\
-    1     &  Entry of vector / dimension of matrix \\
-    2     &  Entry of vector / dimension of matrix \\
-    a     &  Active \\
-    d     &  Desired \\
-    end   & Last entry of vector \\
-    est   & Estimate \\
-    g     & Backbone curve \\
-    i     & Integral \\
-    i     & Vector row entry \\
-    j     & Vector row entry \\
-    k     & Discrete time step \\
-    k     & Index of summation \\
-    legen & Legendre polynomial \\
-    lenght & Arc length \\
-    mid    & Nodes discretized backbone curve \\
-    nc    & Non-conservative \\
-    p    & Proportional \\
-    set   & Set-point \\
-    tot    & Total \\
-    x    & Cartesian x-direction \\
-    y    & Cartesian y-direction \\
-    $'$ & Spatial derivative \\
-    $\dagger$ & Pseudo-Inverse \\
-    $\dot{}$ & Time derivative \\
-    $\epsilon$  & Strain \\
-    $\kappa$ & Curvature \\
-    $\hat{}$ & Isomorphism \\
-    $\top$ & Transpose \\
-    $+$ & Positive numbers \\
-    $\times$ & Cross-product \\  \hline
-    
-    \end{tabular}
-\end{table}
-
-
-
-\begin{table}[H]
-\centering
-    \begin{tabular}{p{1.5cm} p{5cm}} \hline
-    \textbf{Abbr.}    &   \textbf{Meaning }\\ \hline
-    ADC     &  Analog-Digital converter\\
-    FEA     &  Finite Element Analysis \\
-    IMU    & Inertial Measurement Unit \\
-    LED   & Light Emitting Diode \\
-    PCC   & Piece-wise constant curvature \\
-    PD    & Proportional-Derivative \\
-    PID    & Proportional-Integral-Derivative \\
-    PSI    & Pound-Force per square inch\\
-    PWM    & Pulse-Width modulation\\  \hline
+    $x$     & Cartesian x-direction \\
+    $x$     & State vector \\
+    $y$     & Cartesian y-direction \\
+    $y$     & Sensor value data input \\
+    $Y$     & Sensor value \\
+    $z$     & Cartesian z-direction \\ \hline
     \end{tabular}
 \end{table}
 
@@ -127,10 +65,11 @@
 \end{table}
 
 
+
 \begin{table}[H]
 \centering
-    \begin{tabular}{p{1.5cm} p{5cm}} \hline
-    \textbf{Symbol}    &   \textbf{Description }\\ \hline
+    \begin{tabular}{p{2.8cm} p{3.2cm}} \hline
+    \textbf{Greek symbol}    &   \textbf{Description }\\ \hline
     $\alpha$     &  Stiffness parameter \\
     $\beta$     &  Stiffness parameter \\
     $\epsilon$     &  Strain \\
@@ -152,6 +91,61 @@
     \end{tabular}
 \end{table}
 
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{p{1.5cm} p{5cm}} \hline
+    \textbf{Index}    &   \textbf{Superscript / subscript punctuation marks}\\ \hline
+    0     &  Initial condition or order of approximation \\
+    1     &  Entry of vector / dimension of matrix \\
+    2     &  Entry of vector / dimension of matrix \\
+    a     &  Active \\
+    d     &  Desired \\
+    end   & Last entry of vector \\
+    est   & Estimate \\
+    g     & Backbone curve \\
+    i     & Integral \\
+    k     & Discrete time step \\
+    k     & Index of summation \\
+    legen & Legendre polynomial \\
+    lenght & Arc length \\
+    $L$   & Frame at $\sigma = L$ \\
+    mid    & Nodes discretized backbone curve \\
+    nc    & Non-conservative \\
+    p    & Proportional \\
+    set   & Set-point \\
+    tot    & Total \\
+    $x$    & Cartesian x-direction \\
+    $y$    & Cartesian y-direction \\
+    $\epsilon$  & Strain \\
+    $\kappa$ & Curvature \\ 
+    $\sigma$   & Frame evaluated at $\sigma$ \\\hline
+    \end{tabular}
+\end{table}
+
+
+
+
+
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{p{1.5cm} p{5cm}} \hline
+    \textbf{Abbr.}    &   \textbf{Meaning }\\ \hline
+    ADC     &  Analog-Digital converter\\
+    FEA     &  Finite Element Analysis \\
+    IMU    & Inertial Measurement Unit \\
+    LED   & Light Emitting Diode \\
+    PCC   & Piece-wise constant curvature \\
+    PD    & Proportional-Derivative \\
+    PID    & Proportional-Integral-Derivative \\
+    PSI    & Pound-Force per square inch\\
+    PWM    & Pulse-Width modulation\\  \hline
+    \end{tabular}
+\end{table}
+
+
+
 \begin{table}[H]
 \centering
     \begin{tabular}{p{2.5cm} p{4cm}} \hline
@@ -163,13 +157,36 @@
     $\mathcal{M}$     &  Mass tensor \\
     $\mathcal{Q}$     &  Forces acting on system \\
     $\mathcal{T}$     &  Kinetic energy \\
-    $\mathcal{V}$     &  Potential energy \\
+    $\mathcal{V}$     &  Potential energy \\ \hline
 
     
     \end{tabular}
 \end{table}
 
 
+\begin{table}[H]
+\centering
+    \begin{tabular}{p{1.5cm} p{5cm}} \hline
+    \textbf{Notation}    &   \textbf{Description}\\ \hline
+    $a_i$ & $i$-th entry of vector a \\
+    $a^\top$ & Transpose of vector a \\
+    $\text{dim}(a)$ & Dimension of vector a \\
+    $A^\top$ & Transpose of matrix A \\
+    $A^\dagger$ & Pseudo-Inverse of non-square matrix A \\
+    $A^{-1}$ & Inverse of matrix A \\
+    $A_\times$ & Skew-symmetric matrix A \\
+    $A_{m,n}$ & Matrix entry at row $m$ and column $n$ \\
+    $A_{m \times n}$ & Matrix with $m$ rows and $n$ columns \\
+    $\text{Ad}_g$ & Adjoint action on function $g$\\
+    $[g]_N$ & $N$-th order truncation of function $g$\\ 
+    $g'$ & Spatial derivative of function $g$ \\
+    $\dot{g}$ & Time derivative of function $g$ \\
+    $\hat{g}$ & Isomorphism of $\hat{g} \longmapsto g$ \\
+    $\mathbb{R}^+$ & Positive real number\\
+    $\mathbb{R}^+_0$ & Positive real number including zero\\
+    $\text{diag}(a)$ & Diagonal matrix with the elements of $a$ as the main diagonal\\ \hline
+    \end{tabular}
+\end{table}
 
 
 
