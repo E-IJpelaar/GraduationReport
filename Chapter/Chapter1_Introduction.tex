@@ -1,13 +1,6 @@
 \label{chapter1}
 
-In recent years, the field of soft robotics has received a substantial increase of interest \cite{iida2011soft}\cite{walker2020soft} and \cite{bao2018soft}. Soft robots have a vast domain in which they can be applied. This includes the medical field \cite{sitti2018miniature} \cite{ashuri2020biomedical}, where soft robots have potential applications in artificial muscles, prosthetic devices, stents or surgical instrument. They can also be used to explore places that are hard to reach for human beings. This includes offshore operation and deep-sea exploration \cite{aracri2021soft}, such as the soft robot exploring the depths of the Mariana trench \cite{laschi2021soft}. Other applications are in the field of industrial automation, where they can support human operators in manipulating objects \cite{george2018control}, \cite{grissom2006design}. As their name already suggests soft robots are made from soft and flexible materials. Their inherently dexterous structure allows soft robots to move around obstacles. This makes soft robots robust in constantly changing environments. The foundation of soft robotic design is often found in nature and includes inspiration for material choice, locomotion, and morphology. A few examples of bio-inspired soft robots include emulated trunks \cite{hannan2003kinematics} inspired by the proboscis of an elephant, robots based on the arm of octopus \cite{wang2013visual}, and robots that replicate the movement of fish \cite{marchese2014}. Figure \ref{fig1:softexample} shows a few experimental soft robots. 
-
-
-
-
-
-
-
+In recent years, the field of soft robotics has received a substantial increase of interest \cite{iida2011soft}\cite{walker2020soft} \cite{bao2018soft}. Soft robots have a vast domain in which they can be applied. This includes the medical field \cite{sitti2018miniature} \cite{ashuri2020biomedical}, where soft robots have potential applications in artificial muscles, prosthetic devices, stents or surgical instrument. They can also be used to explore places that are hard to reach for human beings. This includes offshore operation and deep-sea exploration \cite{aracri2021soft}, such as the soft robot exploring the depths of the Mariana trench \cite{laschi2021soft}. Other applications are in the field of industrial automation, where they can support human operators in manipulating objects \cite{george2018control}, \cite{grissom2006design}. Figure \ref{fig1:softexample} shows a few experimental soft robots. 
 
 
 
@@ -19,19 +12,21 @@ In recent years, the field of soft robotics has received a substantial increase 
 \end{figure}
 
 
-In this thesis we focus on soft robots designed for manipulating objects, which reshape the idea of using robots for industrial processes. Currently, rigid robots dominate the field of industrial automation, as they excel in accuracy, repeatability and load capacity. However, these traditional robots tend to be unsafe when operating in human-centred environments. Classic robots are composed of rigid materials and accelerate to high velocities, which could create an unsafe environment for human operators. Additionally, these robots have limited degrees of freedom, making it harder to avoid obstacles. To evade the risk of potential harm 
+
+As their name already suggests soft robots are made from soft and flexible materials. Their inherently dexterous structure allows soft robots to move around obstacles. This makes soft robots robust and very applicable in constantly changing environments. The foundation of soft robotic design is often found in nature and includes inspiration for material choice, locomotion, and morphology. A few examples of bio-inspired soft robots include emulated trunks \cite{hannan2003kinematics} inspired by the proboscis of an elephant, robots based on the arm of octopus \cite{wang2013visual}, and robots that replicate the movement of fish \cite{marchese2014}. 
 
 
+In this thesis, we focus on soft robots designed for manipulating objects. These robots reshape the idea of using robots for industrial processes. Currently, rigid robots dominate the field of industrial automation, as they excel in accuracy, repeatability and load capacity. However, these traditional robots tend to be unsafe when operating in human-centred environments. Classic robots are composed of rigid materials and accelerate to high velocities, which could create an unsafe environment for human operators. Additionally, these robots have limited degrees of freedom, making it harder to avoid obstacles. To evade the risk of potential harm and create more dexterous robots, innovative soft robots are designed. As they are made from soft materials they are inherently safer to operate around humans. However, due to their flexible nature, they behave differently compared to traditional robots. To gain a better understanding of soft robotic manipulators we will draw parallels and mention differences between these type of soft robots and traditional robots. 
 
-There are some major differences between soft robots and common rigid robots. First, a classification between both can be made on the based on the compliance of their underlying materials \cite{Bionics2008}. Generally, classic robots are made of rigid metal beams, whereas soft robots are made from soft polymer materials. The building materials of the robot largely determine the kinematic redundancy of the robot. Since soft robots are composed of materials with an extremely low Young's modulus, they can sustain large (and possibly non-linear) deformation during normal operation. As a result of this compliance, gravity and payload cause a distributed deformation throughout the entire system. This gives the robot theoretically an infinite amount of degrees of freedom. This makes controlling these robots more challenging when compared to traditional robots, as the latter has a fixed amount of degrees of freedom.
 
-Robot actuation is another major difference between the two robot types.
-Whereas traditional robots are generally electro-mechanically actuated, soft robots can be actuated with a wide range of actuation methods, which includes pneumatics, hydraulics, thermal and even chemical \cite{BHA}, \cite{marchese2014},\cite{kang2019programmable}, \cite{shepherd2013using}. Rigid robots are often linked by rotatory or prismatic joints, where its design allows to include the actuator inside the robot. Soft robot actuators are often located externally, as their design simply does not allow to include them. Most soft robots are actuated pneumatically or by using variable-length tendons \cite{Rus2015}. A well-known example of a pneumatically actuated soft robot is the Bionic Handling assistant by Festo, as shown in Figure (\ref{fig1:softexample}). These type of soft robots have inflatable channels that cause deformation when applying pressure. An example of a tendon driven robot is the elephant trunk's robot \cite{cieslak1999elephant}. This manipulator consists of eight elastic segments linked together by coil springs. Each segment is controlled by two pairs of strings. Servo or linear actuators are used to wind and unwind the strings, with that controlling the movement of the robot. Both actuation methods introduce additional dynamics that largely affect the performance of the entire control system. 
+There are some major differences between soft robots and common rigid robots. First, a classification between both can be made based on the compliance of their underlying materials \cite{Bionics2008}. Generally, classic robots are made of rigid metal beams, whereas soft robots are made from soft polymer materials. The building materials of the robot largely determine the kinematic redundancy of the robot. Since soft robots are composed of materials with an extremely low Young's modulus, they can sustain large (and possibly non-linear) deformation during normal operation. As a result of this compliance, gravity and payload cause a distributed deformation throughout the entire system. This gives the robot theoretically an infinite amount of degrees of freedom. This makes controlling these robots more challenging when compared to traditional robots, as the latter has a fixed amount of degrees of freedom.
+
+Robot actuation is another major difference between the two robot types. Whereas traditional robots are generally electro-mechanically actuated, soft robots can be actuated with a wide range of actuation methods, which includes pneumatics, hydraulics, thermal and even chemical \cite{BHA}, \cite{marchese2014},\cite{kang2019programmable}, \cite{shepherd2013using}. Rigid robots are often linked by rotatory or prismatic joints, where its design allows to include the actuator inside the robot. Soft robot actuators are often located externally, as their design simply does not allow to include them. Most soft robots are actuated pneumatically or by using variable-length tendons \cite{Rus2015}. A well-known example of a pneumatically actuated soft robot is the Bionic Handling assistant by Festo, as shown in Figure (\ref{fig1:softexample}). These type of soft robots have inflatable channels that cause deformation when applying pressure. An example of a tendon driven robot is the elephant trunk's robot \cite{cieslak1999elephant} (Figure \ref{fig1:softexample}). This manipulator consists of eight elastic segments linked together by coil springs. Each segment is controlled by two pairs of strings. Servo or linear actuators are used to wind and unwind the strings, with that controlling the movement of the robot. Both actuation methods introduce additional dynamics that largely affect the performance of the entire control system. 
 
 Lastly, most soft robots do not allow to use of conventional sensing mechanisms. For hard robots, their joint design allows incorporating encoders to measure rotation and other sensory devices. Since the forward kinematics, given rigid joints and links, can be computed through trigonometry, position sensing is relatively easy. For soft robots, the compliant and lightweight nature often prevents the integration of conventional sensors, such as encoders, strain gauges and inertial measurement units (IMU's) \cite{Rus2015}, \cite{Lee2017}. Alternative sensory techniques are often needed. These methods include for instance optical sensors and stretch sensors based on macrobend fibres \cite{Sareh2015}.
 
 
-The previous section discussed the contrast between rigid robots and soft robots. It showed that soft robots distinct themselves from traditional robots on three fronts. Their inherent soft body leads to a theoretical infinite degree system. The actuation of soft robots introduces additional dynamics caused by the actuators. Furthermore, the conventional sensory mechanisms can often not be applied to soft robots, and therefore demand for more complex sensory devices. These factors all affect the way soft robots can be controlled. Recent literature often tries to convey readily available control theories and apply those to soft robotics.
+The previous section discussed the contrast between rigid robots and soft robots. It showed that soft robots distinct themselves from traditional robots on three fronts. Their inherent soft body leads to a theoretical infinite degree system. The actuation of soft robots introduces additional dynamics caused by the actuators. Furthermore, the conventional sensory mechanisms can often not be applied to soft robots, and therefore demand more complex sensory devices. These factors all affect the way soft robots can be controlled. Recent literature often tries to convey readily available control theories and apply those to soft robotics.
 
 The work of Thuruthel et al. (2018) \cite{george2018control} presents an overview of recent findings in soft robotic control for pneumatically actuated and tendon-driven soft robots. In this work, three control approaches are distinguished, namely model-free, hybrid and model-based control. A model-free control strategy does not use kinematic or dynamical description in its control approach. Instead, it exploits learning-based algorithms to dynamically control the robotic system. Hybrid controllers combine learning or empirical elements with a model-based approach. The model-based controllers rely on an analytical description of the robotic system. Furthermore, for each control approach, a sub-division between kinematic and dynamical control is made. Here, kinematic control is defined as a zero-order input-output relation. A change in input is directly observed in output, therefore this approach is lower-level compared to dynamical control. For the latter, the configuration space and/or task space variables' velocities are used in the control algorithm. 
 
@@ -42,72 +37,74 @@ In \cite{wang2013visual} visual servo control is used to control a cable-driven 
 
 In \cite{zhang2017visual} also visual servo control was implemented to control a tendon-driven soft robotic manipulator. Again, kinematic control is used for a reference tracking problem. Contrary to the previous research, where a jacobian matrix is estimated, here the jacobian is calculated by running a real-time FEM model parallel. The reference input runs through the FEM model, which outputs a jacobian and expected end-effector position. The jacobian is used in the controller to control the actual manipulator. The FEM model's expected end-effector position and actual end-effector position are used in a second controller to enhance jacobian estimation in the FEM model.
 
-A model-based controller that uses a dynamical model in its control loop is presented in \cite{della2020model}. The robots infinite dimensionality is resolved by regarding the robot being composed of six individual actuatable segments. A Piecewise Constant Curvature (PCC) approach was used to describe the kinematics of the robotic actuator. For each segment Denavit-Hartenberg (DH) is used to describe the rigid robot equivalent, which is then used to derive a dynamic model. The proposed controller essentially is a computed torque controller with an additional PD controller. 
+A model-based controller that uses a dynamical model in its control loop is presented in \cite{della2020model}. The robots infinite dimensionality is resolved by regarding the robot being composed of six individual actuatable segments. A Piece-wise constant curvature (PCC) approach was used to describe the kinematics of the robotic actuator. For each segment Denavit-Hartenberg (DH) is used to describe the rigid robot equivalent, which is then used to derive a dynamic model. The proposed controller essentially is a computed torque controller with an additional PD controller. 
 
-In the aforementioned work, \cite{della2020model}, the infinite dimensionality of the soft robot is solved by assuming the robot consists of a fixed amount of segments. In this way, the infinite dimensionality of the system can be approximated by a fixed amount of degrees of freedom. This makes controller design easier. Of course, the reduction of degrees of freedom is at the cost of model accuracy. 
+In the aforementioned work, \cite{della2020model}, the infinite dimensionality of the soft robot is solved by assuming the robot consists of a fixed amount of segments. In this way, the infinite-dimensionality of the system can be approximated by a fixed amount of degrees of freedom. This makes controller design easier. Of course, the reduction of degrees of freedom is at the cost of model accuracy. In this work, the PCC modelling approach was applied, which is a widely adopted method for describing the configuration of soft robots \cite{ccapproach}. This modelling approach can be applied to soft robots that undergo a very specific deformation. Previous research that used this model include \cite{mahl2014bhakin}, \cite{berkers},\cite{Falkenhahn2015}, \cite{ccapproach}, \cite{runge2017framework}. A schematic drawing of the constant curvature modelling approach is shown in Figure \ref{fig2:ccapproach}. Although our modelling approach distinguishes itself from this methodology, it is important to grasp the basics. 
+
+The constant curvature describes the position of the actuator by three coordinates. Parameter $l$ is the curved length of the actuator measured from the fixed bottom to the tip. Coordinate $\kappa$ expresses the curvature of the actuator. It is assumed that the deformed actuator describes a perfect arc, hence radius $r$ is equal to $\frac{l}{k}$. This allows writing the orientation of the actuator's tip as $\theta = l\kappa$. Lastly, parameter $\phi$ describes the rotation of the actuator relative to the ground. A single constant curvature is not able to describe complex actuator configurations. To this end, multiple of these curves are stacked onto each other, thereby discretizing the actuator. This allows describing more complex configurations. This methodology is used in for instance \cite{Falkenhahn2015}.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.45\textwidth]{Figures/Chapter2/ccapproach.png}
+    \caption{Schematic drawing of the constant curvature model \cite{ccapproach} }
+    \label{fig2:ccapproach}
+\end{figure}
+
+The PCC approach has some limitations, due to its piece-wise character the actuator configuration is not described by a single continuous function. This makes it harder to find analytical expressions for instance derivatives. Additionally, this PCC approach only allows assigning material properties to particular points. This makes dynamical models generally less accurate. One method to overcome this problem is using partial differential equations (PDE's) to describe actuator configurations. These PDE's are more suitable for deriving continuum dynamic models. 
 
 
 
 \section*{Thesis outline and contribution}
 
-% add work of Has here.
+In this work, we study the modelling and control of a planar soft robot as shown in Figure \ref{fig:test2}. This soft actuator has a theoretically infinite amount of degrees of freedom, as it is composed of flexible polymer. Furthermore, it is pneumatically actuated, inducing additional dynamics into the control system, and a major limiting factor on achievable bandwidth. The soft robot consists of two individually inflatable bellows, allowing the robot to extend and curve. Each of the bellows can be inflated using air pumps. The induced rotation can be measured with an IMU, which is mounted at the tip of the actuator. Using optical tracking an LED marker connected to the tip of the robot, elongation of the robot can be measured. The air pumps and sensory devices allow us to design a closed-loop controller, to perform set-point regulation. A schematic layout of the actuator setup is depicted in Figure \ref{fig:test1}.
 
-The fundamentals of this research are provided in \cite{Caasenbrood2020}, which developed a framework to model the soft robot dynamics. This model can be valuable for soft robotic control. Therefore the research question that we try to answer is:
+This work is a continuation of the research of \cite{berkers}, which detailed a length and curvature controller for the planar soft robot. This work uses standard PD and PID control to ultimately perform a reference tracking problem. The obtained results are reasonable but do allow for better tracking performance. To enhance the performance of the control system we would like to include model-based information in the control loop. The fundamentals of this research are provided in \cite{Caasenbrood2020}, which developed a framework to model the soft robot dynamics. This model is valuable for soft robotic control. Given the system description and previous research conducted on the planar soft robot, the research question that we try to answer is:
 
 \textit{Can we develop a model-based control strategy for a pneumatically actuated, planar soft robot to perform a reference tracking problem?}
 
-To provide an answer to this research question we study the robot as depicted in Figure \ref{fig1:actuator}. This soft actuator has a theoretically infinite amount of degrees of freedom, as it is composed of flexible polymer. Furthermore, it is pneumatically actuated, inducing additional dynamics into the control system, and a major limiting factor on achievable bandwidth. The sensing is done with an inertial measurement unit (IMU) and an optical vision sensor. 
+\begin{figure}[H]
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width = 0.8\linewidth]{Figures/Chapter1/completesetup2.png}
+  \caption{Computer rendered image of the soft robot set-up }
+  \label{fig:test1}
+\end{minipage}
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width =0.8\linewidth]{Figures/Chapter1/actuator.png}
+  \vspace{50pt}
+  \caption{Planar soft robot, that can change its posture by inflating or deflating the bellows.}
+  \label{fig:test2}
+\end{minipage}
+\end{figure}
+
+
+To effectively answer the research question we consider the control layout as shown in Figure \ref{fig1:controlarchitecture}. This control setup also shows the structure of this thesis. In Chapter \ref{chap2} a forward kinematic description of the actuator is derived. This allows studying the robot's configuration in 2D-space. Furthermore, it allows us to study the velocity of the actuator as a function of kinematic configuration. The latter allows us to derive a dynamic model of the actuator. Also, a pump model is presented, which allows describing the entire system dynamics in state-space formulation. Once this model is derived, a parameter study is performed in Chapter \ref{chap3}. Here finite element analysis (FEA) is used to capture the non-linear stiffness of the soft robot. Furthermore, experiments are presented which allow determining the pump dynamics. In Chapter \ref{chap4} a model-based controller is proposed. This controller will be tested in simulation, using the dynamic model as derived in Chapter \ref{chap2}. These simulation results together with experimental verification are shown in Chapter \ref{chap5}.
+
+
+
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 
-   0.38\textwidth]{Figures/Chapter1/actuator.png}
-    \caption{Planar soft robot, that can change its posture by inflating or deflating the bellows.}
-    \label{fig1:actuator}
+    \includegraphics[width = \textwidth]{Figures/Chapter1/controlschemeCompleteGood.eps}
+    \caption{Thesis layout and control setup.}
+    \label{fig1:controlarchitecture}
 \end{figure}
 
-This thesis has the following structure. In Chapter \ref{chap2} a forward kinematic description of the actuator is derived. This allows studying the robot's configuration in 2D-space. Furthermore, it allows us to study the velocity of the actuator as a function of kinematic configuration. The latter allows us to derive a dynamic model of the actuator. Once this model is derived, a parameter study is performed in Chapter \ref{chap3}. Here finite element analysis is used to capture the non-linear stiffness of the soft actuator. In Chapter \ref{chap4} a model-based controller 
-is proposed. This controller will be tested in simulation, using the dynamic model as derived in Chapter \ref{chap2}. In Chapter \ref{chap5} the derived controller is experimentally verified. 
 
+
+
+
+This thesis has the following structure.
 Recapitulating, this thesis includes the following:
 
 
 \begin{itemize}
     \item Development of a non-linear dynamic model
     \item Determination of non-linear actuator stiffness
-    \item Completing experimental set-up for the planar soft robot 
     \item Development of a model-based control law
     \item Experimental implementation of the controller
 \end{itemize}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{Figures/Chapter1/controlschemeCompleteGood.eps}
-    \caption{Thesis lay-out and control set-up.}
-    \label{fig:my_label}
-\end{figure}
 
-
-
-
-%A kinematic description of the actuator is necessary to describe the position in three-dimensional space. A widely adopted method for describing the configuration of soft robots is piece-wise constant curvature (PCC) modelling \cite{ccapproach}. Previous research used this model to describe forward kinematics of soft actuators are \cite{mahl2014bhakin}, \cite{berkers},\cite{Falkenhahn2015}, \cite{ccapproach}, \cite{runge2017framework}. A schematic drawing of the constant curvature modelling approach is shown in Figure \ref{fig2:ccapproach}. Although we will not be using this exact methodology, it is important to understand the basics. The constant curvature describes the position of the actuator by three coordinates. Parameter $l$ is the curved length of the actuator measured from the fixed bottom to the tip. Coordinate $\kappa$ expresses the curvature of the actuator. It is assumed that the deformed actuator describes a perfect arc, hence radius $r$ is equal to $\frac{l}{k}$. This allows writing the orientation of the actuator's tip as $\theta = l\kappa$. Lastly, parameter $\phi$ describes the rotation of the actuator relative to the ground. A single constant curvature is not able to describe complex actuator configurations. To this end, multiple of these curves are stacked onto each other, thereby discretizing the actuator. This allows describing more complex configurations. This methodology is used in for instance \cite{Falkenhahn2015}.
-
-%The PCC approach has some limitations, due to its piece-wise character the actuator configuration is not described by a single continuous function. This makes it harder to find analytical expressions for instance derivatives. Additionally, this PCC approach only allows assigning material properties to particular points. This makes dynamical models generally less accurate. One method to overcome this problem is using partial differential equations (PDE's) to describe actuator configurations. These PDE's are more suitable for deriving continuum dynamic models. 
-
-
-\begin{figure}[H]
-\centering
-\begin{minipage}{.5\textwidth}
-  \centering
-  \includegraphics[width = 0.8\linewidth]{Figures/Chapter1/completesetup2.png}
-  \caption{Computer rendered image of the soft robot set-up }
-  \label{fig:test1}
-\end{minipage}%
-\begin{minipage}{.5\textwidth}
-  \centering
-  \includegraphics[width =0.8\linewidth]{Figures/Chapter1/actuator.png}
-  \vspace{50pt}
-  \caption{Image of the actual soft robot}
-  \label{fig:test2}
-\end{minipage}
-\end{figure}
