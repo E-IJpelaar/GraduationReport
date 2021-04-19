@@ -1,0 +1,177 @@
+\begin{spacing}{0.9}
+
+\Large{\textbf{Nomenclature}}
+
+\begin{multicols}{2}
+\begin{table}[H]
+\centering
+    \begin{tabular}{p{1.5cm} p{5cm}} \hline
+    \textbf{Symbol}    &   \textbf{Description }\\ \hline
+    $a_1$     &  Effective surface area \\
+    $a_2$     &  Effective surface area \\
+    $a_3$     &  Effective surface area times lever length \\
+    $a_4$     &  Effective surface area times lever length \\
+    A      &  System matrix \\
+    Ad     &  Adjoint mapping \\
+    B     &  Input matrix \\
+    $C_{10}$     &  Elasticity modulus \\
+    D     &  Damping matrix \\
+    $D_1$     &  Elasticity modulus \\
+    e     & error \\
+    E     &  Young's modulus \\
+    f     & Forward kinematics function \\
+    F     & Force \\
+    g     &  Bacbone curve \\
+    G     &  Shear modulus \\
+    h     &  height \\
+    H     &  Mapping matrix \\
+    I     &  Identity matrix \\
+    J     &  Jacobian matrix \\
+    K     &  Bulk modulus \\
+    K     &  Stiffness matrix \\
+    K     &  Diagonal gain matrix \\
+    l     &  Actuator length \\
+    L     &  Actuator length \\
+    m     &  Matrix dimension \\
+    m     &  Meter \\
+    M     &  Mass matrix \\
+    M     &  Moment \\
+    N     & Order of approximation \\
+    O     &  Zero matrix \\
+    p     & Position vector \\
+    p     & Pressure vector \\
+    q     & Modal coordinate vector \\
+    Q     & Weighing matrix \\
+    r     & Position vector in Cartesian coordinates \\
+    r     & Lever length \\
+    R     & Rotation matrix \\
+    S     & Force input matrix \\
+    t     & Time \\
+    T     & Time domain \\
+    w     & Width \\
+    W     & Weighing matrix \\
+    x     & Cartesian x-direction \\
+    x     & State vector \\
+    y     & Cartesian y-direction \\
+    y     & Sensor value data input \\
+    Y     & Sensor value \\
+    z     & Cartesian z-direction \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{p{1.5cm} p{5cm}} \hline
+    \textbf{Index}    &   \textbf{Superscript / subscript punctuation marks}\\ \hline
+    0     &  Initial condition or order of approximation \\
+    1     &  Entry of vector / dimension of matrix \\
+    2     &  Entry of vector / dimension of matrix \\
+    a     &  Active \\
+    d     &  Desired \\
+    end   & Last entry of vector \\
+    est   & Estimate \\
+    g     & Backbone curve \\
+    i     & Integral \\
+    i     & Vector row entry \\
+    j     & Vector row entry \\
+    k     & Discrete time step \\
+    k     & Index of summation \\
+    legen & Legendre polynomial \\
+    lenght & Arc length \\
+    mid    & Nodes discretized backbone curve \\
+    nc    & Non-conservative \\
+    p    & Proportional \\
+    set   & Set-point \\
+    tot    & Total \\
+    x    & Cartesian x-direction \\
+    y    & Cartesian y-direction \\
+    $'$ & Spatial derivative \\
+    $\dagger$ & Pseudo-Inverse \\
+    $\dot{}$ & Time derivative \\
+    $\epsilon$  & Strain \\
+    $\kappa$ & Curvature \\
+    $\hat{}$ & Isomorphism \\
+    $\top$ & Transpose \\
+    $+$ & Positive numbers \\
+    $\times$ & Cross-product \\  \hline
+    
+    \end{tabular}
+\end{table}
+
+
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{p{1.5cm} p{5cm}} \hline
+    \textbf{Abbr.}    &   \textbf{Meaning }\\ \hline
+    ADC     &  Analog-Digital converter\\
+    FEA     &  Finite Element Analysis \\
+    IMU    & Inertial Measurement Unit \\
+    LED   & Light Emitting Diode \\
+    PCC   & Piece-wise constant curvature \\
+    PD    & Proportional-Derivative \\
+    PID    & Proportional-Integral-Derivative \\
+    PSI    & Pound-Force per square inch\\
+    PWM    & Pulse-Width modulation\\  \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{p{1.5cm} p{5cm}} \hline
+    \textbf{Sets}    &   \textbf{Meaning }\\ \hline
+    $\mathbb{R}$     &  Real numbers \\
+    $\mathbb{Z}$     &  Natural numbers \\  \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{p{1.5cm} p{5cm}} \hline
+    \textbf{Symbol}    &   \textbf{Description }\\ \hline
+    $\alpha$     &  Stiffness parameter \\
+    $\beta$     &  Stiffness parameter \\
+    $\epsilon$     &  Strain \\
+    $\eta$     &  Velocity vector \\
+    
+    $\theta$      & Rotation \\
+    $\kappa$     &  Curvature \\
+    $\lambda$    &  Pump constant \\
+    $\nu$     &  Input force vector \\
+    $\nu$     &  Poisson ratio \\
+    $\xi$     &  Strain vector \\
+    $\rho$     &  Mass density \\
+    $\sigma$     &  Position instance \\
+    $\varphi$     &  Shape-function \\
+    $\Phi$    &  Shape-function matrix \\
+    $\omega$     &  Rotational velocity \\
+    $\partial$     &  Partial derivative \\ \hline
+    
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{p{2.5cm} p{4cm}} \hline
+    \textbf{Calligraphic}    &   \textbf{Description }\\ \hline
+
+    $\mathcal{D}$     &  Damping tensor \\
+    $\mathcal{K}$     &  Stiffness tensor \\
+    $\mathcal{L}$     &  Lagrangian \\
+    $\mathcal{M}$     &  Mass tensor \\
+    $\mathcal{Q}$     &  Forces acting on system \\
+    $\mathcal{T}$     &  Kinetic energy \\
+    $\mathcal{V}$     &  Potential energy \\
+
+    
+    \end{tabular}
+\end{table}
+
+
+
+
+
+\end{multicols}
+\end{spacing}
