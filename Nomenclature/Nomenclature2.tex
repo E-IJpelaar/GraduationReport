@@ -12,13 +12,13 @@
     $C_{10}$     &  Elasticity modulus \\
     D     &  Damping matrix \\
     $D_1$     &  Elasticity modulus \\
-    $e$     & error \\
+    $e$     & Error \\
     E     &  Young's modulus \\
     $f$     & Forward kinematics function \\
     F     & Force \\
-    g     &  Bacbone curve \\
+    g     &  Backbone curve \\
     G     &  Shear modulus \\
-    $h$     &  height \\
+    $h$     &  Height \\
     H     &  Mapping matrix \\
     I     &  Identity matrix \\
     J     &  Jacobian matrix \\
@@ -60,7 +60,7 @@
     \begin{tabular}{p{1.5cm} p{5cm}} \hline
     \textbf{Sets}    &   \textbf{Meaning }\\ \hline
     $\mathbb{R}$     &  Real numbers \\
-    $\mathbb{Z}$     &  Natural numbers \\  \hline
+    $\mathbb{N}$     &  Natural numbers \\  \hline
     \end{tabular}
 \end{table}
 
@@ -80,7 +80,7 @@
     $\lambda$    &  Pump constant \\
     $\nu$     &  Input force vector \\
     $\nu$     &  Poisson ratio \\
-    $\xi$     &  Strain vector \\
+    $\xi$     &  Curvature-strain vector \\
     $\rho$     &  Mass density \\
     $\sigma$     &  Position instance \\
     $\varphi$     &  Shape-function \\
@@ -96,9 +96,7 @@
 \centering
     \begin{tabular}{p{1.5cm} p{5cm}} \hline
     \textbf{Index}    &   \textbf{Superscript / subscript punctuation marks}\\ \hline
-    0     &  Initial condition or order of approximation \\
-    1     &  Entry of vector / dimension of matrix \\
-    2     &  Entry of vector / dimension of matrix \\
+    0     &  Initial condition \\
     a     &  Active \\
     d     &  Desired \\
     end   & Last entry of vector \\
@@ -107,7 +105,6 @@
     i     & Integral \\
     k     & Discrete time step \\
     k     & Index of summation \\
-    legen & Legendre polynomial \\
     lenght & Arc length \\
     $L$   & Frame at $\sigma = L$ \\
     mid    & Nodes discretized backbone curve \\
@@ -132,16 +129,20 @@
 \centering
     \begin{tabular}{p{1.5cm} p{5cm}} \hline
     \textbf{Abbr.}    &   \textbf{Meaning }\\ \hline
+    2D       & Two dimensional \\
     ADC     &  Analog-Digital converter\\
     BHA    &  Bionic Handling Assistant\\
     DH    &  Denavit-Hartenberg\\
     FEA     &  Finite Element Analysis \\
     FEM     &  Finite Element Model \\
     IMU    & Inertial Measurement Unit \\
-    LED   & Light Emitting Diode \\
+    LED   & Light-emitting Diode \\
+    ODE   & Ordinary Differential Equation \\
     PCC   & Piece-wise constant curvature \\
     PD    & Proportional-Derivative \\
+    PDE    & Partial Differential Equation \\
     PI   & Proportional-Integral \\
+    PID   & Proportional-Integral-Derivative\\
     PSI    & Pound-Force per square inch\\
     PWM    & Pulse-Width modulation\\  \hline
     \end{tabular}
@@ -171,23 +172,28 @@
 \centering
     \begin{tabular}{p{1.5cm} p{5cm}} \hline
     \textbf{Notation}    &   \textbf{Description}\\ \hline
-    $a_i$ & $i$-th entry of vector a \\
-    $a^\top$ & Transpose of vector a \\
-    $\text{dim}(a)$ & Dimension of vector a \\
-    $A^\top$ & Transpose of matrix A \\
-    $A^\dagger$ & Pseudo-Inverse of non-square matrix A \\
-    $A^{-1}$ & Inverse of matrix A \\
-    $A_\times$ & Skew-symmetric matrix A \\
+    $0_m$    & Column vector of zeros with length $m$ \\
+    $a_i$ & $i$-th entry of vector $a$ \\
+    $a^\top$ & Transpose of vector $a$ \\
+    $\text{dim}(a)$ & Dimension of vector $a$ \\
+    $\text{diag}(a)$ & Diagonal matrix with the elements of $a$ as the main diagonal\\
+    $A^\top$ & Transpose of matrix $A$ \\
+    $A^\dagger$ & Pseudo-Inverse of non-square matrix $A$ \\
+    $A^{-1}$ & Inverse of matrix $A$ \\
+    $A_\times$ & Skew-symmetric matrix $A$ \\
     $A_{m,n}$ & Matrix entry at row $m$ and column $n$ \\
     $A_{m \times n}$ & Matrix with $m$ rows and $n$ columns \\
+    $A \otimes B$ & Kronecker tensor product between matrices $A$ and $B$ \\
     $\text{Ad}_g$ & Adjoint action on function $g$\\
     $[g]_N$ & $N$-th order truncation of function $g$\\ 
     $g'$ & Spatial derivative of function $g$ \\
     $\dot{g}$ & Time derivative of function $g$ \\
     $\hat{g}$ & Isomorphism of $\hat{g} \longmapsto g$ \\
+    $I_m$    & Square identity matrix of size $m \times m$ \\
+    $O_m$    & Square zero matrix of size $m \times m$ \\
     $\mathbb{R}^+$ & Positive real number\\
-    $\mathbb{R}^+_0$ & Positive real number including zero\\
-    $\text{diag}(a)$ & Diagonal matrix with the elements of $a$ as the main diagonal\\ \hline
+    $\mathbb{N}^+_0$ & Positive natural number including zero\\ \hline
+
     \end{tabular}
 \end{table}
 
