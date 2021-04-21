@@ -208,7 +208,7 @@ An analytic solution to (\ref{eq2:etadif}) can be found by integrating the equat
     \label{eq2:J}
 \end{equation}
 
-here an expression for the geometric Jacobian $[J(\sigma,t)] \in \mathbb{R}^{3\times 2}$ is obtained \cite{Caasenbrood2020}. Note that we have approximated the strain with a first order truncation. This Jacobian maps modal coordinate velocity to linear and angular velocities along the backbone curve. Let us be clear on the dimension of this geometric Jacobian. Since we have two active degrees of freedom, that are strain $\epsilon$ in the y-direction and curvature strain $\kappa$, our modal coordinate vector $q(t)$ has length two. The geometric Jacobian maps the modal coordinate velocity $\dot{q}(t)$ to velocities in the Euclidean space. The velocity of a point with respect to a reference in 2-dimensional Euclidean space can be described by 3 components. From our fixed reference point at $g(0,t)$, these velocities are one rotational velocity, and two linear velocities in horizontal en vertical direction, respectively. As can be seen, this Jacobian matrix is non-linear with respect to position and time. Besides relating modal coordinate velocity to Cartesian velocity, the Jacobian can be used on position level as,
+here an expression for the geometric Jacobian $[J(\sigma,t)]_1 \in \mathbb{R}^{3\times 2}$ is obtained \cite{Caasenbrood2020}. Note that we have used the first-order strain truncation. This Jacobian maps modal coordinate velocity to linear and angular velocities along the backbone curve. Since we have two active degrees of freedom, that are strain $\epsilon$ in the y-direction and curvature strain $\kappa$, our modal coordinate vector $q(t)$ has length two. The geometric Jacobian maps the modal coordinate velocity $\dot{q}(t)$ to velocities in the Euclidean space. The velocity of a point with respect to a reference in 2-dimensional Euclidean space can be described by 3 components. From our fixed reference point at $g(0,t)$, these velocities are one angular velocity, and two linear velocities in horizontal en vertical direction, respectively. As can be seen, this Jacobian matrix is non-linear with respect to position and time. Besides relating modal coordinate velocity to Cartesian velocity, the Jacobian can be used on position level as,
 
 \begin{equation}
     r(\sigma,t) = [J(\sigma,t))]_1q(t),
@@ -220,47 +220,53 @@ which implies that modal coordinates $q(t)$ can also be mapped to a position vec
 \section{Dynamic model derivation}
 
 
-To study the dynamic behaviour of the soft actuator a dynamic model is created. A relatively simple approximation is used to obtain insight into the basic dynamics of the actuator. The dynamic model will primarily be used for controller design. A relatively simple model is deemed to be sufficient to assess general controller performance. To this end, we propose a non-linear mass-spring-damper model. In the previous section, we obtained an expression for the Jacobian matrix. Here we observed its position and time variance, therefore it is assumed that the mass matrix of the system is also non-linear. Furthermore, it is known that the elastomer of which the soft actuator is composed deforms non-linearly. Therefore, the sought after form to describe our soft robot dynamics is,
+To study the dynamic behaviour of the soft actuator a dynamic model is created. A relatively simple approximation is used to obtain insight into the basic dynamics of the actuator. The dynamic model will primarily be used for controller design. A relatively simple model is deemed to be sufficient to assess general controller performance. To this end, we propose a non-linear mass-spring-damper model as, 
 
 
 \begin{equation}
-    M(q(t))\Ddot{q}(t) + D\dot{q}(t) + K(q)q(t) = \nu(p,t),
+    M\big(q(t)\big)\Ddot{q}(t) + D\dot{q}(t) + K\big(q(t)\big)q(t) = \nu(p,t),
     \label{eq2:simp_model}
 \end{equation}
 
 
-here $M(q) \in \mathbb{R}^{2\times 2}$ is the non-linear mass matrix. Furthermore, $D \in \mathbb{R}^{2\times2}$ is a linear damping matrix and lastly $K(q) \in \mathbb{R}^{2\times 2}$. It should be clear that the desired matrix dimensions correspond to length of modal coordinate vector $q(t)$. The input of the system is chosen $\nu(p,t) \in \mathbb{R}^2$, which is dependent on pressure and time. In this section we detail the derivation of each of these matrices. 
+here $M(q(t)) \in \mathbb{R}^{2\times 2}$ is the non-linear mass matrix. In the previous section, we obtained an expression for the Jacobian matrix. Here we observed its position and time variance, therefore it is assumed that the mass matrix of the system is also non-linear. Furthermore, $D \in \mathbb{R}^{2\times2}$ is a linear damping matrix. Lastly, $K(q(t)) \in \mathbb{R}^{2\times 2}$ is a non-linear stiffness matrix. It is known that the elastomer of which the soft actuator is composed deforms non-linearly. Let it be clear that the desired matrix dimensions correspond to length of modal coordinate vector $q(t)$. The input of the system is chosen $\nu(p,t) \in \mathbb{R}^2$, which is dependent on pressure and time. Posing our dynamic model as such, implicitly imposed the following assumption:
 
-The dynamic model as presented in (\ref{eq2:simp_model}) can be obtained based on Lagrangian method given as $\mathcal{L} = \mathcal{T} -\mathcal{V}$. The Lagrangian $\mathcal{L}$ expresses the energy difference between kinetic energy $\mathcal{T}$ and potential energy $\mathcal{V}$. Exact expressions for the kinetic energy and potential energy of the system are given by, respectively,
+\begin{theorem}
+The soft robot's dynamics can be modelled as a non-linear mass-spring-damper, assuming that the system is negligibly effected by Coriolis effects and the influence of gravity.
+\end{theorem}
+
+Neglecting the influence of gravity is deemed valid, as the mass of the system is very low ($m << 0.1 kg$). This low mass, and given the fact that the system operates at low velocity, also makes contribution of the Coriolis effects small. The Coriolis matrix contains terms $\dot{q}_i q_j$ with $i \neq j$. For small velocities these cross-terms are deemed small. In this section we detail the derivation of each of these matrices in (\ref{eq2:simp_model})
+
+The dynamic model as presented in (\ref{eq2:simp_model}) can be obtained based on Lagrangian method. The Lagrangian is defined as $\mathcal{L} = \mathcal{T} -\mathcal{V}$ which expresses the energy difference between kinetic energy $\mathcal{T}$ and potential energy $\mathcal{V}$. Exact expressions for the kinetic energy and potential energy of the system are given by, respectively,
 
 \begin{equation}
-    \mathcal{T} = \frac{1}{2}\int_0^{\sigma} \eta(\sigma,t)^\top \mathcal{M} \eta(\sigma,t) d \sigma \hspace{20pt} \text{and} \hspace{20pt}  \mathcal{V} = \frac{1}{2}\int_0^{\sigma} \xi(\sigma,t)^\top \mathcal{K} \xi(\sigma,t) d \sigma,
+    \mathcal{T} = \frac{1}{2}\int_0^{\sigma} \eta(\sigma,t)^\top \mathcal{M} \eta(\sigma,t) \hspace{2pt} d \sigma \hspace{20pt} \text{and} \hspace{20pt}  \mathcal{V} = \frac{1}{2}\int_0^{\sigma} \xi(\sigma,t)^\top \mathcal{K} \xi(\sigma,t)  \hspace{2pt} d \sigma,
     \label{eq2:T}
 \end{equation}
 
 
-where $\mathcal{M} \in \mathbb{R}^{3\times3}$ and $\mathcal{K} \in \mathbb{R}^{3\times3}$ are a diagonal mass tensor and stiffness tensor, respectively. It should be noted that we have neglected gravitational effects contributing to the potential energy term. This is deemed valid as the system has a small mass. For the expression of the kinetic energy the velocity approximation of (\ref{eq2:J}) can be substituted. Additionally, the approximation of the strain field (\ref{eq2:xishape}) can be substituted in potential energy equation, this results in,
+where $\mathcal{M} \in \mathbb{R}^{3\times3}$ and $\mathcal{K} \in \mathbb{R}^{3\times3}$ are a diagonal mass tensor and stiffness tensor, respectively. The expression for velocity (\ref{eq2:J}) and strain (\ref{eq2:xishape}) can be substituted in this equation to formulate the kinetic and potential energy as follows,
 
 \begin{equation}
-    \mathcal{T} = \frac{1}{2}\int_0^{\sigma} \Big([J(\sigma,t)]_1\dot{q}(t)\Big)^\top \mathcal{M} \Big([J(\sigma,t)]_1\dot{q}(t)\Big) d \sigma  \hspace{10pt} \text{and} \hspace{10pt}  \mathcal{V} = \frac{1}{2}\int_0^{\sigma} \big(\Phi q(t)\big)^\top \mathcal{K} \big(\Phi q(t)\big) d \sigma.
+    \mathcal{T} = \frac{1}{2}\int_0^{\sigma} \Big([J(\sigma,t)]_1\dot{q}(t)\Big)^\top \mathcal{M} \Big([J(\sigma,t)]_1\dot{q}(t)\Big) d \sigma  \hspace{10pt} \text{and} \hspace{10pt}  \mathcal{V} = \frac{1}{2}\int_0^{\sigma} \big(\Phi q(t)\big)^\top \mathcal{K} \big(\Phi q(t)\big) \hspace{2pt} d \sigma.
 \end{equation}
 
-These expression allows deriving the Lagrangian equations of motion as \cite{NWouw},
+Above expression allows deriving the Lagrangian equations of motion as \cite{NWouw},
 
 \begin{equation}
-    \frac{\partial}{\partial t}\Big( \frac{\partial}{\partial\dot{q}}\mathcal{T}\Big)- \underbrace{\frac{\partial}{\partial q}\mathcal{T}}_0 + \frac{\partial}{\partial q}\mathcal{V} = \mathcal{Q}^{nc} \hspace{10pt} \text{with} \hspace{10pt} \mathcal{Q}^{nc} =  S\nu - \big(\Phi\dot{q}(t)\big)^\top \mathcal{D} \big( \Phi \dot{q}(t)\big)
+    \frac{\partial}{\partial t}\Big( \frac{\partial}{\partial\dot{q}}\mathcal{T}\Big)- \frac{\partial}{\partial q}\mathcal{T} + \frac{\partial}{\partial q}\mathcal{V} = \mathcal{Q}^{nc} \hspace{10pt} \text{with} \hspace{10pt} \mathcal{Q}^{nc} =  S\nu(p,t) - \int_0^\sigma \big(\Phi\dot{q}(t)\big)^\top \mathcal{D} \big( \Phi \dot{q}(t)\big) \hspace{2pt} d \sigma
     \label{eq2:lagrange}
 \end{equation}
 
-where $\mathcal{Q}^{nc} \in \mathbb{R^3}$ is a vector containing non-conservative forces acting on the system. One of these non-conservative forces are actuation forces. These actuation forces are captured in vector $\nu \in \mathbb{R}^2$, which is pre-multiplied with matrix $S \in \mathbb{R}^{3\times 2}$. This matrix $S$ represents the generalized direction of force and torque. In a moment we will prove this selection matrix is equal to matrix $B_a$. Another non-conservative force are the damping forces. Here damping tensor $\mathcal{D} \in \mathbb{R}^{3 \times 3}$. Also note that we have substituted the approximated strain velocity. Which without further prove is can be easily obtained from (\ref{eq2:xiapprox}). Furthermore we have assumed that the Coriolis effects $\frac{d}{dq}\mathcal{T}$ are zero. These Coriolis matrix contains terms $\dot{q}_i q_j$ with $i \neq j$. Since the entries of the mass matrix are small, and the dynamic system operates a low velocities this assumption is deemed valid. Further working out (\ref{eq2:lagrange}) gives,
+where $\mathcal{Q}^{nc} \in \mathbb{R}^3$ is a vector containing non-conservative forces acting on the system. One of these non-conservative forces are actuation forces. These actuation forces are captured in vector $\nu(p,t) \in \mathbb{R}^2$, which is pre-multiplied by some matrix $S \in \mathbb{R}^{3\times 2}$. This matrix $S$ represents the generalized direction of force and torque. In a moment we will prove this selection matrix is equal to matrix $\Phi$. Another non-conservative force are the damping forces caused by the elastomer. These damping terms are captured in diagonal damping tensor $\mathcal{D} \in \mathbb{R}^{3 \times 3}$. Also note that we have substituted the approximated strain velocity which, without further prove, can be easily obtained from (\ref{eq2:xiapprox}). Further working out (\ref{eq2:lagrange}) and rearranging terms gives,
 
 \begin{equation}
-    \int_0^\sigma \Big[ \underbrace{[J(\sigma,t)]^\top \mathcal{M} [J(\sigma,t)]}_{M(q)} \ddot{q}(t) +  \underbrace{\Phi^\top \mathcal{D} \Phi }_{D} \dot{q}(t)    +   \underbrace{\Phi^\top \mathcal{K} \Phi}_{K(q)} q(t)\Big] d\sigma = S\nu,
+    \int_0^\sigma \Big( \underbrace{[J(\sigma,t)]_1^\top \mathcal{M} [J(\sigma,t)]_1}_{M(q)} \ddot{q}(t) +  \underbrace{\Phi^\top \mathcal{D} \Phi }_{D} \dot{q}(t)    +   \underbrace{\Phi^\top \mathcal{K} \Phi}_{K(q)} q(t)\Big) \hspace{2pt} d\sigma = S\nu,
 \end{equation}
 
-here it becomes clear that $M(q)$, $D(q)$ and $K(q)$ are all in $\mathbb{R}^{2\times2}$. Recalling the generalized force and torque input vector $\Phi$, it can be concluded that $S = \Phi$ must hold. We are now further elucidating on finding the mass, damping and stiffness tensor, respectively.
+here it becomes clear that $M(q)$, $D(q)$ and $K(q)$ are all in $\mathbb{R}^{2\times2}$, since $[J(\sigma,t)]_1 \land \Phi \in \mathbb{R}^{3 \times 2}$. Recalling the generalized input vector $S$, it must hold that $S = \Phi$, as we only have two input directions. Since we have assumed that the Coriolis effects are small, the term $\frac{\partial}{\partial q}\mathcal{T} $ is omitted. Now the expressions for the mass, damping and stiffness matrices are presented, we will elucidate on the entries of their tensors, respectively.
 
-In our modelling approach, the actuator kinematics have been described by a one-dimensional backbone curve. To derive the mass matrix, mass properties need to be assigned to this curve. Therefore the backbone curve is discretized, and we consider a cross-section of the actuator. In determining the mass of the system the following assumption is made.
+In our modelling approach, the actuator kinematics have been described by a one-dimensional backbone curve. To derive the mass matrix, mass properties need to be assigned to this curve. Therefore the backbone curve is discretized, and we consider an infinite slice of cross-section of the actuator. To derive the mass tensor of the system the following assumption is made.
 
 \begin{theorem}
 The inertial properties of the actuator can be determined by considering an infinitely thin slice in the transverse direction and regarding it as a solid cuboid.
@@ -280,7 +286,7 @@ Figure (\ref{fig:massapprox}) shows such a discretized cross section. Here the b
 The mass tensor $\mathcal{M}$ then takes the following form,
 
 \begin{equation}
-    \mathcal{M} = \begin{bmatrix} \frac{1}{12}\rho (w^2 + d\sigma^2) & 0 & 0 \\
+    \mathcal{M} = \begin{bmatrix} \frac{1}{12}\rho w^2 & 0 & 0 \\
                                    0 & \rho & 0 \\
                                    0 & 0 & \rho \end{bmatrix}\hspace{5pt} \text{with} \hspace{5pt} \rho = \frac{m_{tot}}{L_0}
 \end{equation} 
@@ -288,28 +294,30 @@ The mass tensor $\mathcal{M}$ then takes the following form,
 
 
 
-where $m_{tot}$ is the total mass of the actuator. The first entry expresses mass moments of inertia, related to the curvature of the actuator. The last three entries relate to linear velocities of the centre of mass of the cuboid. Based on equation (\ref{eq2:T}) the position variant mass matrix can be expressed as, 
+where $m_{tot}$ is the total mass of the actuator. The first entry expresses mass moments of inertia, related to the curvature acceleration of the actuator. The last two entries relate to linear acceleration of the centre of mass of the cuboid. Based on equation (\ref{eq2:T}) the space-time variant mass matrix can be expressed as, 
 
 
 \begin{equation}
-    M(q) = \int_0^{\sigma} J(\sigma)^\top \mathcal{M}(\sigma)J(\sigma) d \sigma.
+    M(q(t)) = \int_0^{\sigma} [J(\sigma,t)]_1^\top \mathcal{M}(\sigma)[J(\sigma,t)]_1  \hspace{2pt}d \sigma,
 \end{equation}
 
-Furthermore, damping and stiffness properties are assigned to the actuator. We assume that the polymer of which the actuator is made has linear damping characteristics. Therefore the damping matrix can be found as,
+here it should be noted this mass-matrix has off-diagonal entries related to the non-linear jacobian matrix. 
+
+We assume that the polymer of which the actuator is made has linear damping characteristics, therefore the damping matrix is space-time invariant and can be presented as,
 
 \begin{equation}
-    D = \int_0^\sigma \Phi^\top \mathcal{D} \Phi d \sigma  = \text{diag}([D_\kappa, D_\epsilon])
-\end{equation}.
-
-Since it is hard to measure damping properties experimentally, the entries damping tensor will be chosen once doing simulations. Effectively, this means that we are trying to find damping parameters $D_\kappa$ and $D_\epsilon$. 
-
-For a fact, we know that polymer has non-linear stiffness properties. Therefore stiffness matrix $K(q)$ is space-variant, and is therefore given by,
-
-\begin{equation}
-    K(q) = \int_0^\sigma \Phi^\top \mathcal{K}(q) \Phi  d\sigma, = \text{diag}([K_\kappa(q), K_\epsilon(q)]).
+    D = \int_0^\sigma \Phi^\top \mathcal{D} \Phi \hspace{2pt} d \sigma  = \text{diag}([D_\kappa, D_\epsilon]),
 \end{equation}
 
-Instead of defining the entries to the stiffness tensor $\mathcal{K}$, we have to determine the curvature stiffness $K_\kappa(q)$ and elongation stiffness $K_\epsilon(q)$. Determining these non-linear stiffnesses will be explained in Chapter \ref{chap3}. Furthermore, here the geometric properties and material properties will be given to determine the mass tensor. 
+which has no off-diagonal terms. Effectively, this means that we are trying to find damping parameters $D_\kappa$ and $D_\epsilon$ related to curvature velocity and strain rate, respectively. These damping parameters will be chosen iteratively, as it is impossible to measure damping properties experimentally. The system can not be actuated such that a single degree-of-freedom is excited. 
+
+It is given that the polymer has non-linear stiffness properties, which implies that stiffness matrix $K(q(t))$ is space-variant. The stiffness matrix is described as,
+
+\begin{equation}
+    K(q(t)) = \int_0^\sigma \Phi^\top \mathcal{K}(q) \Phi \hspace{2pt} d\sigma, = \text{diag}([K_\kappa(q), K_\epsilon(q)]),
+\end{equation}
+
+which has no off-diagonal terms. Essentially, this means that only curvature stiffness $K_\kappa(q)$ and elongation stiffness $K_\epsilon(q)$ need to be determined. The processes of obtaining these non-linear stuffiness's is explained in Chapter \ref{chap3}. Furthermore, here the geometric properties and material properties are presented necessary to determine the mass tensor. 
 
 
 
@@ -322,15 +330,13 @@ At this point, we have derived a dynamic model for our soft actuator. However, a
     \dot{p}(t) = -\lambda_1 p(t) + \lambda_2 V(t),
 \end{equation}
 
-here $p(t)$ is the time-dependent pressure based on input voltage $V(t)$. Constant $\lambda_1 \in \mathbb{R}^+$ represents the system's resistance to a pressure increase and scales with actual system pressure. Parameter $\lambda_2 \in \mathbb{R}^+$ is a constant that incorporates the pressure increase relative to the volt input signal. Both of these parameters can be obtained by doing experimental analysis. This process is detailed in Chapter \ref{chap3}.
+here $p(t)$ is the time-dependent pressure based on input voltage $V(t)$. Constant $\lambda_1 \in \mathbb{R}^+$ represents the system's resistance to a pressure increase and is dependent on actual system pressure. Parameter $\lambda_2 \in \mathbb{R}^+$ is a constant that incorporates the pressure increase relative to the volt input signal. Both of these parameters can be obtained via experimental analysis. This process is detailed in Chapter \ref{chap3}.
 
 
 
 \section{Overall System dynamics}
 
-The parameter identification allows to obtain the entries of mass matrix $M$ and stiffness matrix $K$. With the determined stiffness' matrix $K = \text{diag}([K_\kappa \hspace{3pt} K_\epsilon])$. The diagonal damping matrix is equal is represented by $D = \text{diag}([D_\kappa \hspace{3pt} D_\epsilon]) = \text{diag}([4e-5 \hspace{3pt} 0.3])$. Damping properties have not been determined experimentally, as the actuator cannot be actuated such that a measurable free excitation is induced in a single axis. Therefore the damping parameters are chosen iteratively. In Appendix \ref{app4}, a free oscillation of the dynamic model is presented. Here the effect of damping on the systems response is further elucidated. Furthermore an analysis on the accuracy of the model is provided.
-
-The dynamic model of (\ref{eq4:SS}) allows for numeric solving by reformulating the model to a second order state-space formulation as,
+The dynamic model of (\ref{eq2:simp_model}) allows for numeric solving by reformulating the model to a second order state-space formulation as,
 
 \begin{equation}
      \begin{bmatrix} \dot{x}  \end{bmatrix}   = \underbrace{  \begin{bmatrix} O_2 & I_2 \\ -M(q)^{-1}K(q)  & -M(q)^{-1} D \end{bmatrix}   }_{A} \begin{bmatrix} x \end{bmatrix}  +      \underbrace{\begin{bmatrix} O_2 \\ M(q)^{-1}H   \end{bmatrix}   }_{B}    \begin{bmatrix} p_1\\ p_2  
