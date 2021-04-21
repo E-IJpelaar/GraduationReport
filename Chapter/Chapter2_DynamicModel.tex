@@ -334,17 +334,23 @@ here $p(t)$ is the time-dependent pressure based on input voltage $V(t)$. Consta
 
 
 
-\section{Overall System dynamics}
+\section{Overall system dynamics}
 
-The dynamic model of (\ref{eq2:simp_model}) allows for numeric solving by reformulating the model to a second order state-space formulation as,
+To allow controller performance evaluation, the dynamic model of (\ref{eq2:simp_model}) should numerically solved. Therefore, the dynamic model is reformulated to a second order state-space formulation as,
 
 \begin{equation}
-     \begin{bmatrix} \dot{x}  \end{bmatrix}   = \underbrace{  \begin{bmatrix} O_2 & I_2 \\ -M(q)^{-1}K(q)  & -M(q)^{-1} D \end{bmatrix}   }_{A} \begin{bmatrix} x \end{bmatrix}  +      \underbrace{\begin{bmatrix} O_2 \\ M(q)^{-1}H   \end{bmatrix}   }_{B}    \begin{bmatrix} p_1\\ p_2  
+     \begin{bmatrix} \dot{x}  \end{bmatrix}   = \underbrace{  \begin{bmatrix} O_2 & I_2 \\ -M(q)^{-1}K(q)  & -M(q)^{-1} D \end{bmatrix}   }_{A} \begin{bmatrix} x \end{bmatrix}  +      \underbrace{\begin{bmatrix} O_2 \\ M(q)^{-1}   \end{bmatrix}   }_{B}    \begin{bmatrix} \nu_1(p) \\ \nu_2(p)  
      \end{bmatrix}, 
      \label{eq4:SS}
 \end{equation}
 
-with state vector $x = \begin{bmatrix} \kappa \hspace{3pt} \epsilon \hspace{3pt} \dot{\kappa}  \hspace{3pt} \dot{\epsilon}  \end{bmatrix}^{\top}$. Here matrix $A \in \mathbb{R}^{4\times 4}$ contains all elements with respect to the system dynamics. Matrix $B\in\mathbb{R}^{4 \times 2}$ is the control input vector. Mind the substitution of the mapping matrix, hence control input is pressure instead of force and moment. 
+with state vector $x = \begin{bmatrix} q \hspace{3pt} \dot{q}   \end{bmatrix}^\top =  \begin{bmatrix} \kappa \hspace{3pt} \epsilon \hspace{3pt} \dot{\kappa}  \hspace{3pt} \dot{\epsilon}  \end{bmatrix}^{\top}$. System matrix $A \in \mathbb{R}^{4\times 4}$ contains all elements with respect to the system dynamics, whereas matrix $B\in\mathbb{R}^{4 \times 2}$ is the control input vector. Note that we have a omitted the time-dependency in the system matrix, control input matrix and input vector $\nu(p)$. 
+
+As mentioned, this input matrix $\nu(p)$
+
+
+
+Mind the substitution of the mapping matrix, hence control input is pressure instead of force and moment. 
 
 Above state-space does not allow to give an accurate system description as the pump dynamics are not included in this representation. Therefore an adapted state space formulation is presented as,
 
