@@ -13,7 +13,7 @@ Inverse kinematics allows to map the desired end-effector position to the corres
 where, $x \in \mathbb{R}^n$ is the position and orientation vector of the end-effector. For the planar robot $n = 3$, as two translations and one coupled rotation can be achieved. Here, $f$ represents the forward kinematics mapping the modal coordinate $q \in \mathbb{R}^m$ to the end-effector position. Where $m$ depends on amount of shape functions used to describe a given strain. The inverse kinematic problem aims to find a mapping $q\mapsto x$. This mapping is obtained by exploiting the inverse jacobian method according to an iterative updating scheme as,
 
 \begin{equation}
-    q_{k+1} = q_k + \alpha J^\dagger Q e_k \hspace{20pt} \text{with} \hspace{10pt}  e_k = x_d - x_k,
+    q_{k+1} = q_k + \alpha [J(\sigma,t)]_1^\dagger Q e_k \hspace{20pt} \text{with} \hspace{10pt}  e_k = x_d - x_k,
     \label{eq2:qupdate}
 \end{equation}
 

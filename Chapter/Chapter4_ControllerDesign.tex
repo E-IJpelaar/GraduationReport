@@ -13,7 +13,7 @@ The Jacobian controller proposed is an adapted version of the one presented in \
 
 
 \begin{equation}
-    \tau_{set} = \begin{bmatrix}J(\sigma,t)\end{bmatrix}^\top \Big(K_p e + K_i \int_0^t e \hspace{2pt} ds \Big), 
+    \nu_{set} = \begin{bmatrix}J(\sigma,t)\end{bmatrix}_1^\top \Big(K_p e + K_i \int_0^t e \hspace{2pt} ds \Big), 
     \label{eq:tau}
 \end{equation}
 
@@ -39,10 +39,6 @@ where $pwm_{set}$ is the input voltage and $K_{pp} \in \mathbb{R}^{2\times 2}$ a
 
 
 
-
-where state vector $x$ is extended to $x = [\kappa \hspace{3pt} \epsilon \hspace{3pt} \dot{\kappa} \hspace{3pt} \dot{\epsilon} \hspace{3pt} p_1 \hspace{3pt} p_2]$. Here matrix $A \in \mathbb{R}^{6\times 6}$ containing the dynamics is extended. Additionally input matrix $B \in \mathbb{R}^{6\times 4}$ is extended to allow volt input. In this simulation model, the volt input is limited to be between 0 and 12 volt. This constrains the system such that negative pressures can not be used to control the system. 
-
-\hl{Here I would like to add simulations of the jacobian controller. I also would like to include model simulations using stiffness compensation. Some simulations are carried out, but are still incomplete and are therefore not included in this draft.}
 
 %Above state space model and presented Jacobian controller is implemented in \MATLAB. The used settings gains are $K_p = \text{diag}([400,400])$  and $K_i = \text{diag}([150,150])$. Figure  shows a simulation for a set point $q_{set} = [0 0.3]^\top$, which is equivalent to a position of [0,0.084]$m$ in the xy-plane.
 
