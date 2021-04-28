@@ -1,6 +1,6 @@
 \label{chap2}
 
-This chapter describes the dynamic model derivation of the soft robotic manipulator. First, the soft robotic system used in this work is further detailed. Then the configuration space of the soft robot is described. Once this configuration space is determined, the forward kinematics at position and velocity level are derived. These forward kinematics allow the derivation of the dynamic model of the soft robot. Additionally, a model is provided that is used to describe the pump dynamics. Lastly, the state-space representation of the overall system dynamics is presented, which combines the soft robot ans pump dynamics.
+This chapter describes the dynamic model derivation of the soft robotic manipulator. First, the soft robotic system used in this work is further detailed. Then the configuration space of the soft robot is described. Once this configuration space is determined, the forward kinematics at position and velocity level are derived. These forward kinematics are useful for deriving the dynamic model of the soft robot. Additionally, a model is provided that is used to describe the pump dynamics. Lastly, the state-space representation of the overall system dynamics is presented, which combines the dynamics of the soft robot and pump dynamics.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -14,7 +14,7 @@ The soft robot studied in this work is composed of a visco-elastic polymer using
 Strains in the soft robot imposed by pneumatic actuation change the soft robot's length and orientation. Strains causing out of plane motion are deemed negligibly small, and can not be actively controlled. The soft robot's task-space therefore restricts itself to the 2-dimensional plane.
 \end{theorem}
 
-This assumption allows describing the configuration of the soft robot in a two-dimensional Cartesian plane. Since the soft robot has no clear end-effector in the form of a gripper, a point on the body is assigned to be the end-effector. This point is situated at the geometric midst of the closed flange, see Figure \ref{fig2:setup}. The flange with the air inlets is fixed, here its geometric midst is defined as the origin. Altering the bellow pressure can therefore change the soft robot's end-effector position. Based on the above assumptions a kinematic model of the soft actuator is developed, based on the Cosserat beam model. 
+This assumption allows describing the configuration of the soft robot in a two-dimensional Cartesian plane. Since the soft robot has no clear end-effector in the form of a gripper, a point on the body is assigned to be the end-effector. This point is situated at the geometric midst of the closed flange, see Figure \ref{fig2:setup}. The flange with the air inlets is fixed, here its geometric midst is defined as the origin. Altering the bellow pressure can therefore change the soft robot's end-effector position. Based on the above assumptions a kinematic model of the soft actuator is developed using the Cosserat beam model. 
 
 
 
@@ -40,7 +40,7 @@ This assumption allows describing the configuration of the soft robot in a two-d
 
 \section{Cosserat beam theory}
 
-To describe the kinematics of the soft actuator, a Cosserat beam model is used \cite{Boyer2019}. This beam model can be thought of as a continuous one-dimensional curve representing the robot's backbone. This backbone is represented in Figure \ref{fig2:kinematicschematic} as the black dashed curve. This curve describes the configuration of the soft robot as a function of space and time. Therefore, this function is dependent on spatial coordinate $\sigma \in \mathbb{X}$ within bounded domain $\mathbb{X} \in [0,L_0] \subset \mathbb{R}$, where $L_0$ is the nominal length of the actuator. Furthermore, a temporal coordinate $t \in \mathbb{T}$ with $\mathbb{T} \subset [0,T]$ is defined. Under the assumption that the soft robot's task space is a two-dimensional plane, the rotation of any point $\sigma$ at time instance $t$ is given by rotation matrix $R(\sigma,t) \in \mathbb{SO}(2)$. The matrices in $\mathbb{SO}(2)$ represent the special orthogonal group within Lie group theory. This matrix allows to express rotation of points on a two-dimensional surface, and is isomorphic to the circle group. Similarly, the position of that point is given by position vector $p(\sigma,t) \in \mathbb{R}^2$. Therefore, the Cosserat beam model creates a local frame at $\sigma$ which is tangential to this curve. This allows to describe position and rotation for any point $\sigma$ and time instance $t$ along the backbone of the soft manipulator by,
+To describe the kinematics of the soft actuator, a Cosserat beam model is used \cite{Boyer2019}. This beam model can be thought of as a continuous one-dimensional curve representing the robot's backbone. This backbone is represented in Figure \ref{fig2:kinematicschematic} as the black dashed curve. This curve describes the configuration of the soft robot as a function of space and time. Therefore, this function is dependent on spatial coordinate $\sigma \in \mathbb{X}$ within bounded domain $\mathbb{X} \in [0,L_0] \subset \mathbb{R}$, where $L_0$ is the nominal length of the actuator. Furthermore, a temporal coordinate $t \in \mathbb{T}$ with $\mathbb{T} \subset [0,T]$ is defined. Under the assumption that the soft robot's task space is a two-dimensional plane, the rotation of any point $\sigma$ at time instance $t$ is given by rotation matrix $R(\sigma,t) \in \mathbb{SO}(2)$. The matrices in $\mathbb{SO}(2)$ represent the special orthogonal group within Lie group theory. This matrix allows to express rotation of points on a two-dimensional surface. Similarly, the position of that point is given by position vector $p(\sigma,t) \in \mathbb{R}^2$. Therefore, the Cosserat beam model creates a local frame at $\sigma$ tangential to curve $g(\sigma,t)$. This allows to describe position and rotation for any point $\sigma$ and time instance $t$ along the backbone of the soft manipulator by,
 
 
 \begin{equation}
@@ -64,11 +64,11 @@ This assumption demands that derivatives of the backbone with respect to time an
 The strain field allows us to study strains along the backbone curve. To find the strain we differentiate the backbone curve with respect to the spatial domain. Throughout this work derivatives with respect to the spatial domain will be indicated with a `prime', likewise time derivatives will be indicated with a `dot'. The local strain can be found by differentiating (\ref{eq2:g}) with respect to space. This results in the following partial differential equation (PDE), 
 
 \begin{equation}
-   g' = \frac{\partial g}{\partial \sigma} = g \hat{\xi} \hspace{10pt} \implies \hspace{10pt}  \hat{\xi}(\sigma,t) := g^{-1}g' = \begin{bmatrix} K_\times & E \\ 0_2^\top & 0 \end{bmatrix} \in  \mathfrak{se}(2)
+   g' = \frac{\partial g}{\partial \sigma} = g \hat{\xi} \hspace{10pt} \implies \hspace{10pt}  \hat{\xi}(\sigma,t) := g^{-1}g' = \begin{bmatrix} K_\times & E \\ 0_2^\top & 0 \end{bmatrix} \in  \mathfrak{se}(2),
     \label{eq2:dgdsigma}
 \end{equation}
 
-where $\hat{\xi}$ is the space-twist field. Here, $K_\times \in \mathfrak{so}(2)$ is a skew-symmetric matrix expressing single curvature strain. Since we consider a planar case, there is a rotation around a single axis. Therefore the skew-symmetric matrix is isomorphic to a scalar expressing the curvature, which we denote by $K_\times \longmapsto \kappa$. Furthermore, vector $E = [\epsilon_x,\epsilon_y]^\top \in \mathbb{R}^2$ contains the stretch-shear strain in perpendicular and tangential direction, respectively. These skew-symmetric curvature strain and stretch-shear strain combined are within the Lie group $\mathfrak{se}(2)$ \cite{Sola2018}. Physically, $\kappa$ expresses the curvature of the actuator in the plane with unit $\kappa = 1/m$. The entries in vector $E$ represent shear in the horizontal direction and stretch in the vertical direction, respectively. It shall be clear that for the studied soft robot, shear or any other strain in the horizontal direction can not be actively controlled. Isomorphism of the Lie group $\mathfrak{se}(2)$ allows $\hat{\xi}(\sigma,t) \longmapsto \xi(\sigma,t)$. This allows to equivalently express these curvature strain and stretch-shear strain in a column vector as $\xi(\sigma,t) \in \mathbb{R}^3$ as $[\kappa \hspace{3pt} E^\top ]^\top$.
+where $\hat{\xi}$ is the space-twist field. Here, $K_\times \in \mathfrak{so}(2)$ is a skew-symmetric matrix expressing a single curvature strain. Since we consider a planar case, there is a rotation around a single axis. Therefore the skew-symmetric matrix is isomorphic to a scalar expressing the curvature, which we denote by $K_\times \longmapsto \kappa$. Furthermore, vector $E = [\epsilon_x,\epsilon_y]^\top \in \mathbb{R}^2$ contains the stretch-shear strain in perpendicular and tangential direction, respectively. These skew-symmetric curvature strain and stretch-shear strain combined are within the Lie group $\mathfrak{se}(2)$ \cite{Sola2018}. Physically, $\kappa$ expresses the curvature of the actuator in the plane with unit $\kappa = 1/m$. The entries in vector $E$ represent shear in the horizontal direction and stretch in the vertical direction, respectively. It shall be clear that for the studied soft robot, shear or any other strain in the horizontal direction can not be actively controlled. Isomorphism of the Lie group $\mathfrak{se}(2)$ allows $\hat{\xi}(\sigma,t) \longmapsto \xi(\sigma,t)$. This allows to equivalently express these curvature strain and stretch-shear strain in a column vector as $\xi(\sigma,t) \in \mathbb{R}^3$ as $[\kappa \hspace{3pt} E^\top ]^\top$.
 
 The PDE of \ref{eq2:dgdsigma} describes the forward kinematics, which is essential for computing the robot's configuration. It is useful to transform this PDE to an ordinary differential equation (ODE), as this allows for faster computation and controller design. This transformation reduces the system's original infinite dimensionality to a predefined dimension. To be able to transform the system, we make the following assumption: 
 
@@ -89,7 +89,7 @@ To be precise on this notation, each strain in column vector $\xi(\sigma,t)$ is 
 This assumption allows transforming the PDE of (\ref{eq2:dgdsigma}) to an ODE by exploiting the Galerkin reduction method \cite{Galerkin}. Here, the infinite-dimensional system is projected onto a subspace of finite dimension that contains basis elements of the expected solution. Each of the three curvature/strains is approximated by a finite amount of shape functions each having a certain contribution to the complete solution. By reducing the dimensionality of the system, higher-order dynamics are not captured in the model and thus robustness should be taken into account. To transform the PDE in (\ref{eq2:dgdsigma}), the components of the strain field $\xi(\sigma,t)$ are approximated using a finite amount of shape functions as,
 
 \begin{equation}
-    [\xi_i(\sigma,t)]_N = \sum_{k=1}^N \varphi_k(\sigma)q_{i,k}(t) + \xi_{i,0}(\sigma), \hspace{20pt} \forall \sigma \in \mathbb{X}, t \in \mathbb{T},
+    [\xi_i(\sigma,t)]_N = \sum_{k=1}^N \varphi_k(\sigma)q_{i,k}(t) + \xi_{i,0}(\sigma) \hspace{15pt} \text{with} \hspace{15pt} \forall \sigma \in \mathbb{X}, t \in \mathbb{T},
     \label{eq2:strainapprox}
 \end{equation}
 
@@ -98,11 +98,11 @@ where $N \in \mathbb{N}^+$ is the amount of truncations used to approximate stra
 There exist multiple variants of shape function polynomials that can be used in approximating strain. Here we consider the Legendre polynomials given by,
 
 \begin{equation}
-    \varphi_{k} = \frac{1}{2^{k-1} k-1!} \frac{d^{k-1}}{d\sigma^{k-1}}(\sigma^2-1)^{k-1},
+    \varphi_{k} = \frac{1}{2^{k-1} k-1!} \frac{d^{k-1}}{d\sigma^{k-1}}(\sigma^2-1)^{k-1} \hspace{20pt} \sigma \in \Big\{0,\frac{\sigma}{L_0},1\Big\},
     \label{eq2:shapefunction}
 \end{equation}
 
-here it can be seen that first Legendre polynomial is of zero-order, and results in 1 for $k=1$. Each degree of shape-function gives the model a certain amount of flexibility. Therefore increasing the order of shape functions allows the model to describe more complex robot configurations. To avoid coupling between the states, these shape functions must be orthogonal to each other. This means that $\int_\mathbb{X} \varphi_i \varphi_j d \sigma = 0$ for any $i \neq j$ and non-zero otherwise. The strain approximation of \ref{eq2:strainapprox} can be written as a $N$-th order expansion as,
+on the bounded domain $[0,1]$. By definition, this shape function is defined on the domain [-1,1], however we only consider the positive domain as the actuator length cannot become negative. Furthermore, it can be seen that first Legendre polynomial is of zero-order, and results in 1 for $k=1$. Each degree of shape-function gives the model a certain amount of flexibility. Therefore increasing the order of shape functions allows the model to describe more complex robot configurations. To avoid coupling between the states, these shape functions must be orthogonal to each other. This means that $\int_\mathbb{X} \varphi_i \varphi_j d \sigma = 0$ for any $i \neq j$ and non-zero otherwise. The strain approximation of \ref{eq2:strainapprox} can be written as a $N$-th order expansion as,
 
 
 
@@ -134,7 +134,7 @@ The entries of selection matrix $B_a$ tell us that only the first and third stra
 The strains induced by actuating the soft robot under normal operating conditions can be captured by truncation of $N = 1$. 
 \end{theorem}
 
-Based on this assumption, and the shape function polynomials of (\ref{eq2:shapefunction}) a first order approximation, e.g. $k=1$, will result in $\varphi_1 = 1$. Substitution of the provided expressions for $B_a$ (\ref{eq2:Ba}) and $\xi_0$ into (\ref{eq2:xishape}) the strains of the soft actuator can be described by,
+Based on this assumption, and the shape function polynomials of (\ref{eq2:shapefunction}) a first order approximation of the strains is made. Substitution of the provided expressions for $B_a$ (\ref{eq2:Ba}) and $\xi_0$ into (\ref{eq2:xishape}) the strains of the soft actuator can be described by,
 
 
 \begin{equation}
@@ -146,7 +146,7 @@ Based on this assumption, and the shape function polynomials of (\ref{eq2:shapef
 \label{eq2:xiapprox}
 \end{equation}
 
-where it can be seen that with a first-order strain approximation, the approximated strain becomes space-invariant. With this first-order approximation it holds that $B_a \otimes [\varphi_1] = \Phi(\sigma) \implies B_a = \Phi$, this will be used throughout this thesis. Furthermore, it can be seen that the second component of strain $[\xi(\sigma,t)]$, corresponding to elongation in x-direction it holds $\epsilon_x = 0 \hspace{3pt} \forall \hspace{3pt} \sigma $ and $ \forall \hspace{3pt} t$. This allows us to define the modal coordinates as,
+where it can be seen that with a first-order strain approximation, the approximated strain becomes space-invariant. With this first-order approximation it holds that $B_a \otimes [\varphi_1] = \Phi(\sigma) \implies B_a = \Phi$, this result will be used throughout this thesis. Furthermore, it can be seen that the second component of strain vector $[\xi(\sigma,t)]_1$, corresponding to elongation in x-direction, it holds $\epsilon_x = 0 \hspace{3pt} \forall \hspace{3pt} \sigma $ and $ \forall \hspace{3pt} t$. This allows us to define the modal coordinates as,
 
 
 \begin{equation}
@@ -164,7 +164,7 @@ In the next section, the forward kinematic problem is solved with the described 
 
 The forward kinematic problem of (\ref{eq2:dgdsigma}) for the planar soft robot is programmed in \MATLAB \cite{MATLAB2020}. A standard ODE solver such as $\verb+ode45.m+$ can be used to solve the forward kinematic problem. The chosen initial condition is $g(0,t) = I_3 \hspace{2pt} \forall t$, which corresponds to zero rotation and zero strain at $\sigma = 0$. Furthermore, we choose our modal coordinates constant as $q = q(t) \hspace{2pt} \forall t$. This formulation allows us to integrate over the spatial domain $[0,L_0]$, as we neglect time dependency for now. At each discrete increment the strain field $[\xi(t)]_1$ is approximated by (\ref{eq2:xiapprox}). 
 
-Figure \ref{fig1:forward_kinematic} shows the result of the forward kinematic model. The initial position is obtained for zero curvature and elongation. It can be seen that the initial length of the actuator $L_0$ is equal to 64.5 mm. To obtain the deformed modal coordinate $q(t)$ was chosen equal to $[-17,0.1]^\top$. Physically this implies a clockwise rotation, creating an arc with a curvature of $18.7 \frac{1}{m}$, as there is  10\% and elongation in the vertical direction.
+Figure \ref{fig1:forward_kinematic} shows the result of the forward kinematic model. The initial position is obtained for zero curvature and elongation. It can be seen that the initial length of the actuator $L_0$ is equal to 64.5 mm. To obtain the deformed modal coordinate $q(t)$ was chosen equal to $[-17,0.1]^\top$. Physically this implies a clockwise rotation, creating an arc with a curvature of $18.7 \frac{1}{m}$, as the soft robot elongates by 10\%.
 
 
 \begin{figure}[H]
@@ -201,14 +201,14 @@ Using the equality of mixed partial derivatives, at each instant of space and ti
 
 where $\text{Ad}_g \in \mathbb{R}^{3 \times 3}$ \cite{2DLie} is the adjoint mapping of $g$ \cite{Sola2018}. Here, $p_\times$ is defined as $[p_2 \hspace{4pt} -p_1]^\top$ \cite{2DLie}, which can be derived from the adjoint action defined for the Lie group $\mathbb{SE}(3)$. This adjoint mapping allows velocities expressed in local frame $g(\sigma,t)$ to be mapped to frame $g(0,t)$, which coincides with our Cartesian coordinate frame. The complete derivation of (\ref{eq2:etadif}) is presented in Appendix \ref{app:chap2}. 
 
-An analytic solution to (\ref{eq2:etadif}) can be found by integrating the equation over spatial domain $[0,\sigma]$. It is given that the actuator is fixed at one end. Therefore the boundary conditions $\eta_0 = 0_{3 \times 1}$ and $g_0 = I_{3\times 3}$ can be imposed. This physically means that at $\sigma = 0$ there is no velocity, strain nor curvature. Integrating over domain $[0,\sigma]$ will give accordingly,
+An analytic solution to (\ref{eq2:etadif}) can be found by integrating the equation over spatial domain $[0,\sigma]$. It is given that the actuator is fixed at one end. Therefore the boundary conditions $\eta_0 = 0_{3 \times 1}^\top$ and $g_0 = I_{3}$ can be imposed. This physically means that at $\sigma = 0$ there is no velocity, strain nor curvature. Integrating over domain $[0,\sigma]$ will give accordingly,
 
 \begin{equation}
   \begin{bmatrix} \eta(\sigma,t)\end{bmatrix}_1 = \text{Ad}_{[g(\sigma,t)]_1^{-1}} \int_0^{\sigma} \text{Ad}_{[g(\sigma,t)]_1} \Phi \hspace{2pt} d \sigma  \hspace{2pt} \dot{q}(t) = [J(\sigma,t)]_1\dot{q}(t),
     \label{eq2:J}
 \end{equation}
 
-here an expression for the geometric Jacobian $[J(\sigma,t)]_1 \in \mathbb{R}^{3\times 2}$ is obtained \cite{Caasenbrood2020}. Note that we have used the first-order strain truncation. This Jacobian maps modal coordinate velocity to linear and angular velocities along the backbone curve. Since we have two active degrees of freedom, that are strain $\epsilon$ in the y-direction and curvature strain $\kappa$, our modal coordinate vector $q(t)$ has length two. The geometric Jacobian maps the modal coordinate velocity $\dot{q}(t)$ to velocities in the Euclidean space. The velocity of a point with respect to a reference in 2-dimensional Euclidean space can be described by 3 components. From our fixed reference point at $g(0,t)$, these velocities are one angular velocity, and two linear velocities in horizontal en vertical direction, respectively. As can be seen, this Jacobian matrix is non-linear with respect to space and time. Besides relating modal coordinate velocity to Cartesian velocity, the Jacobian can be used on position level as,
+here an expression for the geometric Jacobian $[J(\sigma,t)]_1 \in \mathbb{R}^{3\times 2}$ is obtained \cite{Caasenbrood2020}, for a first-order strain truncation. This Jacobian maps modal coordinate velocity to linear and angular velocities along the backbone curve. Since we have two active degrees of freedom, that are strain $\epsilon$ in the y-direction and curvature strain $\kappa$, our modal coordinate vector $q(t)$ has length two. The geometric Jacobian maps the modal coordinate velocity $\dot{q}(t)$ to velocities in the Euclidean space. The velocity of a point with respect to a reference in 2-dimensional Euclidean space can be described by 3 components. From our fixed reference point at $g(0,t)$, these velocities are one angular velocity, and two linear velocities in horizontal en vertical direction, respectively. As can be seen, this Jacobian matrix is non-linear with respect to space and time. Besides relating modal coordinate velocity to Cartesian velocity, the Jacobian can be used on position level as,
 
 \begin{equation}
     r(\sigma,t) = [J(\sigma,t))]_1q(t),
@@ -220,7 +220,7 @@ which implies that modal coordinates $q(t)$ can also be mapped to a position vec
 \section{Dynamic model derivation}
 
 
-To study the dynamic behaviour of the soft actuator a dynamic model is created. A relatively simple approximation is used to obtain insight into the basic dynamics of the actuator. The dynamic model will primarily be used for controller design. A relatively simple model is deemed to be sufficient to assess general controller performance. To this end, we propose a non-linear mass-spring-damper model as, 
+To study the dynamic behaviour of the soft actuator a dynamic model is derived. A relatively simple approximation is used to obtain insight into the basic dynamics of the actuator. The dynamic model will primarily be used for controller design. A relatively simple model is deemed to be sufficient to assess general controller performance. To this end, we propose a non-linear mass-spring-damper model as, 
 
 
 \begin{equation}
@@ -229,13 +229,13 @@ To study the dynamic behaviour of the soft actuator a dynamic model is created. 
 \end{equation}
 
 
-here $M(q(t)) \in \mathbb{R}^{2\times 2}$ is the non-linear mass matrix. In the previous section, we obtained an expression for the Jacobian matrix. Here we observed its position and time variance, therefore it is assumed that the mass matrix of the system is also non-linear. Furthermore, $D \in \mathbb{R}^{2\times2}$ is a linear damping matrix. Lastly, $K(q(t)) \in \mathbb{R}^{2\times 2}$ is a non-linear stiffness matrix. It is known that the elastomer of which the soft actuator is composed deforms non-linearly. Let it be clear that the desired matrix dimensions correspond to the length of modal coordinate vector $q(t)$. The input of the system is chosen $\nu(p,t) \in \mathbb{R}^2$, which is dependent on pressure and time. Posing our dynamic model as such, implicitly imposed the following assumption:
+here $M(q(t)) \in \mathbb{R}^{2\times 2}$ is the non-linear mass matrix. In the previous section, we obtained an expression for the Jacobian matrix. Here we observed its position and time variance, therefore it is assumed that the mass matrix of the system is also non-linear. Furthermore, $D \in \mathbb{R}^{2\times2}$ is a linear damping matrix. Lastly, $K(q(t)) \in \mathbb{R}^{2\times 2}$ is a non-linear stiffness matrix. It is known that the elastomer of which the soft robot is composed deforms non-linearly. Let it be clear that the desired matrix dimensions correspond to the number of active strains. The input of the system is chosen $\nu(p,t) \in \mathbb{R}^2$, which is dependent on pressure and time. Posing our dynamic model as such, implicitly imposed the following assumption:
 
 \begin{theorem}
 The soft robot's dynamics can be modelled as a non-linear mass-spring-damper, assuming that the system is negligibly affected by Coriolis effects and the influence of gravity.
 \end{theorem}
 
-Neglecting the influence of gravity is deemed valid, as the mass of the system is very low ($m << 0.1 kg$). Given the system's low mass, and slow operating velocity, the contribution of the Coriolis terms are small. This Coriolis matrix contains terms $\dot{q}_i q_j$ with $i \neq j$. For small velocities, these cross-terms are deemed small. In this section, we detail the derivation of each of these matrices in (\ref{eq2:simp_model}).
+Neglecting the influence of gravity is deemed valid, as the mass of the system is very low ($m << 0.1 kg$). Given the system's low mass, and slow operating velocity, the contribution of the Coriolis terms are small. This Coriolis matrix contains terms $\dot{q}_i q_j$ with $i \neq j$. For low velocities, these cross-terms are deemed small. In this section, we detail the derivation of each of these matrices in (\ref{eq2:simp_model}).
 
 The dynamic model as presented in (\ref{eq2:simp_model}) can be obtained based on Lagrangian method. The Lagrangian is defined as $\mathcal{L} = \mathcal{T} -\mathcal{V}$ which expresses the energy difference between kinetic energy $\mathcal{T}$ and potential energy $\mathcal{V}$. Exact expressions for the kinetic energy and potential energy of the system are given by, respectively,
 
@@ -245,7 +245,7 @@ The dynamic model as presented in (\ref{eq2:simp_model}) can be obtained based o
 \end{equation}
 
 
-where $\mathcal{M} \in \mathbb{R}^{3\times3}$ and $\mathcal{K} \in \mathbb{R}^{3\times3}$ are a diagonal mass tensor and stiffness tensor, respectively. The expression for velocity (\ref{eq2:J}) and strain (\ref{eq2:xishape}) can be substituted in this equation to formulate the kinetic and potential energy as follows,
+where $\mathcal{M} \in \mathbb{R}^{3\times3}$ and $\mathcal{K} \in \mathbb{R}^{3\times3}$ are a diagonal mass tensor and stiffness tensor, respectively. The approximations for velocity (\ref{eq2:J}) and strain (\ref{eq2:xishape}) can be substituted in this equation to formulate the kinetic and potential energy as follows,
 
 \begin{equation}
     \mathcal{T} = \frac{1}{2}\int_0^{\sigma} \Big([J(\sigma,t)]_1\dot{q}(t)\Big)^\top \mathcal{M} \Big([J(\sigma,t)]_1\dot{q}(t)\Big) d \sigma  \hspace{10pt} \text{and} \hspace{10pt}  \mathcal{V} = \frac{1}{2}\int_0^{\sigma} \big(\Phi q(t)\big)^\top \mathcal{K} \big(\Phi q(t)\big) \hspace{2pt} d \sigma.
@@ -258,15 +258,15 @@ Above expression allows deriving the Lagrangian equations of motion as \cite{NWo
     \label{eq2:lagrange}
 \end{equation}
 
-where $\mathcal{Q}^{nc} \in \mathbb{R}^3$ is a vector containing non-conservative forces acting on the system. One of these non-conservative forces are actuation forces. These actuation forces are captured in vector $\nu(p,t) \in \mathbb{R}^2$, which is pre-multiplied by some matrix $S \in \mathbb{R}^{3\times 2}$. This matrix $S$ represents the generalized direction of force and torque. In a moment we will prove this selection matrix is equal to matrix $\Phi$. Another non-conservative force are the damping forces caused by the elastomer. These damping terms are captured in diagonal damping tensor $\mathcal{D} \in \mathbb{R}^{3 \times 3}$. Also note that we have substituted the approximated strain velocity which, without further prove, can be easily obtained from (\ref{eq2:xiapprox}). Further working out (\ref{eq2:lagrange}) and rearranging terms gives,
+where $\mathcal{Q}^{nc} \in \mathbb{R}^3$ is a vector containing non-conservative forces acting on the system. One of these non-conservative forces are actuation forces. These actuation forces are captured in vector $\nu(p,t) \in \mathbb{R}^2$, which is pre-multiplied by some matrix $S \in \mathbb{R}^{3\times 2}$. This matrix $S$ represents the generalized direction of force and torque. In a moment we will prove this selection matrix is equal to matrix $\Phi$. Another non-conservative force are the damping forces as a result of the energy dissipation in the elastomer. These damping terms are captured in diagonal damping tensor $\mathcal{D} \in \mathbb{R}^{3 \times 3}$. Also note that we have substituted the approximated strain rate which, without further prove, can be easily obtained from (\ref{eq2:xiapprox}). Further working out (\ref{eq2:lagrange}) and rearranging terms gives,
 
 \begin{equation}
     \int_0^\sigma \Big( \underbrace{[J(\sigma,t)]_1^\top \mathcal{M} [J(\sigma,t)]_1}_{M(q)} \ddot{q}(t) +  \underbrace{\Phi^\top \mathcal{D} \Phi }_{D} \dot{q}(t)    +   \underbrace{\Phi^\top \mathcal{K} \Phi}_{K(q)} q(t)\Big) \hspace{2pt} d\sigma = S\nu,
 \end{equation}
 
-here it becomes clear that $M(q)$, $D(q)$ and $K(q)$ are all in $\mathbb{R}^{2\times2}$, since $[J(\sigma,t)]_1 \land \Phi \in \mathbb{R}^{3 \times 2}$. Recalling the generalized input vector $S$, it must hold that $S = \Phi$, as we only have two input directions. Since we have assumed that the Coriolis effects are small, the term $\frac{\partial}{\partial q}\mathcal{T} $ is omitted. Now the expressions for the mass, damping and stiffness matrices are presented, we will elucidate on the entries of their tensors, respectively.
+here it becomes clear that $M(q)$, $D(q)$ and $K(q)$ are all in $\mathbb{R}^{2\times2}$, since $[J(\sigma,t)]_1 \land \Phi \in \mathbb{R}^{3 \times 2}$. Recalling the generalized input vector $S$, it must hold that $S = \Phi$, as we only have two input directions. Since we have assumed that the Coriolis effects are small, the term $\frac{\partial}{\partial q}\mathcal{T} \approx O_2 $ is omitted. Now the expressions for the mass, damping and stiffness matrices are presented, we will elucidate on the entries of their tensors, respectively.
 
-In our modelling approach, the actuator kinematics have been described by a one-dimensional backbone curve. To derive the mass matrix, mass properties need to be assigned to this curve. Therefore the backbone curve is discretized, and we consider an infinite slice of the cross-section of the actuator. To derive the mass tensor of the system the following assumption is made.
+In our modelling approach, the actuator kinematics have been described by a one-dimensional backbone curve. To derive the mass matrix, mass properties need to be assigned to this curve. Therefore the backbone curve is discretized, and we consider an infinitely thin slice of the cross-section of the actuator. To derive the mass tensor of the system the following assumption is made.
 
 \begin{theorem}
 The inertial properties of the actuator can be determined by considering an infinitely thin slice in the transverse direction and regarding it as a solid cuboid.
@@ -324,14 +324,15 @@ which has no off-diagonal terms. Essentially, this means that only curvature sti
 
 \section{Pump dynamics}
 
-At this point, we have derived a dynamic model for our soft robot. However, actuation plays a dominant role in controlling our soft robot. Therefore it important to include pressure dynamics as well. Each bellow of the soft robot is pressurized using an air pump. These air pumps compress air using membranes. The speed at which the membranes open and close determines the rate at which pressure increases. This speed can be regulated by supplying a DC voltage to the electric motor which opens and closes the membranes. To model the air pump dynamics, we propose a first-order linear model given by,
+At this point, we have derived a dynamic model for our soft robot. However, actuation plays a dominant role in controlling our soft robot. Therefore it important to include pressure dynamics as well. Each bellow of the soft robot is pressurized using a diaphragm air pump. These air pumps compress air using membranes. The speed at which the membranes open and close determines the rate at which pressure increases. This speed can be regulated by supplying a DC voltage to the electric motor which opens and closes the membranes. To model the air pump dynamics, we propose a first-order linear model given by,
 
 \begin{equation}
     \dot{p}(t) = -\lambda_1 p(t) + \lambda_2 V(t),
     \label{eq2:pumpmodel}
 \end{equation}
 
-here $p(t)$ is the time-dependent pressure based on input DC-voltage $V(t)$. Constant $\lambda_1 \in \mathbb{R}^+$ represents the system's resistance to a pressure increase and is dependent on actual system pressure. Parameter $\lambda_2 \in \mathbb{R}^+$ is a constant that incorporates the pressure increase relative to the volt input signal. Both of these parameters can be obtained via experimental analysis. This process is detailed in Chapter \ref{chap3}. 
+here $p(t)$ is the time-dependent pressure based on input DC-voltage $V(t)$. Constant $\lambda_1 \in \mathbb{R}^+$ represents the system's resistance to a pressure increase and is dependent on actual system pressure. Parameter $\lambda_2 \in \mathbb{R}^+$ is a constant that incorporates the pressure increase relative to the volt input signal. Additionally, it should be noted that this $\lambda_1$ acts as some deflation coefficient. For zero volt input, the system pressure decreases with a rate relative to the system pressure. This is captured by this pump parameter. Both of these parameters can be obtained via experimental analysis. This process is detailed in Chapter \ref{chap3}. 
+
 
 
 
@@ -340,18 +341,18 @@ here $p(t)$ is the time-dependent pressure based on input DC-voltage $V(t)$. Con
 Eventually, we wish to evaluate the controller performance using the posed dynamic model. Therefore, the dynamic model of (\ref{eq2:simp_model}) should numerically be solved. To this end, the dynamic model is reformulated to a second order state-space formulation as,
 
 \begin{equation}
-     \begin{bmatrix} \dot{x}  \end{bmatrix}   = \underbrace{  \begin{bmatrix} O_{2\times 2} & I_{2\times 2} \\ -M(q)^{-1}K(q)  & -M(q)^{-1} D \end{bmatrix}   }_{A} \begin{bmatrix} x \end{bmatrix}  +      \underbrace{\begin{bmatrix} O_{2\times 2} \\ M(q)^{-1}   \end{bmatrix}   }_{B}    \begin{bmatrix} \nu_1(p) \\ \nu_2(p)  
+     \begin{bmatrix} \dot{x}  \end{bmatrix}   = \underbrace{  \begin{bmatrix} O_{2} & I_{2} \\ -M(q)^{-1}K(q)  & -M(q)^{-1} D \end{bmatrix}   }_{A} \begin{bmatrix} x \end{bmatrix}  +      \underbrace{\begin{bmatrix} O_{2} \\ M(q)^{-1}   \end{bmatrix}   }_{B}    \begin{bmatrix} \nu_1(p) \\ \nu_2(p)  
      \end{bmatrix}, 
      \label{eq4:SS}
 \end{equation}
 
-with state vector $x = \begin{bmatrix} q \hspace{3pt} \dot{q}   \end{bmatrix}^\top =  \begin{bmatrix} \kappa \hspace{3pt} \epsilon \hspace{3pt} \dot{\kappa}  \hspace{3pt} \dot{\epsilon}  \end{bmatrix}^{\top}$. System matrix $A \in \mathbb{R}^{4\times 4}$ contains all elements with respect to the system dynamics, whereas matrix $B\in\mathbb{R}^{4 \times 2}$ is the control input vector. Note that we have a omitted the time-dependency in the system matrix, control input matrix and input vector. As mentioned, this input vector $\nu(p)$ is a function of pressure and time. From a physical standpoint the entries of the input vector $\nu$ can interpreted as a moment and a force acting on the system. This moment $\nu_1$ causes the actuator to rotate, whereas $\nu_2$ can be viewed as a force that causes elongation. To include the pump dynamics, some sort of pressure to input moment/force mapping is necessary. Hereto we propose a mapping as $\nu(p,t) = H p(t)$, where $H \in \mathbb{R}^{2\times 2}$ maps pressure vector $p(t) \in \mathbb{R}^2$ to input moment and force. 
+with state vector $x = \begin{bmatrix} q \hspace{3pt} \dot{q}   \end{bmatrix}^\top =  \begin{bmatrix} \kappa \hspace{3pt} \epsilon \hspace{3pt} \dot{\kappa}  \hspace{3pt} \dot{\epsilon}  \end{bmatrix}^{\top}$. System matrix $A \in \mathbb{R}^{4\times 4}$ contains all elements with respect to the system dynamics, whereas matrix $B\in\mathbb{R}^{4 \times 2}$ is the control input matrix. Note that we have a omitted the time-dependency in the system matrix, control input matrix and input vector. As mentioned, this input vector $\nu(p)$ is a function of pressure and time. From a physical standpoint the entries of the input vector $\nu$ can interpreted as a moment and a force acting on the system. This moment $\nu_1$ causes the actuator to curve, whereas $\nu_2$ can be viewed as a force that causes elongation. To include the pump dynamics, some sort of pressure to input moment/force mapping is necessary. Hereto we propose a mapping as $\nu(p,t) = H p(t)$, where $H \in \mathbb{R}^{2\times 2}$ maps pressure vector $p(t) \in \mathbb{R}^2$ to input moment and force. 
 
 To capture the overall system dynamics the provided state-space model in (\ref{eq4:SS}) can be combined with the pump model of (\ref{eq2:pumpmodel}). Hereto we assume that the dynamics of both air pumps are identical, this results in, 
 
 \begin{equation}
-     \begin{bmatrix} \dot{x}  \end{bmatrix}   =   \underbrace{ \begin{bmatrix} O_{2\times 2} & I_{2 \times 2} & O_{2 \times 2} \\ -M(q)^{-1}K(q)  & -M(q)^{-1} D & O_{2 \times 2} \\
-     O_{2\times 2} & O_{2\times 2}    & -\lambda_1 I_{2\times 2}\ \end{bmatrix}   }_A   \begin{bmatrix} x \end{bmatrix}  + \underbrace{      \begin{bmatrix} O_{2 \times 2} & O_{2\times 2} \\ M(q)^{-1}H & O_{2\times 2} \\ O_{2\times 2} & \lambda_2 I_{2\times 2} \end{bmatrix} }_B      \begin{bmatrix} p_1 \\ p_2  \\ V_1 \\ V_2 \end{bmatrix},
+     \begin{bmatrix} \dot{x}  \end{bmatrix}   =   \underbrace{ \begin{bmatrix} O_{2\times 2} & I_{2} & O_{2} \\ -M(q)^{-1}K(q)  & -M(q)^{-1} D & O_{2} \\
+     O_{2} & O_{2}    & -\lambda_1 I_{2}\ \end{bmatrix}   }_A   \begin{bmatrix} x \end{bmatrix}  + \underbrace{      \begin{bmatrix} O_{2} & O_{2} \\ M(q)^{-1}H & O_{2} \\ O_{2} & \lambda_2 I_{2} \end{bmatrix} }_B      \begin{bmatrix} p_1 \\ p_2  \\ V_1 \\ V_2 \end{bmatrix},
      \label{eq:ssp}
 \end{equation}
 

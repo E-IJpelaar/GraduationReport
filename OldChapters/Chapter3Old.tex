@@ -265,3 +265,75 @@ Figure (\ref{fig3:elongvsforce}) shows the result of solving the regression prob
 \end{figure}
 
 \todo{coupling is neglected}
+
+
+\section{Pump Dynamics}
+
+
+For the adapted system the step response is determined for volt steps between 2 and 12 volt. The results are shown in Figure \ref{fig3:pump_dynamics_adapted}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.6\textwidth]{Figures/Chapter3/step212V.eps}
+    \caption{Step response for volt step input between 2V and 12V for the system including air vessel and actuator.}
+    \label{fig3:pump_dynamics_adapted}
+\end{figure}
+
+
+Based on the step responses of Figure (\ref{fig3:pump_dynamics_adapted}) we try to capture the pump dynamics in a model. The time response of a first order linear system responding to a step input is given by, 
+
+\begin{equation}
+    p(t,V) = K(1-e^{-t/\tau})V,
+    \label{eq3:firstordermodel}
+\end{equation}
+
+where $p$ is the pressure at time $t$ in kPa. DC-gain $K$ [kPa/V] determines the maximum pressure, time constant $\tau_s$ [1/s] determines the growth rate of the exponential function. Furthermore, $V$ is the input volt. 
+
+An attempt to fit the linear first order model of (\ref{eq3:firstordermodel}) did not result in an accurate description of the pump dynamics for all step inputs. Therefore an alternative description of the pump dynamics is proposed. In this description DC-gain $K$ is replaced by a nonlinear function $K(V)$. Additionally, a linear function $\tau_s(V)$ is proposed. This adaption makes the original model non-linear. Additionally, we are aware that by introducing these functions the terminology time `constant' is used incorrectly.
+
+
+Based on (\ref{eq3:firstordermodel}) an indication of the gradient between constant $K$ and $V$ can be estimated. The DC-gain can be found by dividing the steady-state pressure by its corresponding volt input. The steady-state pressure for each step input is estimated by taken the mean over the last 10 seconds of data. A similar approach is done for determining time constant $\tau_s$. For a first order system it can be proven that this time constant is equal to time at which 63\% of the steady state value is reached. The corresponding relations for $K(V)$ and $\tau_s(V)$ are shown in Figure \ref{fig3:Kest} and Figure \ref{fig3:tauest}, respectively.
+\newpage
+
+\begin{figure}[H]
+\begin{minipage}[b]{0.48\linewidth}
+\centering
+\includegraphics[width=\textwidth]{Figures/Chapter3/Kest.eps}
+\caption{Experimental estimate of `constant' $K$ and fourth order fit.}
+\label{fig3:Kest}
+\end{minipage}
+\begin{minipage}[b]{0.48\linewidth}
+\centering
+\includegraphics[width=\textwidth]{Figures/Chapter3/tauest.eps}
+\caption{Experimental estimate of time `constant' $\tau$ and linear fit.}
+\label{fig3:tauest}
+\end{minipage}
+\end{figure}
+
+Figure \ref{fig3:Kest} shows a fourth-order polynomial fit through DC-gain $K$. For step inputs larger than 8 volt the DC-gain drops. This indicates that the air pump is less efficient for these volt inputs. This could be caused an increased temperature of the air pump. Another explanation for this behaviour is an increased passive leakage of the system, as steady-state pressure is higher for high volt inputs. Up till 5V the pumps do not adhere to what is expected. The DC-gains found in this region indicate inefficient pump behaviour. It is believed that this is caused by friction.
+
+Figure \ref{fig3:tauest} shows the estimated time constants, with a linear fit. Clearly the estimated time constant for 2 and 3 volt do not follow this linear trend line. Therefore, this data point where excluded from the linear fit. A possible explanation for these outliers is the friction acting at these voltage inputs, and are therefore not reliable. Furthermore, we see the time constant decreasing for a increasing volt. This means that the pump has a faster response for higher volt input. This can make sense as the total power supplied to the air pumps is higher. 
+
+
+The obtained measurement fits for $K$ and $\tau_s$ can be substituted in (\ref{eq3:firstordermodel}) resulting in an expression as,
+
+\begin{equation}
+    p(t,V) = K(V)(1-e^{-t/\tau_s(V)})V.
+    \label{eq3:firstodernonlinearmodel}
+    \end{equation}
+
+The derived first order model of (\ref{eq3:firstodernonlinearmodel}) can be plotted against the experimental results of Figure (\ref{fig3:pump_dynamics_adapted}), this is shown in Figure (\ref{fig3:expvsfitpres}).
+
+\newpage
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.7\textwidth]{Figures/Chapter3/expfit.eps}
+    \caption{Experimental results and the derived nonlinear pressure model.}
+    \label{fig3:expvsfitpres}
+\end{figure}
+
+Above figure shows that the derived model captures the behaviour of the system with actuator and air vessel accurately. The steady-state pressure is close to the experimental value for all volt step inputs. As expected, the rise time for the 1 and 2 volt step inputs are not captured that well by this model.
+
+The obtained dynamic response is arguable from a physical point of view. The dynamic model for the air pumps is fit to a first order linear system by introducing non-linearity's. Therefore the obtained model is very specific and does not allow for a change in parameters. Therefore this model can not be used in a changed set-up. Furthermore it should be noted that the fourth order fit used to describe the DC-gain is found negative for Volt input equal to 0. From a physical perspective this is not possible. At 0 volt input, the DC-gain should be equal to 0. Therefore the model is only deemed valid in the volt input range where $K$ is positive.
+

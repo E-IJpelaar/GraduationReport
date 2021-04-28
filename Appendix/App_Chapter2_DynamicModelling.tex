@@ -4,7 +4,10 @@
 %This subsection is not definite. 2 inverse kinematic scripts have been created. One in which only end-effector position $[x,y]$ is given. One where also the orientation is added $[x,y,\theta]$ . For only a single shape-function approximation (constant curvature approach), will find the shortest path. However, when increasing the amount of shape functions, both models will not come with the most shortest path. Therefore, the inverse kinematics as described here has not been used extensively.
 
 
-Inverse kinematics allows to map the desired end-effector position to the corresponding modal coordinates. To determine this inverse mapping the Jacobian search method is exploited \cite{JacobianInverse}. Essentially, a desired position and orientation of the robot's end-effector is given. The derived forward kinematics can be regarded as,
+Inverse kinematics allows to map the desired end-effector position to the corresponding modal coordinates. To determine this inverse mapping the Jacobian search method is exploited \cite{JacobianInverse}. Essentially, a desired position and orientation of the robot's end-effector is given. 
+
+
+The derived forward kinematics can be regarded as,
 
 \begin{equation}
     x = f(q),
