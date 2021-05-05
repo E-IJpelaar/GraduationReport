@@ -5,62 +5,68 @@
 \begin{multicols}{2}
 \begin{table}[H]
 \centering
-    \begin{tabular}{p{1.5cm} p{5cm}} \hline
-    \textbf{Symbol}    &   \textbf{Description }\\ \hline
+    \begin{tabular}{p{1.7cm} p{4.8cm}} \hline
+    \textbf{Capitals}    &   \textbf{Description }\\ \hline
     A      &  System matrix \\
     B     &  Input matrix \\
-    $C_{10}$     &  Elasticity modulus \\
     D     &  Damping matrix \\
-    $D_1$     &  Elasticity modulus \\
-    $e$     & Error \\
-    E     &  Young's modulus \\
-    $f$     & Forward kinematics function \\
     F     & Force \\
-    g     &  Backbone curve \\
-    G     &  Shear modulus \\
-    $h$     &  Height \\
     H     &  Mapping matrix \\
-    I     &  Identity matrix \\
     J     &  Jacobian matrix \\
-    K     &  Bulk modulus \\
     K     &  Stiffness matrix \\
-    K     &  Diagonal gain matrix \\
-    $l$     &  Actuator length \\
-    L     &  Actuator length \\
-    m     &  Matrix rows \\
-    $m$     &  Meter \\
+    L     &  Relaxed actuator length \\
     M     &  Mass matrix \\
     M     &  Moment \\
-    n     &  Matrix collumns \\
     N     & Order of approximation \\
-    O     &  Zero matrix \\
-    $p$     & Position vector \\
-    $p$     & Pressure vector \\
-    q     & Modal coordinate vector \\
+
     Q     & Weighing matrix \\
-    $r$     & Position vector in Cartesian coordinates \\
-    $r$     & Lever length \\
     R     & Rotation matrix \\
     S     & Force input matrix \\
-    $t$     & Time \\
     T     & Time domain \\
-    $w$     & Width \\
     W     & Weighing matrix \\
-    $x$     & Cartesian x-direction \\
-    $x$     & State vector \\
-    $y$     & Cartesian y-direction \\
-    $y$     & Sensor value data input \\
-    $Y$     & Sensor value \\
-    $z$     & Cartesian z-direction \\ \hline
+    $Y$     & Sensor value \\ \hline
     \end{tabular}
 \end{table}
 
+
+
 \begin{table}[H]
 \centering
-    \begin{tabular}{p{1.5cm} p{5cm}} \hline
-    \textbf{Sets}    &   \textbf{Meaning }\\ \hline
-    $\mathbb{R}$     &  Real numbers \\
-    $\mathbb{N}$     &  Natural numbers \\  \hline
+    \begin{tabular}{p{1.7cm} p{4.8cm}} \hline
+    \textbf{Lowercase}    &   \textbf{Description }\\ \hline
+     $e$     & Error vector \\
+     $g$     & Backbone curve \\
+     $h$     & Height \\
+     $l$     & Deformed actuator length \\
+     $m$     & Meter \\
+     $p$     & Position vector \\
+     $p$     & Pressure vector \\
+     $q$     & Modal coordinate vector \\
+     $r$     & Position vector in Cartesian coordinates \\
+     $t$     & Time \\
+     $w$     & Width \\
+     $x$     & Cartesian x-direction \\
+     $x$     & State vector \\
+     $y$     & Cartesian y-direction \\
+     $y$     & Sensor value data input \\
+     $z$     & Cartesian z-direction \\ \hline
+    \end{tabular}
+\end{table}
+
+
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{p{2.5cm} p{4cm}} \hline
+    \textbf{Calligraphic}    &   \textbf{Description }\\ \hline
+
+    $\mathcal{D}$     &  Damping tensor \\
+    $\mathcal{K}$     &  Stiffness tensor \\
+    $\mathcal{L}$     &  Lagrangian \\
+    $\mathcal{M}$     &  Mass tensor \\
+    $\mathcal{Q}$     &  Forces acting on system \\
+    $\mathcal{T}$     &  Kinetic energy \\
+    $\mathcal{V}$     &  Potential energy \\ \hline
     \end{tabular}
 \end{table}
 
@@ -72,14 +78,14 @@
     \textbf{Greek symbol}    &   \textbf{Description }\\ \hline
     $\alpha$     &  Stiffness parameter \\
     $\beta$     &  Stiffness parameter \\
+    $\gamma$     & Learning gain \\
     $\epsilon$     &  Strain \\
     $\eta$     &  Velocity vector \\
-    
     $\theta$      & Rotation \\
     $\kappa$     &  Curvature \\
     $\lambda$    &  Pump constant \\
+    $\mu$     & Singularity factor \\
     $\nu$     &  Input force vector \\
-    $\nu$     &  Poisson ratio \\
     $\xi$     &  Curvature-strain vector \\
     $\rho$     &  Mass density \\
     $\sigma$     &  Position instance \\
@@ -87,8 +93,8 @@
     $\phi$       & Rotation  \\
     $\Phi$    &  Shape-function matrix \\
     $\psi$        & Weighing factor \\
-    $\omega$     &  Rotational velocity \\
-    $\partial$     &  Partial derivative \\ \hline
+    $\omega$     &  Rotational velocity \\ \hline
+
     
     \end{tabular}
 \end{table}
@@ -100,13 +106,9 @@
     \textbf{Index}    &   \textbf{Superscript \& subscript}\\ \hline
     0     &  Initial condition \\
     a     &  Active \\
-    d     &  Desired \\
     end   & Last entry of vector \\
     est   & Estimate \\
-    g     & Backbone curve \\
     i     & Integral \\
-    k     & Discrete time step \\
-    k     & Index of summation \\
     lenght & Arc length \\
     $L$   & Frame at $\sigma = L$ \\
     mid    & Nodes discretized backbone curve \\
@@ -114,11 +116,6 @@
     p    & Proportional \\
     set   & Set-point \\
     tot    & Total \\
-    $x$    & Cartesian x-direction \\
-    $y$    & Cartesian y-direction \\
-    $\epsilon$  & Strain \\
-    $\kappa$ & Curvature \\ 
-    $\sigma$   & Frame evaluated at $\sigma$ \\\hline
     \end{tabular}
 \end{table}
 
@@ -153,35 +150,18 @@
 
 
 
-\begin{table}[H]
-\centering
-    \begin{tabular}{p{2.5cm} p{4cm}} \hline
-    \textbf{Calligraphic}    &   \textbf{Description }\\ \hline
-
-    $\mathcal{D}$     &  Damping tensor \\
-    $\mathcal{K}$     &  Stiffness tensor \\
-    $\mathcal{L}$     &  Lagrangian \\
-    $\mathcal{M}$     &  Mass tensor \\
-    $\mathcal{Q}$     &  Forces acting on system \\
-    $\mathcal{T}$     &  Kinetic energy \\
-    $\mathcal{V}$     &  Potential energy \\ \hline
-
-    
-    \end{tabular}
-\end{table}
-
 
 \begin{table}[H]
 \centering
     \begin{tabular}{p{1.5cm} p{5cm}} \hline
-    \textbf{Notation}    &   \textbf{Description}\\ \hline
-    $0_m$    & Column vector of zeros with length $m$ \\
+     \multicolumn{2}{l}{\textbf{Mathematical notations}}\\ \hline
+    $0_m$    & Column vector of zeros of dimension $m$ \\
     $a_i$ & $i$-th entry of vector $a$ \\
     $a^\top$ & Transpose of vector $a$ \\
-    $\Bar{a}$ & Measured value of $a$  \\
+    $A^\top$ & Transpose of matrix $A$ \\
+    $\Bar{a}$ & Vector with measured values $a$  \\
     $\text{dim}(a)$ & Dimension of vector $a$ \\
     $\text{diag}(a)$ & Diagonal matrix with the elements of $a$ as the main diagonal\\
-    $A^\top$ & Transpose of matrix $A$ \\
     $A^\dagger$ & Pseudo-Inverse of non-square matrix $A$ \\
     $A^{-1}$ & Inverse of matrix $A$ \\
     $A_\times$ & Skew-symmetric matrix $A$ \\
@@ -189,14 +169,23 @@
     $A_{m \times n}$ & Matrix with $m$ rows and $n$ columns \\
     $A \otimes B$ & Kronecker tensor product between matrices $A$ and $B$ \\
     $\text{Ad}_g$ & Adjoint action on function $g$\\
+    $\partial g$     &  Partial derivative w.r.t function $g$\\ 
     $[g]_N$ & $N$-th order truncation of function $g$\\ 
     $g'$ & Spatial derivative of function $g$ \\
     $\dot{g}$ & Time derivative of function $g$ \\
     $\hat{g}$ & Isomorphism of $\hat{g} \longmapsto g$ \\
     $I_m$    & Square identity matrix of size $m \times m$ \\
     $O_m$    & Square zero matrix of size $m \times m$ \\
+    $\mathbb{R}$ & Real number\\
     $\mathbb{R}^+$ & Positive real number\\
-    $\mathbb{N}^+_0$ & Positive natural number including zero\\ \hline
+    $\mathbb{N}$ & Natural number\\
+    $\mathbb{N}^+_0$ & Positive natural number including zero\\
+    $\mathfrak{se}(2)$ & Square real matrix expressing Lie algebra on $\mathbb{SE}(2)$ group  \\
+    $\mathbb{SE}(2)$ & Special Euclidean group representing 2D rigid-body transformations\\
+    $\mathfrak{so}(2)$ & Skew-symmetric square real matrix\\
+    $\mathbb{SO}(2)$ &  Special orthogonal group representing 2D rotation. \\
+    \hline
+    
 
     \end{tabular}
 \end{table}

@@ -1,26 +1,33 @@
 \label{app4}
 
 
-\section{Dynamic Model}
-
-Since damping parameters can not be obtained experimentally, it was opted for to intuitively tune these gains based on observations in the lab. This assumption is deemed valid as the pump dynamics are dominant for set-point regulation tasks. In this section we compare the dynamic system for a free oscillation for two different damping settings. A critically damped system, which resembles observations made in the lab best. And a under damped system, to illustrate other dynamical characteristics of the system. For both simulations the initial conditions where a curvature of $8$ $\frac{1}{m}$ and elongation of $0.5$ $[-]$.
 
 
-Figure \ref{figapp4:highd} shows a free oscillation of the dynamic model with damping constants $D_\kappa = 4\mathrm{e}{-5} Nms$ and $D_\epsilon = 0.3 Ns $. This results in a critically damped system. There is no oscillatory behaviour around the steady-state. These settings represent the actual system best. It can be seen that the system settles the order of 0.1 seconds.
 
-Figure \ref{figapp4:lowd} shows a free oscillation of the dynamic model with damping constants $D_\kappa = 2\mathrm{e}{-6} Nms$ and $D_\epsilon = 9\mathrm{e}{-3} Ns $. This results in a under damped system. This simulation is added to show the effects of the non-linear stiffness, which is indicated by the inconsistent width of the oscillations.
+\section{Simplified Inverse Kinematics}
+
+The controller demands that the configuration of the actuator is known at each sampling instant. Therefore the modal coordinates need to be calculated based on the sensor data. Since the configuration of the actuator is approximated with a single shape function. The inverse kinematic problem can implicitly be solved with the constant curvature approach. The sensor output, which is the x,y position in the plane, and the orientation of the tip of the actuator $\theta$ can be used to determine modal coordinates $\epsilon$ and $\kappa$. At each sampling instant this inverse kinematics are determined. Based on the modal coordinates the Jacobian matrix can be updated, which in its turn is used in determining the new control input. The simplified kinematics are shown in Figure \ref{fig:simpkin}.
 
 \begin{figure}[H]
-\begin{minipage}{0.48\textwidth}
     \centering
-    \includegraphics[width = \textwidth]{Figures/Chapter4/freeoschighd.eps}
-    \caption{Free oscillation of the dynamic model with $q_0 = [8,0.5]$ for relatively high damping}
-    \label{figapp4:highd}
-    \end{minipage}
-\begin{minipage}{0.48\textwidth}
-    \centering
-    \includegraphics[width = \textwidth]{Figures/Chapter4/freeosclowd.eps}
-    \caption{Free oscillation of the dynamic model with $q_0 = [8,0.5]$ for relatively low damping}
-    \label{figapp4:lowd}
-    \end{minipage}
+    \includegraphics[width = 0.5\textwidth]{Figures/Chapter5/fbdkinematics.eps}
+    \caption{Schematic drawing of the actuator to determine mapping from configuration space to task space}
+    \label{fig:simpkin}
 \end{figure}
+
+From above figure the following forward kinematic relations follow as,
+
+
+\begin{equation}
+    y = \frac{1}{\kappa}\sin(\theta) \hspace{15pt} \text{and} \hspace{15pt}    x = \frac{1}{\kappa}[1-\cos(\theta)] \hspace{15pt} \text{with} \hspace{10pt}   \theta = l \kappa.
+\end{equation}
+
+where $l \in \mathbb{R}^{+}$ is the actuator length given by $l = (1+\epsilon)L_0$. Accordingly, the modal coordinates can then be calculated by,
+
+\begin{equation}
+    \kappa_y = \frac{\sin(\theta)}{y} \hspace{15pt} 	\land \hspace{15pt}  \kappa_x = \frac{1 -\cos(\theta)}{x} \hspace{15pt} \text{and} \hspace{10pt} \epsilon = \frac{\theta}{\kappa L_0} -1,
+\end{equation}
+
+where it should be noted that for small angles it is more accurate to use $\kappa_y$.
+
+
