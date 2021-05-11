@@ -55,13 +55,8 @@ The constant curvature describes the position of the actuator by three coordinat
     \label{fig2:ccapproach}
 \end{figure}
 
-The PCC approach has some limitations, due to its piece-wise character the actuator configuration is not described by a single continuous function. This makes it harder to find analytical expressions e.g. derivatives. Additionally, this PCC approach only allows assigning material properties to particular points. This makes dynamical models generally less accurate. One method to overcome this problem is using partial differential equations (PDE's) to describe actuator configurations. These PDE's are more suitable for deriving continuum dynamic models. The Cosserat beam model overcomes this problem. This method describes the soft robot configuration by a continuous curve. The soft robot's deformation
+The PCC approach has some limitations, due to its piece-wise character the actuator configuration is not described by a single continuous function. This makes it harder to find analytical expressions e.g. derivatives. Additionally, this PCC approach only allows assigning material properties to particular points. This makes dynamical models generally less accurate. One method to overcome this problem is using partial differential equations (PDE's) to describe actuator configurations. These PDE's are more suitable for deriving continuum dynamic models. In this work, the Cosserat beam model is exploited to overcome the mentioned problems. This Cosserat model describes the soft robot configuration by a continuous curve. This continuous curve reflects the backbone of the soft robot describing the strains of the soft robot. These strains can be approximated, hereby reducing the infinite dimensional system to a reduced order. The order reduction allows dynamic model derivation for the soft robot. This dynamic model can then be utilized for control purposes.
 
-\todo{cosserat / MBC }
-
-One method allowing to derive actuator configurations in the form of PDE's is the Cosserat beam model. This model describes the soft robot configuration by a continous deformable curve,
-
-\newpage
 
 \begin{figure}[H]
 \begin{minipage}{.5\textwidth}
