@@ -1,31 +1,28 @@
 \label{chap4}
 
-This chapter details the controller design of the model based controller. The performance of the controller is tested with the aid of a simulation model. The model as derived in Chapter \ref{chap2} will be used with the parameters found in Chapter \ref{chap3}. In order for the model to be complete pump dynamics should be added. These pumps have a major influence on the dynamics of the system. Once these are determined the Jacobian controller can be implemented on the dynamic model. 
+This chapter details the controller design of the model-based controller. The performance of the controller is tested with the aid of a simulation model. The model as derived in Chapter \ref{chap2} will be used with the parameters found in Chapter \ref{chap3}. First, the control layout is detailed. This schematically shows the control loop. Then, the model-based controller is detailed which comprises Jacobian information. Lastly, the pressure controller is detailed. 
 
 
 
-\section{Control lay-out}
+\section{Control layout}
 
-Figure \ref{fig4:controllayout} shows the schematic overview of the soft robot's control lay-out. This control architecture is detailed starting with the reference position vector $r_{set}$ containing the desired $x$ and $y$ coordinate. Based on the actual position $r_{est}$ in the Cartesian plane, position error $e_r$ can be determined. This error is injected into the model-based controller. This control law incorporates current position trough inverse kinematics. Based on the current configuration and position error, a control input $\nu$ is calculated. This control input can be viewed as a moment and force necessary to curve and elongate the soft robot. With the aid of some mapping, the input force and moment can be converted to a reference pressure's $p_{set}$ for each bellow. The difference between measured pressure $p$ and the reference pressure is defined as the pressure error $e_p$. Based on this pressure error, the pressure controller determines volt input to be send to the air-pumps. The change in pressure will result in a change in position as perceived by the vision system. Together with the IMU the actuator tip rotation is measured. Combining the measured Cartesian coordinates and rotation allows to determine the inverse kinematics, that are used to update the model-based controller. The measured position can then be used again to determine the position error. In this section the control lay-out is further detailed. Starting with the model based controller, then the pressure regulation. Furthermore, the simplified inverse kinematics are explained.  
+Figure \ref{fig4:controllayout} shows the schematic overview of the soft robot's control layout. This control architecture is detailed starting with the reference position vector $r_{set}$ containing the desired $x$ and $y$ coordinate. Based on the actual position $r_{est}$ in the Cartesian plane, position error $e_r$ can be determined. This error is injected into the model-based controller. This control law incorporates the current position through inverse kinematics. Based on the current configuration and position error, a control input $\nu_{set}$ is calculated. This control input can be viewed as a moment and force necessary to curve and elongate the soft robot. With the aid of some mapping, the input force and moment can be converted to a reference pressure's $p_{set}$ for each bellow. The difference between measured pressure $p$ and the reference pressure is defined as the pressure error $e_p$. Based on this pressure error, the pressure controller determines the volt input $V$ to the air pumps. The change in pressure affects position and orientation as perceived by the vision system and Inertial Measurement Unit (IMU), respectively. The measured Cartesian coordinates and rotation allows calculating the modal coordinates through inverse kinematics. These determined modal coordinates are then used to update the model-based controller. The measured Cartesian position will also be used to determine the position error. In this section, the control layout is further detailed. Starting with the model-based controller, then the pressure regulation.
 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \textwidth]{Figures/Chapter3/controlschemeActual.eps}
-    \caption{Control lay-out of the model-based controller accompanied by a low-level pressure controller.}
+    \includegraphics[width = \textwidth]{Figures/Chapter4/ControlschemeActualwithPump.eps}
+    \caption{Control layout of the model-based controller accompanied by a low-level pressure controller.}
     \label{fig4:controllayout}
 \end{figure}
 
 
 
 
-\section{Jacobian model based controller}
+\section{Jacobian model-based controller}
 
 
-For controlling the soft robot, a model based controller is proposed based on the system's Jacobian matrix. As mentioned in Chapter \ref{chapter1} this method has readily been applied to the field of soft robotics. 
-
-
-To control the soft robot a Jacobian based model based controller is proposed. Jacobian control is widely applied for position control of classic robots. However, this theory can also be applied to soft robots given that the Jacobian can be calculated. In this work, a Jacobian PI controller is implemented \cite{MOOSAVIAN20071226}. The latter work states that a computed torque controller can be approximated by a more straightforward control law involving the Jacobian transpose. This approximation holds if high enough control gains are used. The Jacobian controller that is to be implemented is given by,
+For controlling the soft robot, a model based controller is proposed based on the system's Jacobian matrix. As mentioned in Chapter \ref{chapter1}, Jacobian control has readily been applied to the field of soft robotics. In this work, a Jacobian controller is implemented based on \cite{MOOSAVIAN20071226}. The latter work states that a computed torque controller can be approximated by a more straightforward control law involving the Jacobian transpose. This approximation holds if high enough control gains are used. The work of \cite{MOOSAVIAN20071226} uses a Jacobian PD controller, however this type of control strategy does not reduce steady-state error. Therefore the Jacobian controller that will be implemented is given as,
 
 
 \begin{equation}
@@ -33,37 +30,54 @@ To control the soft robot a Jacobian based model based controller is proposed. J
     \label{eq:tau}
 \end{equation}
 
-where the proportional-integrator structure can be directly observed. Due to the structure of the control architecture the controller does not 
+where $\nu_{set}$ is the desired control input, as calculated by the controller. Furthermore, the proportional-integrator structure can be directly observed. The diagonal gain matrices $K_p$ and $K_i$ both in $\mathbb{R}^{2\times 2}$ contain proportional and integrator gains, respectively. The proportional gain matrix $K_p$ penalizes proportional to the error, whereas integrator gain matrix $K_i$ contributes to the sum of the error over time. The error $e_r \in \mathbb{R}^2$ is defined as the difference between reference position $e_{set}$ and the measured position in the (x,y)-plane $e_{est}$. The Jacobian is determined with equation (\ref{eq2:J}) following a first-order approximation, as shown in Chapter \ref{chap3}. Since only the position in (x,y)-plane is considered, not the entire Jacobian of dimension $3 \times 2$ is used. Only the entries mapping modal coordinate position to Cartesian position are used. This corresponds to the second and third row of the Jacobian, which will be defined as $[J_c]_1$. Due to its space dependency, the Jacobian is updated in real-time based on the actual kinematic configuration of the actuator. Based on the measured position and angle the modal coordinates can be calculated using inverse kinematics. The simplified inverse kinematics are detailed in Appendix \ref{app4}.
 
-In this controller, diagonal gain matrices $K_p$ and $K_i$ both in $\mathbb{R}^{2\times 2}$ contain proportional and integrator gains, respectively. 
+Since the Jacobian controller has a PI structure, the integrator will try to remove the steady-state error. However, oscillations will not be reduced as there is no derivative action included in the control law of (\ref{eq:tau}). A derivative action could have easily been included based on numerical differentiation. However, this method is often erroneous velocity estimated due to the presence of noise. Therefore a low-pass filter is added to the Jacobian controller. The discretized low-pass filter is given as,
+
+\begin{equation}
+\bar{\nu}_{set,k} = \zeta \nu_{set,k} + (1-\zeta)\bar{\nu}_{set,k-1}
+\end{equation}
+
+where $\zeta$ with $ 0 < \zeta \leq 1$ is a tuning parameter defining the relative importance between new input $\nu_{set,k}$ and previous input $\bar{\nu}_{set,k-1}$. A high value of $\zeta$ increases the cut-off frequency, resulting in minimal noise reduction. A low value for $\zeta$ suppresses more frequencies. Lowering the value of $\zeta$ increases the delays in the system, which can potentially cause stability problems. 
 
 
-The controller designed in this study includes jacobian information. Jacobian control is a widely applied type of model-based controller for positioning classic robots. As mentioned in Chapter \ref{chapter1}, Jacobian controllers only use model information on velocity and position level. Thus, system dynamics are not used in this control law
 
-where $\nu_{set} \in \mathbb{R}^2$ is the control input vector with control input moment and force. The Jacobian is determined with equation \ref{eq2:J}. Furthermore, $K_p$ and $K_i \in \mathbb{R}^{2\times 2}$ are diagonal gain matrices. Here $K_p$ penalizes proportional to the error, $K_i$ contributes to the sum of the error over time. The error $e_r \in \mathbb{R}^2$ is defined as the difference between reference position and the actual position in the (x,y)-plane. Therefore not the entire Jacobian of dimension $3 \times 2$, but only the entries mapping modal coordinate velocity to linear velocity in x-y plane $J_c$, corresponding to the second and third row. As mentioned this Jacobian is space-time variant. Therefore, in the control law this Jacobian is calculated real-time based on the actual kinematic configuration of the actuator. Based on the simplified inverse kinematics, that belong two a first order approximation. The simplified inverse kinematics are detailed in Appendix \ref{app4}.
 
 \section{Pressure control}
 
 
-The actual system does not allow to induce forces and moments directly. Therefore this control input should be mapped to pressure. Using the inverse of the mapping found by finite element analysis in Chapter \ref{chap3} desired input forces and moments can be mapped to pressure. Based on the desired control input, a reference pressure can be formulated as,
+The actual system does not allow to induce forces and moments directly. Therefore the set control input $\nu_{set}$ should be mapped to some reference pressure. Using the inverse of the mapping found by finite element analysis in Chapter \ref{chap3} desired input forces and moments can be mapped to pressure. Based on the desired control input, a reference pressure can be formulated as,
 
 \begin{equation}
-    p_{set} = H^{-1}\nu,
+    p_{set} = H^{-1}\bar{\nu}_{set},
 \end{equation}
 
 
 where $p_{set} \in \mathbb{R}^2$ is the reference pressure for each bellow. In order for this reference pressure to be reached a second controller is necessary. This low-level controller is used to set the input voltage that is supplied to the air pumps. A standard PI-controller is deemed good enough to track the reference pressure. Therefore the control law is can be described by,
 
 \begin{equation}
-    V_{set} = K_{pp}e_p + K_{ip} \int_0^t e_p \hspace{2pt} ds \hspace{10pt} \text{with} \hspace{10pt} e_p = p_{set} - p,
+    V = K_{pp}e_p + K_{ip} \int_0^t e_p \hspace{2pt} ds \hspace{10pt} \text{with} \hspace{10pt} e_p = p_{set} - p,
 \end{equation}
 
+where $V$ is the input voltage based on the pressure error $e_p$. The proportional action is based on diagonal gain matrix $K_{pp} \in \mathbb{R}^{2\times 2}$, whereas the integral action is done by $K_{ip} \in \mathbb{R}^{2\times 2}$.
 
 
-where $V_{set}$ is the input voltage based on the pressure error $e_p$. The proportional action is based on diagonal gain matrix $K_{pp} \in \mathbb{R}^{2\times 2}$. The integral action is done by $K_{ip}\mathbb{R}^{2\times 2}$.
 
 
-\section{Digital Filters}
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\section{Digital Filters}
 
 
 %Above state space model and presented Jacobian controller is implemented in \MATLAB. The used settings gains are $K_p = \text{diag}([400,400])$  and $K_i = \text{diag}([150,150])$. Figure  shows a simulation for a set point $q_{set} = [0 0.3]^\top$, which is equivalent to a position of [0,0.084]$m$ in the xy-plane.

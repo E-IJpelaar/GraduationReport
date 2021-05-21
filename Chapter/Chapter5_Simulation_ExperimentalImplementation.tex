@@ -1,89 +1,39 @@
 \label{chap5}
 
-In this chapter the proposed Jacobian controller is experimentally verified. The experimental set-up will first be further detailed. This includes the data acquisition from the sensors. Then experimental results will be shown for a set-point regulation.  
+In this chapter the proposed model-based controller is tuned and verified in simulation and for experiments. First the models response to a free oscillation is shown. This can already be used to detect strengths and weaknesses of the dynamic model. Then the performance of the model-based controller will be evaluated for a reference set-point in simulation. Then the step to the experimental set-up is made. The experimental set-up will be discussed, including it's data acquisition using the sensory devices. Subsequently, the input mapping is reviewed. Next, the response for a set-point regulation with the model-based controller and filters will be presented. Lastly, the results of a reference tracking problem conducted on the experimental setup are shown. 
 
 
 
+\section{Dynamic model in free-oscillation}
 
-\subsection{Dynamic model in free-oscillation}
+still work out, script finished
 
+\section{Set-point regulation in simulation}
 
-\section{Simulation Results}
-
-
-\subsection{Jacobian control}
-
-
-\subsection{Jacobian control \& Stiffness compensation}
+still work out, script finished
 
 
+\section{Experimental set-up and data acquisition}
+
+The experimental set-up consisting of the planar soft robot, air pumps, airtanks, and pressure sensors are connected as followed. Each air pump is attached to an air distribution manifold via a hose. This distribution manifold has three air outlets. To these outlets a pressure sensor, air tank and actuator bellow is attached, respectively. To this end, air hoses with a inner diameter of 3mm are used. To the tip of the actuator a yellow LED used for optical tracking is mounted. This LED is glued to a connector that has been additively manufactured. The LED has an offset of 40 mm with respect the tip of the actuator. This connector part also houses the IMU. This IMU is used to measure rotation of the actuator's tip in radians. Furthermore, a vision system is focused on the actuator. This vision system is programmed such it can recognise and track the LED marker. The actual end-effector position can then be calculated using trigonometry using rotation and position data, see Appendix \ref{app:chap5} for this derivation. 
+
+The sensors described above, e.g. the IMU, two pressure sensors and optical tracking system are connected to an Arduino micro. This Arduino is connected to a Raspberry PI 3B+. The Arduino code is programmed such that it constantly updates all sensors. For the optical tracking system, which is the Pixy V2 the update rate is 60 Hz. The pressure sensors and IMU are read at ??? Hz. Once the Raspberry requests sensor data, the Arduino puts a string with delimiters into the Arduino serial. The Raspberry reads this string, separates the sensor data based on this delimiters, and updates the sensor data. This communication drastically lowers the sampling frequency to 18 Hz. It would be more convenient to connect the sensors directly to the Raspberry. However, the Raspberry was not able to interpret this sensor data correctly. On this Raspberry the model-based and pressure controller are programmed. To this Raspberry a ADC converter shield is mounted which can regulate the input to the air pumps.
+
+\textcolor{red}{tell about low pass and complementary filter design for theta,x,y}
 
 
-\section{Experimental set-up}
+\section{Revision of input mapping}
 
-The experimental set-up consisting of the planar soft robot, air pumps, airtanks, and pressure sensors are connected as followed. Each air pump is attached to an air distribution manifold via a hose. This distribution manifold has three air outlets. To these outlets a pressure sensor, air tank and actuator bellow is attached, respectively. To this end, air hoses with a inner diameter of 3mm are used. To the tip of the actuator a yellow LED used for optical tracking is mounted. This LED is glued to a connector that has been additively manufactured. The LED has an offset of 45 mm with respect the tip of the actuator. This connector part also houses the Inertial Measurement Unit (IMU). This IMU is used to measure  rotation of the actuator's tip in radians. Furthermore, a vision system is focused on the actuator. This vision system is programmed such it can recognise and track the LED marker. 
+done still to be written 
 
-The sensors described above, e.g. the IMU, two pressure sensors and optical tracking system are connected to an Arduino micro. This Arduino is then connected to a Raspberry PI 3B+. The Arduino code is programmed such that it constantly updates all sensors. For the optical tracking system, which is the Pixy V2 the update rate is 60 Hz. The pressure sensors and IMU are read at 200 Hz. Once the Raspberry requests sensor data, the Arduino puts a string with delimiters into the Arduino serial. The Raspberry reads this string, separates the sensor data based on this delimiters, and updates the sensor data. This communication allows to reach a sampling frequency of 25 Hz. It would be more convenient to connect the sensors directly to the Raspberry. However, the Raspberry was not able to interpret this sensor data correctly. On this Raspberry the controller was programmed. To this Raspberry a ADC converter shield is mounted which can regulate the $pwm$ input to the air pumps. The programming language used for the Raspberry is \CC. For coding on the Arduino, the Arduino language is used. 
+\section{Set-point regulation in experiments}
 
-Since the position data collected by the vision system contains high-frequent noise, a first order low-pass filter was implemented on the Raspberry. This discrete low-pass filter with a cut-off frequency of 1 Hz and a sample rate of 25 Hz is given as,
+results present not included yet
 
-\begin{equation}
-    Y_k = 0.78Y_{k-1} + 0.22y_k,
-\end{equation}
+\section{Reference tracking in experiments}
 
-where $Y_k$ is new sensor value, $Y_{k-1}$ previous sensor value. And $y_k$ the new sensor data input. Notice that a zero order hold integration method is used for determining the new sensor value. 
+still to be done, hopefully next week 
 
-\subsection{Revision of input mapping}
-
-
-
-\subsection{Revision of stiffnesses}
-
-
-\section{Digital Filter Design}
-
-
-\section{Experimental results}
-
-
-
-
-
-
-
-\subsection{Jacobian control}
-
-\subsection{Jacobian control \& Stiffness compensation}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Experimental Results}
-
-\hl{correct experimental results are still to added.}
-
-
-
-%\textbf{Assumptions}
-%\begin{itemize}
-%    \item The actuator is symmetrical, curvature equal but negative in when bellow is pressurized
-%    \item Out of plane motion is negligible small
-%    \item Constant curvature approach captures the kinematics well when neglecting the effect of gravity 
-%\end{itemize}
 
 
 

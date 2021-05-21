@@ -74,26 +74,28 @@
 
 \begin{table}[H]
 \centering
-    \begin{tabular}{p{2.8cm} p{3.2cm}} \hline
+    \begin{tabular}{p{2.5cm} p{3.4cm}} \hline
     \textbf{Greek symbol}    &   \textbf{Description }\\ \hline
-    $\alpha$     &  Stiffness parameter \\
-    $\beta$     &  Stiffness parameter \\
-    $\gamma$     & Learning gain \\
-    $\epsilon$     &  Strain \\
-    $\eta$     &  Velocity vector \\
+    $\alpha$      & Elongation stiffness parameter  \\
+    $\beta$       & Rotational stiffness parameter \\
+    $\gamma$      & Poisson ratio \\
+    $\epsilon$    & Strain \\
+    $\zeta$       & Low-pass filter parameter \\
+    $\eta$        & Velocity vector \\
     $\theta$      & Rotation \\
-    $\kappa$     &  Curvature \\
-    $\lambda$    &  Pump constant \\
-    $\mu$     & Singularity factor \\
-    $\nu$     &  Input force vector \\
-    $\xi$     &  Curvature-strain vector \\
-    $\rho$     &  Mass density \\
-    $\sigma$     &  Position instance \\
-    $\varphi$     &  Shape-function \\
-    $\phi$       & Rotation  \\
-    $\Phi$    &  Shape-function matrix \\
+    $\kappa$      & Curvature \\
+    $\lambda$     & Pump constant \\
+    $\mu$         & Singularity factor \\
+    $\nu$         & Control input vector \\
+    $\xi$         & Curvature-strain vector \\
+    $\rho$        & Mass density \\
+    $\sigma$      & Position instance \\
+    $\varphi$     & Shape-function \\
+    $\phi$        & Rotation  \\
+    $\Phi$        & Shape-function matrix \\
+    $\chi$         & Learning gain \\
     $\psi$        & Weighing factor \\
-    $\omega$     &  Rotational velocity \\ \hline
+    $\omega$      &  Rotational velocity \\ \hline
 
     
     \end{tabular}
@@ -102,18 +104,19 @@
 
 \begin{table}[H]
 \centering
-    \begin{tabular}{p{1.5cm} p{5cm}} \hline
+    \begin{tabular}{p{1.1cm} p{5.4cm}} \hline
     \textbf{Index}    &   \textbf{Superscript \& subscript}\\ \hline
     0     &  Initial condition \\
     a     &  Active \\
     end   & Last entry of vector \\
     est   & Estimate \\
     i     & Integral \\
+    ip     & Integral pressure controller \\
     lenght & Arc length \\
-    $L$   & Frame at $\sigma = L$ \\
     mid    & Nodes discretized backbone curve \\
     nc    & Non-conservative \\
     p    & Proportional \\
+    pp    & Proportional pressure controller\\
     set   & Set-point \\
     tot    & Total \\
     \end{tabular}
@@ -159,9 +162,10 @@
     $a_i$ & $i$-th entry of vector $a$ \\
     $a^\top$ & Transpose of vector $a$ \\
     $A^\top$ & Transpose of matrix $A$ \\
-    $\Bar{a}$ & Vector with measured values $a$  \\
+    \underbar{$a$} & Vector with measured values $a$  \\
     $\text{dim}(a)$ & Dimension of vector $a$ \\
     $\text{diag}(a)$ & Diagonal matrix with the elements of $a$ as the main diagonal\\
+    $\Bar{\nu}$ & Low-pass filtered $\nu$ \\
     $A^\dagger$ & Pseudo-Inverse of non-square matrix $A$ \\
     $A^{-1}$ & Inverse of matrix $A$ \\
     $A_\times$ & Skew-symmetric matrix $A$ \\
@@ -176,6 +180,7 @@
     $\hat{g}$ & Isomorphism of $\hat{g} \longmapsto g$ \\
     $I_m$    & Square identity matrix of size $m \times m$ \\
     $O_m$    & Square zero matrix of size $m \times m$ \\
+    
     $\mathbb{R}$ & Real number\\
     $\mathbb{R}^+$ & Positive real number\\
     $\mathbb{N}$ & Natural number\\
