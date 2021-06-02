@@ -22,7 +22,7 @@ Figure \ref{fig4:controllayout} shows the schematic overview of the soft robot's
 \section{Jacobian model-based controller}
 
 
-For controlling the soft robot, a model based controller is proposed based on the system's Jacobian matrix. As mentioned in Chapter \ref{chapter1}, Jacobian control has readily been applied to the field of soft robotics. In this work, a Jacobian controller is implemented based on \cite{MOOSAVIAN20071226}. The latter work states that a computed torque controller can be approximated by a more straightforward control law involving the Jacobian transpose. This approximation holds if high enough control gains are used. The work of \cite{MOOSAVIAN20071226} uses a Jacobian PD controller, however this type of control strategy does not reduce steady-state error. Therefore the Jacobian controller that will be implemented is given as,
+For controlling the soft robot, a model based controller is proposed based on the system's Jacobian matrix. As mentioned in Chapter \ref{chapter1}, Jacobian control has readily been applied to the field of soft robotics. In this work, a Jacobian controller is implemented based on \cite{MOOSAVIAN20071226}. The latter work states that a computed torque controller can be approximated by a more straightforward control law involving the Jacobian transpose. This approximation holds if high enough control gains are used. The work of \cite{MOOSAVIAN20071226} demonstrates this with a Jacobian PD controller. The control law that will be implemented is slightly altered. Since a PD controller has no integrator action, the steady-state error is not reduced. Furthermore, the presence of noise in the control loop does not lend itself for numeric differentiation, hence a standard derivative action can not be implemented. Therefore, a Jacobian PI controller will be implemented. The control law can then be formulated as,
 
 
 \begin{equation}
@@ -32,15 +32,14 @@ For controlling the soft robot, a model based controller is proposed based on th
 
 where $\nu_{set}$ is the desired control input, as calculated by the controller. Furthermore, the proportional-integrator structure can be directly observed. The diagonal gain matrices $K_p$ and $K_i$ both in $\mathbb{R}^{2\times 2}$ contain proportional and integrator gains, respectively. The proportional gain matrix $K_p$ penalizes proportional to the error, whereas integrator gain matrix $K_i$ contributes to the sum of the error over time. The error $e_r \in \mathbb{R}^2$ is defined as the difference between reference position $e_{set}$ and the measured position in the (x,y)-plane $e_{est}$. The Jacobian is determined with equation (\ref{eq2:J}) following a first-order approximation, as shown in Chapter \ref{chap3}. Since only the position in (x,y)-plane is considered, not the entire Jacobian of dimension $3 \times 2$ is used. Only the entries mapping modal coordinate position to Cartesian position are used. This corresponds to the second and third row of the Jacobian, which will be defined as $[J_c]_1$. Due to its space dependency, the Jacobian is updated in real-time based on the actual kinematic configuration of the actuator. Based on the measured position and angle the modal coordinates can be calculated using inverse kinematics. The simplified inverse kinematics are detailed in Appendix \ref{app4}.
 
-Since the Jacobian controller has a PI structure, the integrator will try to remove the steady-state error. However, oscillations will not be reduced as there is no derivative action included in the control law of (\ref{eq:tau}). A derivative action could have easily been included based on numerical differentiation. However, this method is often erroneous velocity estimated due to the presence of noise. Therefore a low-pass filter is added to the Jacobian controller. The discretized low-pass filter is given as,
+Since the controller has a PI structure, oscillations in the control signal are not reduced as there is no derivative action in the control law. A derivative action could have easily been included based on numerical differentiation. However, this method is often erroneous velocity estimated due to the presence of noise. The origin of the noise comes from position measurement which, via inverse kinematics, also effects the calculation of the Jacobian. To reduce oscillation on the input signal, a low-pass filter is added to the controller law. The discretized low-pass filter is given as,
 
 \begin{equation}
 \bar{\nu}_{set,k} = \zeta \nu_{set,k} + (1-\zeta)\bar{\nu}_{set,k-1}
+\label{eq4:lowpass}
 \end{equation}
 
 where $\zeta$ with $ 0 < \zeta \leq 1$ is a tuning parameter defining the relative importance between new input $\nu_{set,k}$ and previous input $\bar{\nu}_{set,k-1}$. A high value of $\zeta$ increases the cut-off frequency, resulting in minimal noise reduction. A low value for $\zeta$ suppresses more frequencies. Lowering the value of $\zeta$ increases the delays in the system, which can potentially cause stability problems. 
-
-
 
 
 \section{Pressure control}
