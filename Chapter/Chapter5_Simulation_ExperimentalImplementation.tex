@@ -2,22 +2,107 @@
 
 In this chapter, the proposed model-based controller is tuned and verified in simulation and for experiments. First, the response of the dynamic model in a free oscillation is shown. This can be used to detect the strengths and weaknesses of the dynamic model. Then the performance of the model-based controller will be evaluated for a reference set-point in simulation. Then the step to the experimental set-up is made. The experimental set-up will be discussed, including its data acquisition using the sensory devices. Subsequently, the input mapping is reviewed. Next, the response for a set-point regulation with the model-based controller and filters will be presented. Lastly, the results of a reference tracking problem conducted on the experimental setup are shown. 
 
+\section{Dynamic Model verification}
+
+To verify the dynamic model, the model's response is compared to a measured response of the actual set-up. In this case the model and actual system are subjected to equivalent initial conditions and input. Preferably, this is a free oscillation induced by only choosing an initial condition. This would allow to isolate the soft robot dynamics from the pump dynamics as the input is zero. However, such a free oscillation can not be induced on the physical set-up. An initial curvature or elongation can be induced, although not being perfectly in plane. This slight out of plane initial condition causes the soft to oscillate out-of-plane, making the observed response nugatory for parameter estimation.
+
+Another method to 
 
 
-\section{Dynamic model in free-oscillation}
 
-still work out, script finished
+
+The low out-of-plane stiffness causes the soft robot so o
+
+
+
+A free oscillation would be desirable to asses the dynamic of the model. For this set-up a free oscillation is considered an initial curvature and elongation and observing its response. However, such a free oscillation can not be induced on the physical set-up. 
+
+
+
+Comparing the experimental results with the model response allows to 
+
+
+To verify the dynamic model, the response of the system to an induced 
+
+
+
+
+the soft robot can not be excited in such a way that on
+
+means of comparing experimental 
+
+
+
+The model as discussed in Chapter \ref{chap2} with its parameters as 
+
+
+
+The model can 
+
+\section{Free oscillation of the soft robot in simulation}
+
+Before implementing the controller, the response of the soft robot is observed for a free oscillation in simulation. Although the models response can still be interpreted. By analyzing the response, an indication on the quality of the model can be made.  
+
+Since a free oscillation can not be induced experimentally, the system's damping properties are chosen based on observations made in the lab. By extending and rotating the robot by hand, and observing the movement when let loose
+
+
+
+can give insight on the model quality. 
+
+
+To this end two free oscillations are consired for two damping cases. 
+
+Since a free oscillation can not
+
+A simulation of the soft robot during a free oscillation is 
+
+
+
+
+
+
+To verify the modeled soft robot dynamics, a free oscillation is simulated. For the physical soft robot a free oscillation can not be carried out, as the robot can not be excited to create
+
+
+. However, a free oscillation in simulation can be used to asses if the model behaves as is expected. To this end two simulations each for different damping characteristics.
+
+Since damping parameters can not be obtained experimentally, it was opted for to intuitively tune these gains based on observations in the lab. This assumption is deemed valid as the pump dynamics are dominant for set-point regulatory tasks. In this section we compare the dynamic system for a free oscillation for two different damping settings. A critically damped system, which resembles observations made in the lab best. And a under damped system, to illustrate other dynamical characteristics of the system. For both simulations the initial conditions where a curvature of 45 degrees and an elongation of $0.5$ $[-]$.
+
+Brief part on Figures
+
+%Figure \ref{figapp4:highd} shows a free oscillation of the dynamic model with damping constants $D_\kappa = 4\mathrm{e}{-5} Nms$ and $D_\epsilon = 0.3 Ns $. This results in a critically damped system. There is no oscillatory behaviour around the steady-state. These settings represent the actual system best. It can be seen that the system settles the order of 0.1 seconds.
+
+%Figure \ref{figapp4:lowd} shows a free oscillation of the dynamic model with damping constants $D_\kappa = 2\mathrm{e}{-6} Nms$ and $D_\epsilon = 9\mathrm{e}{-3} Ns $. This results in a under damped system. This simulation is added to show the effects of the non-linear stiffness, which is indicated by the inconsistent width of the oscillations.
+
+Conclusion on the dynamic model. Incorrect stiffness calculation caused by two reasons. 1. The FEM analysis was carried out for a thinner printed soft robot composed of softer material. Secondly, the pressure to force mapping is inaccurate, causing an additional error on the stiffness calculation. The mass approximation using infinitely thin slices results in a low effective mass $m$ in the order $10^{-5}$ and mass moments of inertia in the order of $10^{-8}$, resulting in an high eigenfrequency no way related to physical set up. 
+
+Ofcourse, the mass could be considered a tuning parameter, increasing the mass an order xx yields more sensible results with respect to observed behaviour of the actuator. Therefore, we increase the mass of the sytem to xx grams, and observe the response. From this point on, this mass will be used during simulations of the Jacobian controller. 
+
+\begin{figure}[H]
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width = \textwidth]{Figures/Chapter5/ehighlowdamp.eps}
+    \caption{Free oscillation of the dynamic model with initial elongation of $0.5 [-]$.}
+    \label{fig5:esim}
+    \end{minipage}
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width = \textwidth]{Figures/Chapter5/khighlowdamp.eps}
+    \caption{Free oscillation of the dynamic model with initial curvature of $45$ degrees.}
+    \label{fig5:ksim}
+    \end{minipage}
+\end{figure}
 
 \section{Set-point regulation in simulation}
 
-The controller of 
+Show simulation of the Jacobian controller with adapted mass parameter. Explain tuning and obtained result.
 
 
 \section{Experimental set-up and data acquisition}
 
 The experimental set-up consisting of the planar soft robot, air pumps, air tanks, and pressure sensors are connected as followed. Each air pump is attached to an air distribution manifold via a hose. This distribution manifold has three air outlets. To these outlets, a pressure sensor, air tank and actuator bellow are attached, respectively. To this end, air hoses with an inner diameter of 3 millimeters are used. To the tip of the actuator, a yellow LED is mounted that is used for optical tracking. This LED is glued to a connector that has been additively manufactured. The LED has an offset of 35 millimeters with respect to the tip of the actuator. This connector part also houses the IMU. This IMU is used to measure the rotation of the actuator's tip. Furthermore, a vision system is focused on the actuator. This vision system is programmed such it can recognise and track the LED marker. The actual end-effector position can then be calculated using trigonometry using rotation and position data, see Appendix \ref{app:chap5} for this derivation. 
 
-The sensors described above, e.g. the IMU, two pressure sensors and optical tracking system are connected to an Arduino micro. This Arduino is connected to a Raspberry PI 3B+. The Arduino code is programmed such that it updates all sensors. This includes the optical tracking system, two pressure sensors and the IMU. The maximum attained sample frequency of the Arduino is 40 Hz. On the Raspberry, the model-based and pressure controller are programmed. To the Raspberry, an ADC converter shield is mounted which can regulate the input to the air pumps. The Raspberry PI can receive sensor data and perform all necessary calculations at a frequency of 25 Hz. This is the bandwidth frequency of the control system. This sampling frequency of 25 Hz might seem low compared to traditional robots. However, considering the low system dynamics in the order of 1 Hz \cite{tawk2018bioinspired},\cite{HighBandwidthControl} this sample frequency suffices.  
+The sensors described above, e.g. the IMU, two pressure sensors and optical tracking system are connected to an Arduino micro. This Arduino is connected to a Raspberry PI 3B+. The Arduino code is programmed such that it updates all sensors. This includes the optical tracking system, two pressure sensors and the IMU. The maximum attained sample frequency of the Arduino is 40 Hz. On the Raspberry, the model-based controller and pressure controller are programmed. To the Raspberry, an ADC converter shield is mounted which can regulate the input to the air pumps. The Raspberry PI can receive sensor data and perform all necessary calculations at a frequency of 25 Hz. This is the bandwidth frequency of the control system. This sampling frequency of 25 Hz might seem low compared to traditional robots. However, considering the low system dynamics in the order of 1 Hz \cite{tawk2018bioinspired},\cite{HighBandwidthControl} this sample frequency suffices.  
 
 \section{Digital filter design}
 
@@ -49,7 +134,10 @@ where $\Bar{r}_{pixy,k}$ is the low-pass filtered position vector of the LED mar
 
 \section{Revision of input mapping}
 
-The input mapping as derived in Chapter \ref{chap3} given by (\ref{eq3:H}) was found inaccurate during the experiments. Recall that this mapping maps moment and force to individual bellow pressure. Incorrect mapping results in erroneous pressure set points. The revised input mapping was found as follows. First, the pressure controller gains are set as $K_{pp} =\text{diag}([1,1])$ and the integrator gain $K_{ip} = \text{diag}([0,0])$. In this way, the system pressure will never converge to the pressure set point. Then a setpoint is chosen for which the soft robot needs to elongate and curve. Eventually, the soft robot will move to its desired position setpoint, as the integrator action in the model-based controller will increase $\nu_{set}$. Once the reference position is reached, the input signal $\nu_{set}$ remains constant. Furthermore, the pressure in both bellows can be read. Based on the pressures, and value of $\nu_{set}$ the entries of the input mapping can be redetermined. The revised input mapping was found to be equal to,
+The input mapping as derived in Chapter \ref{chap3} given by (\ref{eq3:H}) was found inaccurate during the experiments. Recall that this mapping maps moment and force to individual bellow pressure. Incorrect mapping results in erroneous pressure set points, as the large
+
+
+The revised input mapping was found as follows. First, the pressure controller gains are set as $K_{pp} =\text{diag}([1,1])$ and the integrator gain $K_{ip} = \text{diag}([0,0])$. In this way, the system pressure will never converge to the pressure set point. Then a setpoint is chosen for which the soft robot needs to elongate and curve. Eventually, the soft robot will move to its desired position setpoint, as the integrator action in the model-based controller will increase $\nu_{set}$. Once the reference position is reached, the input signal $\nu_{set}$ remains constant. Furthermore, the pressure in both bellows can be read. Based on the pressures, and value of $\nu_{set}$ the entries of the input mapping can be redetermined. The revised input mapping was found to be equal to,
 
 \begin{equation}
     H = \begin{bmatrix} 	0.0206 &  -0.0206 \\ 
@@ -65,6 +153,7 @@ where it can be seen that the moment to pressure mapping was off by a factor 10.
 Table \ref{tab5:tuningcosiderations} shows the experimentally implemented tuning parameters together with its tuning consideration. The used parameters are found by iterative tuning and observing the system's response. This is done according to some procedure, which is detailed.
 
 Initially, the proportional gains $K_{pp}$ of the pressure controller are set as $\text{diag}([1,1])$. The integrator gains $K_{ip}$ are left as $\text{diag([0,0])}$. Subsequently, the low-pass filter gains on the sensors $\zeta_p$, $\zeta_{pixy}$ are set relatively high ($>0.9$), to minimize delays. Likewise, the sample amount of the moving average filter $N_{IMU}$ can be chosen low ($<5$). The complementary filter $\delta_{IMU}$ is taken initially as 0.02 \cite{compfilter}. These values allow passing through almost all recent data without much delay. Then the curvature set-point as $r_{set} = [0.014,0.082]^\top$ is selected. The proportional gains of the Jacobian controller $K_p$ are increased, such that the system does not saturate in the first few seconds of its response. Recall that the first entry $K_{p,1}$ affects the moment, and $K_{p,2}$ induces a force. Increasing the value of $K_{p,1}$ will result in a swing-like motion in the first seconds, caused by the initially large error in the x-direction. To minimize this behaviour gain $K_{p,1}$ should be chosen smaller than $K_{p,2}$. At this point, the integrator gain of the pressure controller $K_{ip}$ can be increased, to allow tracking of the pressure set point. Furthermore, the integrator gains $K_i$ can be tuned, these should be chosen relatively high to decrease position error relatively fast. The integrator gains are chosen too high when overshoot is observed. Since the system can not be actively deflated, and deflation rates are low, the integrator is not able to compensate well for overshoot. Next, the low-pass filter of the Jacobian controller $\zeta$ can be tuned. This parameter should be decreased to obtain a smooth input signal. At this point $\zeta_{pixy}$ can be tuned as well, to obtain a smoother position signal. Once the control input is smooth, the pressure response is considered. This response can be smoothed by decreasing the low-pass gain $\zeta_p$. Lastly, the sample amount $N_{IMU}$ of the moving average filter is tuned. This value should be tuned such that the angle settling time coincides with the error settling time. Once this procedure is completed, the system can be further fine-tuned to increase performance. Table \ref{tab:tuningcosiderations} shows some guidelines and considerations whilst tuning the controller.
+
 
 
 \begin{table}[H]
@@ -88,10 +177,10 @@ Initially, the proportional gains $K_{pp}$ of the pressure controller are set as
 
 
 
-\section{Set-point regulation in experiments}
+\section{Step-response in experiments}
 
 
-The performance of the designed controller is assessed by analyzing the system's response whilst moving to a reference position. Two set-points are considered for which the actuator needs to extend and curve. The first set-point is $r_{set} = [-0.014,0.082] m$, the second set-point is mirrored and given by $r_{set} = [0.014,0.082] m$. These set-points enable analyzing the movement in both Cartesian directions. Since it is assumed that the soft robot is perfectly symmetric, it is assumed that the system's response will be identical, only reversing the bellow pressures. 
+The performance of the designed controller is assessed by analyzing the system's response whilst moving to a constant reference position. Two set-points are considered for which the actuator needs to extend and curve. The first set-point is $r_{set} = [-0.014,0.082] m$, the second set-point is mirrored and given by $r_{set} = [0.014,0.082] m$. These set-points enable analyzing the movement in both Cartesian directions. Since it is assumed that the soft robot is perfectly symmetric, it is assumed that the system's response will be identical, only reversing the bellow pressures. 
 
 The system's response as a function of time to set-point $r_{set} = [-0.014,0.082] m$ is given in Figure \ref{fig5:stepleft}. The top figure shows the error signal in the x-direction, the middle figure the error in the y-direction, and the bottom figure shows the control input sent to the motors. In the physical set-up, this set-point corresponds to a tip-movement to the left, hence ``left"  is used to address this set-point. Furthermore, Figure \ref{fig5:nuleft} shows control input $\nu$ as determined by the model-based controller. This figure shows the unfiltered, and low-pass filtered control input. Figure \ref{fig5:pleft} shows the bellow pressure of both bellows as solid lines. The dotted lines in this figure indicate reference pressure.
 
@@ -209,56 +298,87 @@ and,
 \end{equation}
 
 
-where it can be seen that during the first $t_1$ seconds the reference position linearly increases to an offset $y_{off}$. Then, clockwise rotation occurs during $T_{ell}$ seconds in which the amplitude in the x-direction is $\alpha$, and the maximum elongation in y-direction is $y_{off} + \beta$. Once the ellipsoid has been completed, the reference signal is equal to its offset position. The values of these parameters are shown in Table \ref{tab5:refparams}. Since the controller has no feedforward control, and settling times are at least 15 seconds in the x-direction, $T_{ell}$ is chosen 60 seconds. The amplitudes, $\alpha$ and $\beta$ are comparable to the set-points presented in the previous section. 
+where it can be seen that during the first $t_1$ seconds the reference position linearly increases to an offset $y_{off}$. Then, clockwise rotation occurs during $T_{ell}$ seconds in which the amplitude in the x-direction is $\alpha$, and the maximum elongation in y-direction is $y_{off} + \beta$. Once the ellipsoid has been completed, the reference signal is equal to its offset position. The values of these parameters are shown in Table \ref{tab5:refparams}. Since the controller has no feedforward control, and considering the slow dynamics of the system, $T_{ell}$ is chosen 100 seconds. The amplitudes, $\alpha$ and $\beta$ are comparable to the set-points presented in the previous section. The same controller parameters are used as for the set-point regulation experiments.
 
 
 \begin{table}[H]
     \centering
     \caption{Reference tracking parameters}
     \begin{tabular}{|c|c|} \hline
-   \textbf{Paramter}  & \textbf{Value [unit]} \\ \hline
-    $t_1$ &   10 [s]  \\ 
+   \textbf{Parameter}  & \textbf{Value [unit]} \\ \hline
+    $t_1$ &   15 [s]  \\ 
     $\alpha$ & 13 [mm] \\
     $\beta$ & 7 [mm] \\
-    $T_{ell}$ & 60 [s] \\ \hline
+    $T_{ell}$ & 100 [s] \\ \hline
 \end{tabular}
     \label{tab5:refparams}
 \end{table}
 
-The results of the above reference trajectory a plotted in Figure \ref{fig5:errorellips}. The left-hand figure shows the position in the x,y plane as a solid blue line, whereas the reference is plotted as a dotted black line. Additionally, green crosses mark the reference position at a given time, whereas red crosses mark the actual position at a given time. It can be seen that the actual position is lagging behind the reference position. This phenomenon is caused by the low-pass filter of the model-based controller, preventing rapid changes in the reference moments and force. This problem can be resolved by increasing $T_{ell}$. Therefore the error response as shown on the right-hand side of Figure \ref{fig5:errorellips} is not an accurate representation of the soft robot's capabilities.
+The results of the above reference trajectory a plotted in Figure \ref{fig5:xyelips}. This figure shows the position in the x,y plane as a solid blue line, whereas the reference is plotted as a dotted black line. Additionally, green crosses mark the reference position at a given time, whereas red crosses mark the actual position at a given time. It can be seen that the actual position is lagging behind the reference position. For reference positions in the lower halve of the ellips is seems that the delay is larger compared to the upper halve. This phenomena can be explained by the fact that the system can not actively deflate. 
+Low-pass filtering of the reference signal only results in a delay for the reference signal of around 0.5 seconds. 
 
-Another observation is the high-frequency noise in the position measurement. The origin of this noise is caused by the air pumps. 
-The bottom figure in Figure \ref{fig5:controlellips}, shows the control input to the air-pumps. This figure shows that especially in regions where the volt input approaches saturation levels large-amplitude volt changes occur. This coincides with the pressure step response as presented in Chapter \ref{chap3}, which showed increasing noise levels for pressure increases. Although the pressure data is low-pass filtered, spikes in the volt control input still occur. 
 
-Furthermore, the effect on non-symmetrical material properties can be observed in Figure \ref{fig5:errorellips}. Tracking the reference in the positive x domain seems to cause higher errors, compared to the negative x domain. Especially between 20 and 30 seconds, the actual position deviates much from the reference set-point. For a large part, the set-point is not even reached at all. In the negative x-domain, between 50 and 60 seconds, relative large position errors are observed as well. However, the position error in this region contains both positive and negative errors, indicating that the set-point is reachable. Since the task-space has not been determined it remains hard to tell if the entire ellipsoid is situated in the robots task-space. 
-\newpage
+This phenomenon can partly be explained by the low-pass filtering of the control input, which limits rapid changes in control input. Another explanation is the low-pass filtering of the position data as perceived by the vision system. To decrease the effect of the delay caused by the model-based controller, $T_{ell}$ can be further increased. The delays initiated by the vision system can be decreased by increasing cut-off frequency of its low-pass filter. However, this will effect the position readings as it raises noise levels. Figure \ref{fig5:errorelips} shows the error signal in x and y-direction for the reference tracking problem. Since the system is delayed, the position error as function of time is 
 
-\begin{figure}[H]
+Part of this phenomenon can be explained by the low-pass filter in the model-based controller. This low-pass filter prevents rapid changes in control input
+
+. The control input is determined based on the actual position and desired position. For a reference tracking problem both set-point and actual position are time dependent, whereas for the step-response the s
+\
+as response to a position error. Initially, this low-pass filter reduces  Therefore the error response as shown on the right-hand side of Figure \ref{fig5:errorellips} is not an accurate representation of the soft robot's capabilities. If the error signal
+\textbf{when experiment has been }
+
+
+
+
+\begin{figure}[H] 
+    \begin{minipage}[b]{0.49\linewidth}
     \centering
-    \includegraphics[width = \textwidth]{Figures/Chapter5/error.eps}
-    \caption{\textbf{Left:} Position of the end-effector in the x,y plane with time stamps. \textbf{Right top:} Error signal as a function of time in x-direction. \textbf{Right bottom:} Error signal as a function of time in y-direction.}
-    \label{fig5:errorellips}
+    \includegraphics[width = \textwidth]{Figures/Chapter5/xy.eps}
+    \caption{Position in the x,y-plane for the ellipsoid reference path, the crosses indicate the reference and actual position at time $t$.}
+    \label{fig5:xyelips}
+       \end{minipage} 
+    \begin{minipage}[b]{0.49\linewidth}
+    \centering
+    \includegraphics[width = \textwidth]{Figures/Chapter5/errorxy.eps}
+    \caption{Error in the x and y-direction during for ellipsoid reference path as function of time.}
+    \label{fig5:errorelips}
+    \end{minipage} 
 \end{figure}
 
 
+
+Another observation is the high-frequent noise in the position measurement. During the experiments, these vibrations of the soft robot can be seen. The origin of this noise are related to the dynamics of the air pumps. The bottom figure in Figure \ref{fig5:controlellips}, shows the control input to the air-pumps. This figure shows that especially in regions where the volt input approaches saturation levels large-amplitude volt changes occur. This coincides with the pressure step response as presented in Chapter \ref{chap3}, which showed increasing noise levels for pressure increases. Although the pressure data is low-pass filtered, spikes in the volt control input still occur. 
+
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \textwidth]{Figures/Chapter5/controlsignalextend.eps}
+    \includegraphics[width = \textwidth]{Figures/Chapter5/input.eps}
     \caption{\textbf{Top:} Control signal of model-based controller. \textbf{Middle:} Reference pressure and measured pressure. \textbf{Bottom:} Control input to the air-pumps.}
     \label{fig5:controlellips}
 \end{figure}
 
-The unsymmetrical material properties are visualized by a pressure contour plot, as depicted in Figure \ref{fig5:pressureellips}. In this figure, the red crosses indicate time stamps. The solid black line indicates the pressures at which the actuator should theoretically only elongate. Perpendicular to this black line, red lines mark elongation and curvature set-points. Previously, it was assumed that the soft robot deforms symmetrically during rotation. However, this statement holds up til a pressure of about 50 kPa. The red lines $a_1$ and $a_2$ are of equal lengths and are close to measured pressures. This also holds for the lines $b_1$ and $b_2$. Considering pressures above 50 kPa, the symmetry argument does not hold. The lines $c_1$ and $c_2$ are not of equal length, indicating that curvature stiffness is dependent on its sign. 
+The errors in the bottom left and right quadrant of the ellipsoid are caused by a change in angular rate. Consider Figure \ref{fig5:ellipstheta} which shows the angle as function of time. Especially between 28 to 36 and 50 to 60 seconds the rotation data is inaccurate. This measurements is directly observed in the calculated end-effector position in the x,y plane. Since the angle data is used to calculate the end-effector position. This effect, together with the already observed noise deteriorates position calculation. In Figure \ref{fig5:ellipstheta} the effects of the sign change for the rotation are observed as spikes in the x and y position.
+
+Furthermore, the effect on non-symmetrical material properties can be observed in Figure \ref{fig5:errorellips}. In the first halve of the ellipse the x-position is positive. During this 40 second period the actual position tends to be within the ellipsoid reference signal instead of on or outside the reference signal. For the second halve, the tracking is more accurate with errors both inside and outside the ellipsoid reference. Since the task-space has not been determined it remains hard to tell if the entire ellipsoid is situated in the robots task-space. 
 
 
 
-
-\begin{figure}[H]
+\begin{figure}[H] 
+    \begin{minipage}[b]{0.49\linewidth}
     \centering
-    \includegraphics[width = 0.8\textwidth]{Figures/Chapter5/pressurecontour.eps}
-    \caption{Contour plot of the bellow pressure $p_1$ and $p_2$, red lines indicate (non)-symmetrical material properties.}
+    \includegraphics[width = \textwidth]{Figures/Chapter5/ellipsthetaxyh.eps}
+    \caption{Angle $\theta$ and position in x and y direction as function of time.}
+    \label{fig5:ellipstheta}
+       \end{minipage} 
+    \begin{minipage}[b]{0.49\linewidth}
+    \centering
+    \includegraphics[width = \textwidth]{Figures/Chapter5/pressurecontour.eps}
+    \caption{Contour plot of the bellow pressure $p_1$ and $p_2$.}
     \label{fig5:pressureellips}
+    \end{minipage} 
 \end{figure}
+
+The unsymmetrical material properties are visualized by a pressure contour plot, as depicted in Figure \ref{fig5:pressureellips}. In this figure, the red crosses indicate time stamps. The solid black line indicates the pressures at which the actuator should theoretically only elongate. Perpendicular to this black line, red lines mark elongation and curvature set-points. Previously, it was assumed that the soft robot deforms symmetrically during rotation. However, this statement holds up til a pressure of about 50 kPa. The red lines $a_1$ and $a_2$ are of equal lengths and are close to measured pressures. This also holds for the lines $b_1$ and $b_2$. Considering pressures above 50 kPa, the symmetry argument does not hold. The lines $c_1$ and $c_2$ are not of equal length, indicating that curvature stiffness is dependent on the sign of the x-coordinate. 
 
 
 
