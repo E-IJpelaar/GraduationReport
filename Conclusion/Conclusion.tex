@@ -1,5 +1,17 @@
+In this thesis, an approach for modelling soft robotics and 
+
+
+Jacobian control shows a major increase in performance when compared to PD with FFW regarding the work of \cite{berkers}.
+
 
 
 
 
 \section{Recommendation}
+
+
+Modelling: include gravitational effects, Coreolis effects, mass matrix determination. Deflation model. 
+
+Set-up wise: pressurized vessels instead of diafragms pumps, quicker pressuriztion improved performance less noise. Vision system: higher bandwidth. Also LED same hue as soft robot. Sometimes soft robot detected instead of actual led, makes setting up vision system/tuning harder. Higher resolution camera for improved position sensing. Less delay through filtering.
+
+Controller wise: feedforward action on pump, mention stiffness in feedback control while intrinsical soft aspects of the robot want to be put into use. Stiffness compension with stiffness model. Slow dynamics so most effect. gravtional compensation, argue model with slow pump dynamics governign. model-based controller
