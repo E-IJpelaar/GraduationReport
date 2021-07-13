@@ -18,10 +18,8 @@
     M     &  Mass matrix \\
     M     &  Moment \\
     N     & Order of approximation \\
-
     Q     & Weighing matrix \\
     R     & Rotation matrix \\
-    S     & Force input matrix \\
     T     & Time domain \\
     W     & Weighing matrix \\ \hline
     \end{tabular}
@@ -38,6 +36,7 @@
      $g$     & Backbone curve \\
      $h$     & Height \\
      $l$     & Deformed actuator length \\
+     $m$     & Mass \\
      $p$     & Pressure vector \\
      $q$     & Modal coordinate vector \\
      $r$     & Position vector in Cartesian coordinates \\
@@ -47,8 +46,7 @@
      $x$     & Cartesian x-direction \\
      $x$     & State vector \\
      $y$     & Cartesian y-direction \\
-     $y$     & Sensor value data input \\
-     $z$     & Cartesian z-direction \\ \hline
+     $y$     & Sensor value data input \\ \hline
     \end{tabular}
 \end{table}
 
@@ -108,17 +106,21 @@
     \textbf{Index}    &   \textbf{Superscript \& subscript}\\ \hline
     0     &  Initial condition \\
     a     &  Active \\
+    acc    & Accelerometer \\
+    c     & Control \\
     end   & Last entry of vector \\
     est   & Estimate \\
+    gyro  & Gyroscope \\
     i     & Integral \\
     ip     & Integral pressure controller \\
-    lenght & Arc length \\
+    length & Arc length \\
     mid    & Nodes discretized backbone curve \\
     nc    & Non-conservative \\
+    off   & Offset \\
     p    & Proportional \\
     pp    & Proportional pressure controller\\
     set   & Set-point \\
-    tot    & Total \\
+    tot    & Total \\ \hline
     \end{tabular}
 \end{table}
 
@@ -164,8 +166,8 @@
     $A^\top$ & Transpose of matrix $A$ \\
     \underbar{$a$} & Vector with measured values $a$  \\
     $\text{dim}(a)$ & Dimension of vector $a$ \\
-    $\text{diag}(a)$ & Diagonal matrix with the elements of $a$ as the main diagonal\\
-     $\Tilde{s}$ & Position vector $s$in adjoint mapping \\
+    $\text{diag}([a])$ & Diagonal matrix with the elements of $a$ as the main diagonal\\
+     $\Tilde{s}$ & Position vector $s$ in adjoint mapping \\
     $\Bar{\nu}$ & Low-pass filtered $\nu$ \\
     $A^\dagger$ & Pseudo-Inverse of non-square matrix $A$ \\
     $A^{-1}$ & Inverse of matrix $A$ \\
