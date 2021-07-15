@@ -22,11 +22,11 @@ Figure \ref{fig4:controllayout} shows the schematic overview of the soft robot's
 \section{Jacobian model-based controller}
 
 
-For controlling the soft robot, a model-based controller is proposed based on the system's Jacobian matrix. As mentioned in Chapter \ref{chapter1}, Jacobian control has readily been applied to the field of soft robotics. In this work, a Jacobian controller is implemented based on \cite{MOOSAVIAN20071226}. The latter work states that a computed torque controller can be approximated by a more straightforward control law involving the Jacobian transpose. This approximation holds if ``high enough" control gains are used. The work of \cite{MOOSAVIAN20071226} demonstrates this with a Jacobian PD controller. The control law that will be implemented is slightly altered. Since a PD controller has no integrator action, the steady-state error cannot be reduced. Furthermore, due the high intrinsic damping present in soft robots, a differential action (i.e. $K_d \dot{e}$) is deemed not necessary to ensure a smooth transient. Therefore, a Jacobian PI controller will be implemented. The control law can then be formulated as,
+For controlling the soft robot, a model-based controller is proposed based on the system's Jacobian matrix. As mentioned in Chapter \ref{chapter1}, Jacobian control has readily been applied to the field of soft robotics. In this work, a Jacobian controller is implemented based on \cite{MOOSAVIAN20071226}. The latter work states that a computed torque controller can be approximated by a more straightforward control law involving the Jacobian transpose. This approximation holds if ``high enough" control gains are used. The work of \cite{MOOSAVIAN20071226} demonstrates this with a Jacobian PD controller. The control law that will be implemented is slightly altered. Since a PD controller has no integrator action, the steady-state error cannot be reduced. Furthermore, due to the high intrinsic damping present in soft robots, a differential action (i.e. $K_d \dot{e}$) is deemed not necessary to ensure a smooth transient. Therefore, a Jacobian PI controller will be implemented. The control law can then be formulated as,
 
 
 \begin{equation}
-    \nu_{set} = \begin{bmatrix}J_c(\sigma,t)\end{bmatrix}_1^\top \Big(K_p e_r + K_i \int_0^t e_r \hspace{2pt} ds \Big) \hspace{10pt} \text{with} \hspace{10pt} e_r = r_{set}-r_{est}, 
+    \nu_{set}(t) = \begin{bmatrix}J_c(\sigma,t)\end{bmatrix}_1^\top \Big(K_p e_r + K_i \int_0^t e_r \hspace{2pt} ds \Big) \hspace{10pt} \text{with} \hspace{10pt} e_r = r_{set}-r_{est}, 
     \label{eq:tau}
 \end{equation}
 

@@ -80,36 +80,24 @@ The PCC approach has some limitations, due to its piece-wise character the actua
 
 \section*{Thesis outline and contribution}
 
-In this work, we study the modelling and control of a planar soft robot as shown in Figure \ref{fig:test2}. This soft robot has a theoretically infinite amount of degrees of freedom, as it is composed of flexible polymer. Furthermore, it is pneumatically actuated, inducing additional dynamics into the control system, and is a major limiting factor on achievable control bandwidth. The soft robot consists of two individually inflatable bellows, allowing the robot to extend and curve. Each of the bellows can be inflated using air pumps. The induced rotation can be measured with an inertial measurement unit (IMU), which is mounted at the tip of the actuator. Using optical tracking, an LED marker connected to the tip of the robot can measure the elongation of the robot. The air pumps and sensory devices allow us to design a closed-loop controller, to perform set-point regulation. A schematic layout of the actuator setup is depicted in Figure \ref{fig:test1}.
+In this work, we study the modelling and control of a \textcolor{blue}{single-link} planar soft robot as shown in Figure \ref{fig:test2}. This soft robot has a theoretically infinite amount of degrees of freedom, as it is composed of flexible polymer. Furthermore, it is pneumatically actuated, inducing additional dynamics into the control system, and is a major limiting factor on achievable control bandwidth. The soft robot consists of two individually inflatable bellows, allowing the robot to extend and curve. Each of the bellows can be inflated using air pumps. The induced rotation can be measured with an inertial measurement unit (IMU), which is mounted at the tip of the actuator. Using optical tracking, an LED marker connected to the tip of the robot can measure the elongation of the robot. The air pumps and sensory devices allow us to design a closed-loop controller, to perform set-point regulation. A schematic layout of the actuator setup is depicted in Figure \ref{fig:test1}.
 
 This work is a continuation of the research of \cite{berkers}, which detailed a length and curvature controller for the planar soft robot. The mentioned work uses standard PD and PID control methods to ultimately perform a reference tracking problem. The obtained results are moderate for length and orientation control. However, the tracking performance is poor. To enhance the tracking performance of the system a model-based controller is proposed. The fundamentals of this research are provided in \cite{Caasenbrood2020}, which details a framework for modelling soft robot dynamics. This model is valuable for soft robotic control. Given the system description and previous research conducted on the planar soft robot, the research question that we try to answer is:
 
-\textit{Can we develop a model-based control strategy for a pneumatically actuated, planar soft robot to perform a reference tracking problem?}
+\textcolor{red}{\textit{Can we develop a model-based control strategy for a pneumatically actuated, planar soft robot to perform a reference tracking problem?}}
 
 
+\textcolor{blue}{\textit{Can we develop,simulate and experimentally implement a model-based control strategy for a pneumatically actuated, single-link soft robotic manipulator to perform a reference tracking problem?}}
 
-To effectively answer the research question several topics need to be considered. These topics are shown in the control layout of Figure \ref{fig1:controlarchitecture}. This control setup also shows the structure of this thesis. In Chapter \ref{chap2}, a forward kinematic description of the actuator is derived. This allows studying the robot's configuration in 2D space. Furthermore, it allows us to study the velocity of the actuator as a function of kinematic configuration. The latter allows us to derive a dynamic model of the actuator. Also, an air pump model is presented, which allows describing the entire system dynamics. Once this model is derived, a parameter study is performed in Chapter \ref{chap3}. Here, finite element analysis (FEA) is used to capture the non-linear stiffness of the soft robot. Furthermore, experiments are presented which allow determining the pump dynamics. In Chapter \ref{chap4}, a model-based controller is proposed. This controller will be tested in simulation, using the dynamic model as derived in Chapter \ref{chap2}. These simulation results, together with experimental verification are presented in Chapter \ref{chap5}.
+To effectively answer the research question several topics need to be considered. These topics are shown in the control layout of Figure \ref{fig1:controlarchitecture}. This control setup also shows the structure of this thesis. In Chapter \ref{chap2}, a forward kinematic description of the soft robot is derived. This allows studying the manipulator's configuration in 2D space. Furthermore, it allows us to study the velocity of the actuator as a function of kinematic configuration. The latter allows us to derive a dynamic model of the soft robot. Also, an air pump model is presented, which allows describing the entire system dynamics. Once this model is derived, a parameter study is performed in Chapter \ref{chap3}. Here, finite element analysis (FEA) is used to capture the non-linear stiffness of the soft robot. Furthermore, experiments are presented which allow determining the pump dynamics. In Chapter \ref{chap4a}, a model-based controller is proposed. This controller will be tested in simulation, using the dynamic model as derived in Chapter \ref{chap2}. These simulation results, together with experimental results are presented in Chapter \ref{chap4b}.
 
 
 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = \textwidth]{Figures/Chapter1/controlschemeCompleteGood.eps}
+    \includegraphics[width = \textwidth]{Figures/Chapter1/controlschemeintroduct.eps}
     \caption{Thesis layout and control setup.}
     \label{fig1:controlarchitecture}
 \end{figure}
-
-
-Recapitulating, this thesis comprises the following:
-
-
-\begin{itemize}
-    \item Chapter 2: Development of a non-linear dynamic soft robot model
-    \item Chapter 3: Modeling of non-linear soft robot stiffness through finite element analysis
-    \item Chapter 3: Experimental determination of air pump dynamics
-    \item Chapter 4: Development of a model-based control law
-    \item Chapter 5: Experimental implementation and simulation of a model-based controller
-\end{itemize}
-
 

@@ -1,13 +1,84 @@
-\label{chap5}
+\label{chap4a}
+
+\textcolor{blue}{This chapter details the controller design and the testing in simulation and experiments. First, the control layout is detailed. Then, the model-based controller is detailed which comprises Jacobian information. Subsequently, the pressure controller is detailed which is used alongside the model-based controller. Before implementing the controller, the simulation model is compared to a quasi-static experimental analysis. Then, a closed-loop step response is considered to tune the controller in simulation. Subsequently, the performance of this controller is analyzed for a reference trajectory. Next, the experimental case is considered. The experimental setup is presented, where the hardware, sensory devices and communication is detailed. Also, the design of digital filters is explained which are used for data acquisition. Furthermore, the experimental tuning procedure is detailed. Thereafter, the closed-loop step response is analyzed. Lastly, the results of a reference tracking problem conducted on the experimental setup are presented.}
+
+
+
+\section{Controller design}
+
+
+\subsection{Control layout}
+
+Figure \ref{fig4:controllayout} shows the schematic overview of the soft robot's control layout. This control architecture is detailed starting with the end-effector's reference position vector $r_{set}$ containing the desired Cartesian $x$ and $y$ coordinate. Based on the estimated position through measurements $r_{est}$ in the Cartesian plane, position error vector $e_r$ can be determined. This error is injected into the model-based controller. This control law incorporates the current position through inverse kinematics. Based on the current configuration and position error, a control input $\nu_{set}$ is calculated. This control input can be viewed as a moment and force necessary to curve and elongate the soft robot. With the aid of some mapping, the input force and moment can be converted to reference pressure $p_{set}$. This vector contains the reference pressure for each bellow. The difference between measured pressure $p$ and the reference pressure is defined as the pressure error $e_p$. Based on this pressure error, the pressure controller determines the volt input vector $V$ to the air pumps. The change in pressure affects position and orientation as perceived by the vision system and inertial measurement unit (IMU), respectively. The measured Cartesian coordinates and rotation allows calculating the modal coordinates through inverse kinematics. These determined modal coordinates are subsequently used to update the model-based controller. The measured Cartesian position will also be used to determine the position error. In this section, the control layout is further detailed. Starting with the model-based controller, then the pressure regulation.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{Figures/Chapter4/ControlschemeActualwithPump.eps}
+    \caption{Control layout of the model-based controller accompanied by a low-level pressure controller.}
+    \label{fig4:controllayout}
+\end{figure}
 
 
 
 
-In this chapter, the proposed model-based controller is tuned and verified in simulation and for experiments. First, the dynamic model is verified by a quasi-static analysis. This analysis can be used to obtain the actual soft robotic stiffness. Then, a closed-loop step response is considered to tune the controller in simulation. Subsequently, the performance of this controller is analyzed for a reference trajectory. Next, the experimental case is considered. The experimental setup is presented, where the hardware, sensory devices and communication is detailed. Also, the design of digital filters is explained which are used for data acquisition. Furthermore, the experimental tuning procedure is detailed. Thereafter, the closed-loop step response is analyzed. Lastly, the results of a reference tracking problem conducted on the experimental setup are presented. 
+\subsection{Jacobian model-based controller}
+
+
+For controlling the soft robot, a model-based controller is proposed based on the system's Jacobian matrix. As mentioned in Chapter \ref{chapter1}, Jacobian control has readily been applied to the field of soft robotics. In this work, a Jacobian controller is implemented based on \cite{MOOSAVIAN20071226}. The latter work states that a computed torque controller can be approximated by a more straightforward control law involving the Jacobian transpose. This approximation holds if ``high enough" control gains are used. The work of \cite{MOOSAVIAN20071226} demonstrates this with a Jacobian PD controller. The control law that will be implemented is slightly altered. Since a PD controller has no integrator action, the steady-state error cannot be reduced. Furthermore, due to the high intrinsic damping present in soft robots, a differential action (i.e. $K_d \dot{e}$) is deemed not necessary to ensure a smooth transient. Therefore, a Jacobian PI controller will be implemented. The control law can then be formulated as,
+
+
+\begin{equation}
+    \nu_{set}(t) = \begin{bmatrix}J_c(\sigma,t)\end{bmatrix}_1^\top \Big(K_p e_r + K_i \int_0^t e_r \hspace{2pt} ds \Big) \hspace{10pt} \text{with} \hspace{10pt} e_r = r_{set}-r_{est}, 
+    \label{eq:tau}
+\end{equation}
+
+where $\nu_{set}$ is the desired control input, as calculated by the controller. Furthermore, the proportional-integrator structure can be directly observed. The diagonal gain matrices $K_p$ and $K_i$ both  $ \in \mathbb{R}^{2\times 2}$ contain proportional and integrator gains, respectively. The proportional gain matrix $K_p$ penalizes proportional to the error, whereas the integrator gain matrix $K_i$ contributes to the sum of the error over time. The error $e_r \in \mathbb{R}^2$ is defined as the difference between reference position vector $r_{set}$ and the estimated position vector in the (x,y)-plane $r_{est}$. The Jacobian is determined by (\ref{eq2:J}) following a first-order approximation, as shown in Chapter \ref{chap2}. Since only the position in (x,y)-plane is considered, not the entire Jacobian of dimension $3 \times 2$ is used. Only the entries mapping modal coordinate position to Cartesian position are used. This corresponds to the second and third row of the Jacobian, which will be defined as $[J_c]_1$. Due to its space dependency, the Jacobian is updated in real-time based on the actual kinematic configuration of the actuator. Based on the measured position and angle, the modal coordinates can be calculated through inverse kinematics. The simplified inverse kinematics are detailed in Appendix \ref{app4}.
+
+Since the controller has a PI structure, oscillations in the control signal are not reduced as there is no derivative action in the control law. A derivative action could have easily been included based on numerical differentiation. However, this method often results in erroneous velocity estimated due to the presence of noise. The origin of the noise originates from position measurement which, through inverse kinematics, also effects the calculation of the Jacobian. Additionally, the vision system makes use of a discretized pixel grid, resulting in a discretized estimated position if not filtered. Instead of using a derivative action, a low-pass filter is added to the controller to reduce quick input changes. The discretized low-pass filter is given as,
+
+\begin{equation}
+\bar{\nu}_{set,k} = \zeta \nu_{set,k} + (1-\zeta)\bar{\nu}_{set,k-1}
+\label{eq4:lowpass}
+\end{equation}
+
+where $\zeta$ with $ 0 < \zeta \leq 1$ is a weighing factor defining the relative importance between new input $\nu_{set,k}$ and previous input $\bar{\nu}_{set,k-1}$. A relatively high value of $\zeta$ increases the cut-off frequency, resulting in minimal noise reduction. A low value for $\zeta$ suppresses more frequencies. Lowering the value of $\zeta$ increases the delays in the system, which can potentially cause stability problems. 
+
+
+\subsection{Pressure control}
+
+
+The actual system does not allow to induce forces and moments directly. Therefore the set control input $\nu_{set}$ should be mapped to some reference pressure. This can be achieved by the mapping matrix as presented in Chapter \ref{chap3}. Recall that this positive definite mapping matrix maps pressure to forces and moments. Therefore, its inverse can be used to map desired input force and moment to pressure. Based on the desired control input, a reference pressure can be formulated as,
+
+\begin{equation}
+    p_{set} = H^{-1}\bar{\nu}_{set},
+\end{equation}
+
+
+where $p_{set} \in \mathbb{R}^2$ is the reference pressure for each bellow. In order for this reference pressure to be reached a second controller is necessary. This low-level controller sets the input voltage to be supplied to the air pumps. A standard PI-controller is deemed sufficient to track the reference pressure. Therefore the control law is can be described by,
+
+\begin{equation}
+    V = K_{pp}e_p + K_{ip} \int_0^t e_p \hspace{2pt} ds \hspace{10pt} \text{with} \hspace{10pt} e_p = p_{set} - p,
+\end{equation}
+
+where $V \in \mathbb{R}^2$ is the input voltage based on the pressure error $e_p$. The proportional action is based on diagonal gain matrix $K_{pp} \in \mathbb{R}^{2\times 2}$, whereas the integral action is done by $K_{ip} \in \mathbb{R}^{2\times 2}$.
 
 
 
-\section{Dynamic Model testing}
+
+
+%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%
+%%%%%%%%%%%
+
+
+\label{chap4b}
+
+\section{Simulation and Experimental testing}
+
+
+\subsection{Dynamic Model testing}
 
 
 
@@ -89,9 +160,9 @@ The measured modal coordinates and results of the fitted stiffness are presented
 
 
 
-\section{Controller testing in simulation}
+\subsection{Controller testing in simulation}
 
-The controller as designed in Chapter \ref{chap4} is verified in simulation and experimentally. First, the controller will be verified on the developed dynamic model of the soft robot. The closed-loop response of the system to a step input is analyzed. This step input is also used for controller tuning. Subsequently, an ellipsoid reference signal is proposed to evaluate the tracking performance of the Jacobian controller in simulation. 
+The controller is tested in simulation and experimentally. First, the controller will be verified on the developed dynamic model of the soft robot. The closed-loop response of the system to a step input is analyzed. This step input is also used for controller tuning. Subsequently, an ellipsoid reference signal is proposed to evaluate the tracking performance of the Jacobian controller in simulation. 
 
 
 \subsection*{Closed-loop step response in simulation}
@@ -104,6 +175,7 @@ The controller in simulation is tuned according to the following procedure. Firs
 
 \begin{table}[H]
     \centering
+     \caption{Controller gains used for step input in simulation}
     \begin{tabular}{|c|c|} \hline
      \textbf{Tuning Parameter}    & \textbf{Value}  \\ \hline
     $K_p$ & $\text{diag}([300,3000])$  \\ \hline
@@ -112,7 +184,7 @@ The controller in simulation is tuned according to the following procedure. Firs
     $K_{ip}$ & $\text{diag}([1,1])$ \\ \hline
     $\zeta$ & 0.01 \\ \hline
     \end{tabular}
-    \caption{Controller gains used for step input in simulation}
+
     \label{tab5:gainssim}
 \end{table}
 
@@ -211,8 +283,7 @@ where it can be seen that during the first $t_1$ seconds the reference position 
 \end{table}
 
 
-The results of this ellipsoid reference in the x-y plane are shown in Figure \ref{fig5:xysim}. In this figure, the green crosses indicate the reference position at a given time. The red crosses mark the actual position at this time instant. It can be seen that a small delay is observed between the reference and the actual position. It can be seen that the controller is able to track the reference trajectory fairly accurate. A delay of about 2 seconds is observed between reference and actual position. Accounting for this 2 second delay, the RMS errors while tracking the ellipsoid reference are $e_{x,RMS} = 0.1489 \hspace{2pt} mm$ and $e_{y,RMS} =0.0899  \hspace{2pt} mm$ in x and y-direction, respectively. The error profiles are shown in Figure \ref{fig5:errorxyellipssim}. The first 15 seconds show a relatively large error in the y-direction as the soft robot is elongated to its offset position. The error that follows shows a sinusoidal shape, as is expected for a sinusoidal reference signal. This kind of error profile can be resolved by feedforward control. The error response shows two characteristics with respect to angle changes. At 107 seconds and 327 seconds, the error response shows a disturbance in both error signals, indicated by a `$*$'. This is caused by a change in curvature rate. For the first instant, the angular rate changes from positive to negative. At the second instance the exact opposite occurs, here a negative angular rate changes to a positive angular rate. This rate change affects the Jacobian causing a disturbance on position level. At 217 seconds a similar disturbance can be observed, denoted by a `$+$'. Again this is related to the curvature. At this time instant the curvature changes sign, again affecting the Jacobian and thus position. It should be noted that this disturbance is only present in $e_x$.
-
+The results of this ellipsoid reference in the x-y plane are shown in Figure \ref{fig5:xysim}. In this figure, the green crosses indicate the reference position at a given time. The red crosses mark the actual position at this time instant. It can be seen that a small delay is observed between the reference and the actual position. It can be seen that the controller is able to track the reference trajectory fairly accurate. A delay of about 2 seconds is observed between reference and actual position. Accounting for this 2 second delay, the RMS errors while tracking the ellipsoid reference are $e_{x,RMS} = 0.1489 \hspace{2pt} mm$ and $e_{y,RMS} =0.0899  \hspace{2pt} mm$ in x and y-direction, respectively. 
 
 \begin{figure}[H] 
     \begin{minipage}[b]{0.49\linewidth}
@@ -229,9 +300,15 @@ The results of this ellipsoid reference in the x-y plane are shown in Figure \re
     \end{minipage} 
 \end{figure}
 
+
+The error profiles are shown in Figure \ref{fig5:errorxyellipssim}. The first 15 seconds show a relatively large error in the y-direction as the soft robot is elongated to its offset position. The error that follows shows a sinusoidal shape, as is expected for a sinusoidal reference signal. This kind of error profile can be resolved by feedforward control. The error response shows two characteristics with respect to angle changes. At 107 seconds and 327 seconds, the error response shows a disturbance in both error signals, indicated by a `$*$'. This is caused by a change in curvature rate. For the first instant, the angular rate changes from positive to negative. At the second instance the exact opposite occurs, here a negative angular rate changes to a positive angular rate. This rate change affects the Jacobian causing a disturbance on position level. At 217 seconds a similar disturbance can be observed, denoted by a `$+$'. Again this is related to the curvature. At this time instant the curvature changes sign, again affecting the Jacobian and thus position. It should be noted that this disturbance is only present in $e_x$.
+
+
+
+
 Figure \ref{fig5:controlinputellipssim} shows the control input determined by the model-based controller, pressure response and control input to the simulated air pumps, respectively. The top figure shows a sinusoidal reference moment. Its extrema are situated at the times the x-displacement is largest. Likewise, the force input reaches a maximum when the maximum y-displacement is required. This coincides with the observations in the pressure response shown in the centre figure. Note that on this time scale the 2-second delay between reference moment and force and pressure can not be distinguished. The bottom figure shows the control input to the air pumps.
 
-\newpage
+
 
 \begin{figure}[H]
     \centering
@@ -242,7 +319,7 @@ Figure \ref{fig5:controlinputellipssim} shows the control input determined by th
 
 The simulation showed that given a sufficiently high $T_{ell}$ the controller is able to perform good tracking of the reference trajectory, in a noise-free environment. In Appendix \ref{app:chap5} a figure is provided showing the x,y position for the same reference with $T_{ell}$ equal to 100 seconds. This figure supports the idea that feedforward control is necessary to enhance fast reference tracking.
 
-\section{Controller testing in experiments}
+\subsection{Controller testing in experiments}
 
 
 
@@ -505,8 +582,6 @@ Figure \ref{fig5:errorelips} shows the error in x and y-direction with the delay
 
 Figure \ref{fig5:controlellips}, shows the control input during the ellipsoid reference. The top figure displays the input as determined by the Jacobian controller. During the first $t_1$ seconds the moment is equal to zero, whereas the force is slowly increasing to induce the elongation. The moment then has two extrema at the time instance where x-displacement is required to be largest. The force is maximum, and the moment is near zero when the at the maximum elongation of the actuator. The centre figure shows the pressure setpoint and measured pressure over time. During the first half of the ellipsoid, a higher pressure $p_2$ is reached than $p_1$ in the second half. This might be caused by the systems deflation rate, which can not be actively regulated. Another explanation can be unsymmetrical material properties of the actuator. The bottom figure shows the volt input to the air pumps. Near the saturation region, the control input to the air pumps has high-frequency noise. This is caused by higher noise levels on the pressure readings compared to lower pressures. Another notable phenomenon is the control input spikes occurring at 90 seconds. These are caused by a change in angular rate between the 3rd and 4th quadrant of the ellipsoid. At the switching plane between the 1st and 2nd quadrant, occurring at 40 seconds, this behaviour is not visible. A possible explanation can be the deflation of the soft robot, for which the controller tries to compensate. 
 
-Figure \ref{fig5:ellipstheta} shows the modal coordinates as a function of time. The switching in angular rate can be well observed at 55 seconds, as a faulty curvature is calculated. In simulation, this is caused by the entries in the Jacobian that change sign. However, in the practical case, the IMU transmits faulty data at such a point. During tracking, the curvature and elongation follow the expected path. As can be seen, a small initial curvature is present. This is caused by the actuator not being perfectly in its downward position at the start of the experiment. The curvature then oscillates and has extrema when x is maximum. The elongation increased linearly for the first 15 seconds when moving to the offset position. A peak is observed when maximum displacement in the y-direction is observed. 
-
 The pressure contour plot with timestamps is shown in Figure \ref{fig5:pressureellips}. Given the symmetrical ellipsoid reference, the pressure path is expected to be symmetrical aswell. For relative low pressures, e.g. up to 50 kPa, this holds. However, for higher pressures this symmetry argument does not hold. A major difference is that between 50 to 70 seconds the pressure is increasing, which is an active process. Between 70 and 90 seconds the system is deflating. However, given that the tracking error in both regions is similar. The conclusion might be made that the system is not completely symmetrical regarding stiffness properties. 
 
 
@@ -538,3 +613,36 @@ A qualitative comparison between the simulation and experimental results can not
 First of all, the model and experimental results show similar behaviour. The step responses are difficult to compare regarding settling times and controller gains as a different input mapping was used. However, the general behaviour of the controller is similar. First, a step like control input to the air pumps is initiated, causing the actuator to rapidly move to the reference direction. Then a dip in control input is observed. From that point onwards the integrator gains cause the system to move to its desired position. In the experiments, a difference was observed for the mirrored set-points. This phenomenon is most likely to be caused by unequal pump characteristics. For the simulation, equal pump characteristics were assumed. 
 
 Reference tracking in simulation and experiments show equal characteristics. The largest difference is the time in which the ellipsoid reference path was tracked. The actual system was able to track the ellipse in 100 seconds with an RMS error of $0.7926 mm$ and $0.4044 mm$. For the model the time to complete the ellipsoid was set to 400 seconds. In simulation, an RMS error of $e_x = 0.1489 mm$ and $e_y = 0.0899 mm$ was found. Lowering the time to complete the ellipsoid is possible, at the cost of an increased error. A weigh-off is made between error and tracking speed. Currently, the low-pass filter of the model-based controller is $<0.1$ for simulation and experiments. This largely affects the control bandwidth but deemed necessary to reduce oscillations. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
