@@ -21,7 +21,7 @@ where $d$ is the offset between the LED marker and the end-effector, $px2w$ a co
 
 
 \begin{equation}
-    \Lambda = \Lambda_{LED} + \frac{d}{px2w} \sin(\theta) \hspace{20pt} \text{and}    \Pi = \Pi_{LED} + \frac{d}{px2w} \cos(\theta).
+    \Lambda = \Lambda_{LED} + \frac{d}{px2w} \sin(\theta) \hspace{20pt} \text{and}  \hspace{20pt}  \Pi = \Pi_{LED} + \frac{d}{px2w} \cos(\theta).
 \end{equation}
 
 Based on the difference between actual and initial position in pixel coordinates, the position in world coordinates can be obtained by, 
@@ -30,36 +30,3 @@ Based on the difference between actual and initial position in pixel coordinates
     x = (\Lambda-\Lambda_0)px2w \hspace{20pt} \text{and} y = L - (\Pi - \Pi_0)px2w. 
 \end{equation}
 
-
-
-
-
-
-
-
-
-
-\section{Ellipsoid reference tracking in simulation for relative fast trajectories}
-
-
-\begin{figure}[H] 
-    \begin{minipage}[b]{0.49\linewidth}
-     \centering
-    \includegraphics[width=\linewidth]{Figures/Chapter5/ellipsxy.eps} 
-    \caption{Position in the x,y-plane for the ellipsoid reference path. } 
-    \label{app5:xysim} 
-       \end{minipage} 
-    \begin{minipage}[b]{0.49\linewidth}
-     \centering
-    \includegraphics[width=\linewidth]{Figures/Chapter5/errorellips.eps} 
-    \caption{Error in the x and y-direction as a function of time for an ellipsoid reference path.} 
-    \label{app5:errorxyellipssim} 
-    \end{minipage} 
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{Figures/Chapter5/inputellipssim.eps}
-    \caption{\textbf{Top:} Control signal of model-based controller. \textbf{Middle:} Reference pressure and actual pressure. \textbf{Bottom:} Control input to the air pumps.}
-    \label{app5:controlinputellipssim}
-\end{figure}
