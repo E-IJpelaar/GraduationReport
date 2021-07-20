@@ -111,7 +111,7 @@ The above-described inverse kinematic optimization is repeated for multiple simu
 \label{subsecelong}
 
 
-The elongation analysis aims to measure the elongation of the soft robot. An elongation is induced by pressurizing both bellows equally. This allows determining the elongation stiffness, as bending of the soft robot is small.
+The elongation analysis aims to measure the elongation of the soft robot. An elongation is induced by pressurizing both bellows equally. This allows determining the elongation stiffness, as the bending of the soft robot is small.
 
 \begin{figure}[H]
     \centering
@@ -299,19 +299,19 @@ At this point, it should be emphasized that during experimental analysis the sof
 The pump dynamics have a major contribution to the overall system dynamics. Therefore, it is essential to include the dynamics of the pumps. First, the pressure response initiated by a Volt step input to the air pumps is analyzed. This step response contains valuable information regarding the friction of the air pumps. Then, the pressure response is measured for an oscillatory input signal. This data allows us to fit the proposed linear pump model of (\ref{eq2:pumpmodel}).
 
 
-Previous research conducted on a similar soft robot manipulator showed that adding an air vessel between the air pump and soft robot will reduce oscillatory behaviour \cite{proper}. The elastic behaviour of the actuator causes vibrations when the pump injects compressed air into the system. When air is injected into the system, an airwave of higher pressure travels through the soft robot. This causes local pressure variations that are observed by the pressure sensor. This behaviour is related to the intrinsic characteristics of diaphragm air pumps. Furthermore, the system's volume is not constant. As the soft robot is pressurized, the volume increases, creating a constant interaction between volume and pressure. This interaction is perceived as noise by the pressure sensor. This constant interaction between the elasticity properties of the soft robot and the characteristics of diaphragm pumps can be partly resolved using air tanks. This air tank causes the total control volume to increase, thereby decreasing the relative volume increase caused by inflating the soft robot. Additionally, the local airwaves dissipate faster. The air vessel therefore acts as a low pass filter, reducing high-frequency noise. However, it also reduces the bandwidth as it takes more time to reach the steady-state pressure as the volume is increased. 
+Previous research conducted on a similar soft robot manipulator showed that adding an air vessel between the air pump and soft robot will reduce oscillatory behaviour \cite{proper}. The elastic behaviour of the actuator causes vibrations when the pump injects compressed air into the system. When air is injected into the system, an airwave of higher pressure travels through the soft robot. This causes local pressure variations that are observed by the pressure sensor. This behaviour is related to the intrinsic characteristics of diaphragm air pumps. Furthermore, the system's volume is not constant. As the soft robot is pressurized, the volume increases, creating a constant interaction between volume and pressure. This interaction is perceived as noise by the pressure sensor. This constant interaction between the elasticity properties of the soft robot and the characteristics of diaphragm pumps can be partly resolved using air tanks. This air tank causes the total control volume to increase, thereby decreasing the relative volume increase caused by inflating the soft robot. Additionally, the local airwaves dissipate faster. The air vessel, therefore, acts as a low pass filter, reducing high-frequency noise. However, it also reduces the bandwidth as it takes more time to reach the steady-state pressure as the volume is increased. 
 
-For determining the step response of the system, the pump is connected to an air distribution manifold. To this air distribution manifold, one bellow of the soft robot, the air tank and the pressure sensor are connected. The step response for step inputs between 1 and 9 Volt is presented in Figure \ref{fig3:pump_dynamics_adapted}. Although the operating range of the pumps is 12 Volt DC, a maximum input of 9 Volt could be achieved. The 9 Volt input results in a system pressure that is already above the pressure sensor limit. Namely, the pressure sensor measures absolute pressures between 0 and 25 PSI, which is equivalent to a maximum of 172 kPa. Depending on weather conditions, the maximum measurable pressure is around 72 kPa, as atmospheric pressure is around 100 kPa.
+For determining the step response of the system, the pump is connected to an air distribution manifold. To this air distribution manifold, one bellow of the soft robot, the air tank and the pressure sensor are connected. The step response for step inputs between 1 and 9 Volt is presented in Figure \ref{fig3:pump_dynamics_adapted}. Although the operating range of the pumps is 12 Volt DC, a maximum input of 9 Volt could be achieved. The 9 Volt input results in a system pressure that is already above the pressure sensor limit. Namely, the pressure sensor can measure absolute pressures between 0 and 25 PSI, which is equivalent to 172 kPa. Depending on weather conditions, the maximum measurable pressure is around 72 kPa, as atmospheric pressure is near 100 kPa.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.65\textwidth]{Figures/Chapter3/presstep.eps}
-    \caption{Step response for Volt step input between 1V and 9V for the system including air vessel and actuator.}
+    \includegraphics[width = 0.67\textwidth]{Figures/Chapter3/presstep.eps}
+    \caption{Pressure response for various Volt step inputs to the air pumps.}
     \label{fig3:pump_dynamics_adapted}
 \end{figure}
 
 
-Multiple observations can be made based on the step response of Figure \ref{fig3:pump_dynamics_adapted}. A first glance reveals first-order system behaviour as pressure increase seems to be proportional to the actual pressure. However, the steady-state pressure is not proportional to the input Volt for all inputs. The reason for this behaviour is caused by friction. For 1 and 2 Volt input, static friction dominates resulting in almost no pressure change. Between 3 and 4 Volts, the transition between dry and kinetic friction is found. Here, the pressure increase is becoming more proportional to the input Voltage. From 5 Volt onwards the steady-state pressure scales more or less linearly with the input Voltage. This coincides with the observation presented in the work of \cite{berkers}, where friction effects were observed below 4.7 Volts. For the 9 Volt step input sensor saturation occurs resulting in high noise levels on the pressure readings.
+Multiple observations can be made based on the step response of Figure \ref{fig3:pump_dynamics_adapted}. A first glance reveals first-order system behaviour as pressure increase seems to be proportional to the actual pressure. However, the steady-state pressure is not proportional to the input Volt for all inputs. The reason for this behaviour is caused by friction. For 1 and 2 Volt input, static friction dominates resulting in almost no pressure change. Between 3 and 4 Volts, the transition between dry and kinetic friction is found. Here, the pressure increase is becoming more proportional to the input Voltage. From 5 Volt onwards the steady-state pressure scales more or less linearly with the input Voltage. This coincides with the observation presented in the work of \cite{berkers}, where friction effects were observed below 4.7 Volts. For the 9 Volt step input, sensor saturation occurs resulting in high noise levels on the pressure readings.
 
 Based on the results of the step response, a time varying input signal can be designed to fit the pump model to. To limit the friction effects a sinusoidal input signal is proposed as,
 
@@ -327,20 +327,18 @@ where the oscillation is around the 7 Volt mean, with an amplitude of 2 Volt and
 \begin{equation}
    \begin{aligned}
 \min_{\lambda_1,\lambda_2} \sum_{k=0}^{N_{samples}} \Big(\underbar{$p$}(t_k) - (-\lambda_1 p(t_k) +\lambda_2 V(t_k)\Big)^2\\ 
-\text{s.t.} \hspace{5pt} \lambda_1 > 0 \\
-\lambda_2 > 0,
+\text{s.t.} \hspace{5pt} \lambda_1,\lambda_2 > 0,
 \label{eq4:optp}
 \end{aligned}
 \end{equation}
 
 
 
-where $\underbar{$p$}(t_k)$ is the measured pressure at time instance $t_k$ and $t_0 = 0$ and $t_{N_{samples}} = T$. Figure \ref{fig3:pumpfit} shows the experimental data and the fitted pump model. The pump parameters found by solving (\ref{eq4:optp}) are $\lambda_1 = 0.2853 [-]$ and $\lambda_2 = 2.6879 \frac{kPa}{V}$. The zoom-in as shown in Figure \ref{fig3:pumpfit} shows a single oscillation. It can be seen that noise amplitude is not constant for an entire oscillation. During pressure increase, the amplitude of the noise is higher, related to the earlier explained phenomena. Since the pump cannot actively deflate, air continuously escapes via the porous walls of the soft robot. During deflation, the input to the air pumps also decreases, thereby reducing noise levels. 
-%\newpage
+where $\underbar{$p$}(t_k)$ is the measured pressure at time instance $t_k$ and $t_0 = 0$ and $t_{N_{samples}} = T$. Figure \ref{fig3:pumpfit} shows the experimental data and the fitted pump model. The pump parameters found by solving (\ref{eq4:optp}) are $\lambda_1 = 0.2853 [-]$ and $\lambda_2 = 2.6879 \frac{kPa}{V}$. The zoom-in as shown in Figure \ref{fig3:pumpfit} shows a single oscillation. It can be seen that the noise amplitude is not constant for an entire oscillation. During pressure increase, the amplitude of the noise is higher, related to the valve dynamics and elasticity properties. Since the pump cannot actively deflate, air continuously escapes via the porous walls of the soft robot. During deflation, the input to the air pumps also decreases, thereby reducing noise levels. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.55\textwidth]{Figures/Chapter3/pressurewrap.png}
+    \includegraphics[width = 0.7\textwidth]{Figures/Chapter3/pressurewrap.png}
     \caption{Measured pressure response and pump model fit. Including a zoom-in for one oscillation at 28 seconds.}
     \label{fig3:pumpfit}
 \end{figure}
@@ -348,5 +346,5 @@ where $\underbar{$p$}(t_k)$ is the measured pressure at time instance $t_k$ and 
 
 \section*{Summary} 
 
-This chapter comprised the parameter identification of the soft robot's stiffness and pump dynamics. A finite element analysis is conducted to determine the soft robots elongation and rotations for a set of pressures. These pressures are related to force and moment, which allows determining the elongation and rotation stiffness. These stiffnesses are described by a hyper-elastic stiffness model. Furthermore, the pump dynamics are determined. First, a step response is conducted which showed achievable pressures given an input Voltage to the air pump. Based on this step response, a sinusoidal input reference signal was designed. The measured pressure response to this input signal allowed determining the pump parameters of the pump model. 
+This chapter comprises the parameter identification of the soft robot's stiffness and pump dynamics. A finite element analysis is conducted to determine the soft robots elongation and rotations for a set of pressures. These pressures are related to force and moment, which allows determining the elongation and rotation stiffness. These stiffnesses are captured by a hyper-elastic stiffness model. Furthermore, the pump dynamics are determined. First, a step response is conducted which showed achievable pressures given an input voltage to the air pump. Based on this step response, a sinusoidal input reference signal is designed. The measured pressure response to this input signal allowed determining the pump parameters of the air pump model. 
 

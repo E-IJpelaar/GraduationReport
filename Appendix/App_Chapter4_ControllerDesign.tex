@@ -6,7 +6,7 @@
 
 \section{Simplified inverse kinematics}
 
-The controller demands that the configuration of the actuator is known at each sampling instant. Therefore the modal coordinates need to be calculated based on the sensor data. Since the configuration of the actuator is approximated with a single shape function. The inverse kinematic problem can implicitly be solved with the constant curvature approach. The sensor output, which is the x,y position in the plane, and the orientation of the tip of the actuator $\theta$ can be used to determine modal coordinates $\epsilon$ and $\kappa$. At each sampling instant this inverse kinematics are determined. Based on the modal coordinates the Jacobian matrix can be updated, which in its turn is used in determining the new control input. The simplified kinematics are shown in Figure \ref{fig:simpkin}.
+The controller demands that the configuration of the actuator is known at each sampling instant. Therefore the modal coordinates need to be calculated based on the sensor data. Since the configuration of the actuator is approximated with a single shape function. The inverse kinematic problem can be solved with the constant curvature approach. The sensor output, which is the x,y position in the plane, and the orientation of the tip of the actuator $\theta$ can be used to determine modal coordinates $\epsilon$ and $\kappa$. At each sampling instant, the inverse kinematics are determined. Based on the modal coordinates, the Jacobian matrix can be updated that in its turn is used in determining the new control input. The simplified kinematics are shown in Figure \ref{fig:simpkin}.
 
 \begin{figure}[H]
     \centering
@@ -28,7 +28,7 @@ where $l$ is the length of the backbone curve of the manipulator given by $l = (
     \kappa = \frac{\sin(\theta)}{y} \hspace{15pt} 	\land \hspace{15pt}  \kappa = \frac{1 -\cos(\theta)}{x} \hspace{15pt} \text{and} \hspace{10pt} \epsilon = \frac{\theta}{\kappa L} -1,
 \end{equation}
 
-where it should be noted that for small angles it is more accurate to use $\kappa$ based on the $\sin(\theta)$.
+where it should be noted that, for small angles, it is more accurate to use $\kappa$ based on the $\sin(\theta)$.
 
 
 

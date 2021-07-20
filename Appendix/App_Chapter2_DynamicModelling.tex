@@ -1,11 +1,6 @@
 \section{Inverse kinematics}
 \label{app:chap2}
-
-%This subsection is not definite. 2 inverse kinematic scripts have been created. One in which only end-effector position $[x,y]$ is given. One where also the orientation is added $[x,y,\theta]$ . For only a single shape-function approximation (constant curvature approach), will find the shortest path. However, when increasing the amount of shape functions, both models will not come with the most shortest path. Therefore, the inverse kinematics as described here has not been used extensively.
-
-
-Inverse kinematics allows to map the desired end-effector position to the corresponding modal coordinates. To determine this inverse mapping the Jacobian search method is exploited \cite{JacobianInverse}. Essentially, a desired position and orientation of the robot's end-effector is given. 
-
+Inverse kinematics allows mapping the desired end-effector position to the corresponding modal coordinates. To determine this inverse mapping the jacobian search method is exploited \cite{JacobianInverse}. Essentially, a desired position and orientation of the robot's end-effector is given. 
 
 The derived forward kinematics can be regarded as,
 
@@ -70,10 +65,10 @@ where the Lie bracket $\xi$ and $\eta$ can be recognized between the parenthesis
     \label{eq2:etapde}
 \end{equation}
 
-where $\text{ad}_\xi$ denotes the adjoint action of the algebra $\hat{xi} \in \mathfrak{se}(2)$. Exploiting the relation $\frac{d}{d \sigma} \text{Ad}_g = \text{Ad}_g \text{ad}_{g^{-1}g'}$ \cite{Boyer2019}, \cite{traversaro2016multibody}, with $g^{-1}g' = \xi$ which follows from (\ref{eq2:dgdsigma}), it follows that $-\text{ad}_\xi = (\text{Ad}_g^{-1})'\text{Ad}_g$. Substitution of this expression into (\ref{eq2:etapde}) allows to formulate the spatial derivative of the velocity twist as,
+where $\text{ad}_\xi$ denotes the adjoint action of the algebra $\hat{\xi} \in \mathfrak{se}(2)$. Exploiting the relation $\frac{d}{d \sigma} \text{Ad}_g = \text{Ad}_g \text{ad}_{g^{-1}g'}$ \cite{Boyer2019}, \cite{traversaro2016multibody}, with $g^{-1}g' = \xi$ which follows from (\ref{eq2:dgdsigma}), it follows that $-\text{ad}_\xi = (\text{Ad}_g^{-1})'\text{Ad}_g$. Substitution of this expression into (\ref{eq2:etapde}) allows to formulate the spatial derivative of the velocity twist as,
 
 \begin{equation}
-    \eta'= (\text{Ad}_g^{-1})'\text{Ad}_g \eta + \Dot{\xi},
+    \eta'= (\text{Ad}_{g^{-1}})'\text{Ad}_g \eta + \Dot{\xi},
     \label{eq2app:etadif}
 \end{equation}
 
