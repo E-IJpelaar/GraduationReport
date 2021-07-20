@@ -1,11 +1,11 @@
-\label{chap4a}
+
 
 This chapter details the controller design and implementation in simulation and experiments. First, the control layout is detailed. Then, the model-based controller is detailed which comprises Jacobian information. Subsequently, the pressure controller is detailed which is used alongside the model-based controller. Before implementing the controller, the simulation model is compared to a quasi-static experimental analysis. Then, a closed-loop step response is considered to tune the controller in simulation. Subsequently, the performance of this controller is analyzed for a reference trajectory. Next, the experimental case is considered. The experimental setup is presented, where the hardware, sensory devices and communication is detailed. Also, the design of digital filters is explained which are used for data acquisition. Furthermore, the experimental tuning procedure is detailed. Thereafter, the closed-loop step response is analyzed. Lastly, the results of a reference tracking problem conducted on the experimental setup are presented.
 
 
 
 \section{Controller design}
-
+\label{chap4a}
 
 \subsection{Control layout}
 
@@ -45,7 +45,7 @@ Since the controller has a PI structure, oscillations in the control signal are 
 where $\zeta$ with $ 0 < \zeta \leq 1$ is a weighing factor defining the relative importance between new input $\nu_{set,k}$ and previous input $\bar{\nu}_{set,k-1}$. A relatively high value of $\zeta$ increases the cut-off frequency, resulting in minimal noise reduction. A low value for $\zeta$ suppresses more frequencies. Lowering the value of $\zeta$ increases the delays in the system, which can potentially cause stability problems. 
 
 
-\subsection{Pressure control}
+\subsection{Pressure controller}
 
 
 The actual system does not allow to induce forces and moments directly. Therefore the set control input $\nu_{set}$ should be mapped to some reference pressure. This can be achieved by the mapping matrix as presented in Chapter \ref{chap3}. Recall that this positive-definite mapping matrix maps pressure to forces and moments. Therefore, its inverse can be used to map desired input force and moment to pressure. Based on the desired control input, a reference pressure can be formulated as,
@@ -73,12 +73,12 @@ where $V \in \mathbb{R}^2$ is the input voltage based on the pressure error $e_p
 %%%%%%%%%%%
 
 
-\label{chap4b}
+
 
 \section{Simulation and Experimental testing}
+\label{chap4b}
 
-
-\subsection{Dynamic Model testing}
+\subsection{Dynamic model testing}
 \label{subsecDMt}
 
 
@@ -93,13 +93,13 @@ This experiment aims to find a linear scaling factor to scale the modelled non-l
    \underbrace{M(q) \Ddot{q}}_{\approx 0} + \underbrace{D \dot{q}}_{\approx 0} + K(q) q = Hp,
 \end{equation}
 
-where, for a steady state pressure, the modal coordinates only depend on the actual soft robot stiffness. It is assumed that the actual soft robotic stiffness can be formulated as $K_{exp}(q) = \alpha K(q) \hspace{4pt} \forall \hspace{2pt} q \in \mathcal{Q}$, with $\alpha \in \mathbb{R}^{2\times 2}$ a diagonal matrix to tune the modeled stiffness and $\mathcal{Q}$ the configuration space of the soft robot. Under the assumption that the measured pressure can be well described by a first-order model, the optimization to find $\alpha$ can be formulated as, 
+where, for a steady state pressure, the modal coordinates only depend on the actual soft robot stiffness. It is assumed that the actual soft robotic stiffness can be formulated as $K_{exp}(q) = G K(q) \hspace{4pt} \forall \hspace{2pt} q \in \mathcal{Q}$, with $G \in \mathbb{R}^{2\times 2}$ a diagonal matrix to tune the modeled stiffness and $\mathcal{Q} \subset \mathbb{R}$ the configuration space of the soft robot. Under the assumption that the measured pressure can be well described by a first-order model, the optimization to find $G$ can be formulated as, 
 
 
 \begin{equation}
 \begin{split}
-    \underset{\alpha}{\text{minimize}}& \sum_{k=0}^{N_{samples}} || q_{exp}(t_k) - q_{sim}(t_k)||  \\
-    \text{s.t.} \hspace{10pt} & \alpha K(q_{sim}) q_{sim} = Hp_{sim}
+    \underset{G}{\text{minimize}}& \sum_{k=0}^{N_{samples}} || q_{exp}(t_k) - q_{sim}(t_k)||  \\
+    \text{s.t.} \hspace{10pt} & G K(q_{sim}) q_{sim} = Hp_{sim}
     \end{split}
     \label{eq5:optalpha}
 \end{equation}
@@ -124,9 +124,9 @@ V & 122 \leq t < 142\\
 \end{cases} ,
 \end{equation}
 
-where the two step inputs between 2 and 22 and 42 and 62 seconds cause the soft robot to bend in a positive and negative direction, respectively. Between 142 and 162 seconds, an equal Volt input to both air pumps is supplied to induce an elongation. For this analysis, it was opted to use step inputs, since for these inputs accurate pressure models can be derived. This is beneficial when optimizing over $\alpha$, as errors in elongation and curvature are minimized as a cause of incorrect pressure models. The analysis is repeated for Volt steps of 7, 9 and 11 Volts, respectively. For each air pump and Volt input, the attained experimental pressure is fit to a first-order linear model. This pressure model is based on the step input inducing a curvature. The used first-order model to fit pressure is provided in Chapter \ref{chap3}. Deflation is not accounted for by this pressure model. 
+where the two step inputs between 2 and 22 and 42 and 62 seconds cause the soft robot to bend in a positive and negative direction, respectively. Between 142 and 162 seconds, an equal Volt input to both air pumps is supplied to induce an elongation. For this analysis, it was opted to use step inputs, since for these inputs accurate pressure models can be derived. This is beneficial when optimizing over $G$, as errors in elongation and curvature are minimized as a cause of incorrect pressure models. The analysis is repeated for Volt steps of 7, 9 and 11 Volts, respectively. For each air pump and Volt input, the attained experimental pressure is fit to a first-order linear model. This pressure model is based on the step input inducing a curvature. The used first-order model to fit pressure is provided in Chapter \ref{chap3}. Deflation is not accounted for by this pressure model. 
 
-The measured modal coordinates and results of the fitted stiffness are presented in Figure \ref{fig5:elong} and Figure \ref{fig5:kappa} for elongation and curvature, respectively. Instead of optimizing (\ref{eq5:optalpha}), the linear scaling for the stiffness curves has been obtained by iteratively running the dynamic model. Based on the outcomes of the steady-state elongation and curvature, $\alpha$ is fitted. Initially, the optimization algorithm of (\ref{eq5:optalpha}) was utilized to find the scaling factors. However, the heavy computations resulted in exceptionally long simulation times. Therefore, this method was preferred, although being less accurate. Eventually, $\alpha$ was found to be equal to $\text{diag}([3.125,3])$. This implies that the modelled stiffness is around a factor 3 lower compared to the actual stiffness. This result is logical, the soft robot model used for FEM analysis has thinner walls, attributing to less stiff yet more porous bellows. The experiments are carried out a on soft robot with thicker walls and therefore is stiffer. The mass of the system is equal to $33.2$ grams. The damping properties were chosen as $D = \text{diag}([4\cdot 10^{-5},2.5\cdot 10^{-2}])$. Furthermore, Figure \ref{fig5:p1} and \ref{fig5:p2} show the measured and simulated pressure. The pressure model describes the pressure for a curvature accurately. During the elongation, occurring between 120 and 140 seconds, the pressure model shows some deviation. Also, notice that the pumps do not reach an equal steady-state pressure for equivalent Volt input. This also results in curvature during the elongation phase, as can be seen in Figure \ref{fig5:kappa}. Most likely this is the deterioration of the pumps after extended use. 
+The measured modal coordinates and results of the fitted stiffness are presented in Figure \ref{fig5:elong} and Figure \ref{fig5:kappa} for elongation and curvature, respectively. Instead of optimizing (\ref{eq5:optalpha}), the linear scaling for the stiffness curves has been obtained by iteratively running the dynamic model. Based on the outcomes of the steady-state elongation and curvature, $G$ is fitted. Initially, the optimization algorithm of (\ref{eq5:optalpha}) was utilized to find the scaling factors. However, the heavy computations resulted in exceptionally long simulation times. Therefore, this method was preferred, although being less accurate. Eventually, $G$ was found to be equal to $G = \text{diag}([3.125,3])$. This implies that the modelled stiffness is around a factor 3 lower compared to the actual stiffness. This result is logical, the soft robot model used for FEM analysis has thinner walls, attributing to less stiff yet more porous bellows. The experiments are carried out a on soft robot with thicker walls and therefore is stiffer. The mass of the system is equal to $33.2$ grams. The damping properties were chosen as $D = \text{diag}([4\cdot 10^{-5},2.5\cdot 10^{-2}])$. Furthermore, Figure \ref{fig5:p1} and \ref{fig5:p2} show the measured and simulated pressure. The pressure model describes the pressure for a curvature accurately. During the elongation, occurring between 120 and 140 seconds, the pressure model shows some deviation. Also, notice that the pumps do not reach an equal steady-state pressure for equivalent Volt input. This also results in curvature during the elongation phase, as can be seen in Figure \ref{fig5:kappa}. Most likely this is the deterioration of the pumps after extended use. 
 
 \begin{figure}[H] 
     \begin{minipage}[b]{0.49\linewidth}
@@ -381,9 +381,9 @@ where $\Bar{r}_{pixy,k}$ is the low-pass filtered position vector of the LED mar
 
 \subsection*{Revision of input mapping}
 
-The accuracy of the obtained input mapping in Chapter \ref{chap3} as given by (\ref{eq3:H}) was questioned during the experiments. Recall that this mapping maps moment and force to individual bellow pressure. The obtained curvature and elongation stiffnesses deviated an order of magnitude of 2 with each other. The original input mapping increased the effort needed to tune the system. The large difference between force and moment mapping made the system susceptible to errors in reference pressure when tuning the gains of the model-based controller. Since the force mapping is approximately 100 times higher than the moment mapping, equivalent order of gains resulted in almost equal reference pressures for both bellows.
+The accuracy of the obtained input mapping in Chapter \ref{chap3} as given by (\ref{eq3:H}) was questioned during the experiments. Recall that this mapping maps moment and force to individual bellow pressure. The obtained curvature and elongation stiffnesses deviated an order of magnitude of 2 with each other. The original input mapping increased the effort needed to tune the system. The large difference between force and moment mapping made the system susceptible to errors in reference pressure when tuning the gains of the model-based controller. Since the force mapping is approximately 100 times higher than the moment mapping, using equivalent order of gains result in almost equal reference pressure for both bellows.
 
-The input mapping has therefore been revised and was found as follows. First, the pressure controller gains are set as $K_{pp} =\text{diag}([1,1])$ and the integrator gain $K_{ip} = \text{diag}([0,0])$. In this way, the actual system pressure will never converge to the reference pressure. Subsequently, a setpoint is chosen for which the soft robot needs to elongate and bend. The proportional gain and integration gain of the Jacobian controller are chosen such that the steady-state is reached within a reasonable time. Eventually, the soft robot will move to its desired position setpoint, as the integrator action in the model-based controller will increase $\bar{\nu_{set}}$. Once the reference position is reached, the input signal $\bar{\nu_{set}}$ as determined with the old mapping remains constant. Furthermore, the actual system pressure in both bellows is known. Based on the pressures, and value of $\bar{\nu_{set}}$ the entries of the input mapping can be redetermined. Following this procedure, the revised input mapping was found as,
+The input mapping has therefore been revised and was found as follows. First, the pressure controller gains are set as $K_{pp} =\text{diag}([1,1])$ and the integrator gain $K_{ip} = \text{diag}([0,0])$. In this way, the actual system pressure will never converge to the reference pressure. Subsequently, a setpoint is chosen for which the soft robot needs to elongate and bend. The proportional gain and integration gain of the Jacobian controller are chosen such that the steady-state is reached within a reasonable time. Eventually, the soft robot will move to its desired position setpoint, as the integrator action in the model-based controller will increase $\bar{\nu}_{set}$. Once the reference position is reached, the input signal $\bar{\nu}_{set}$ as determined with the old mapping remains constant. Furthermore, the actual system pressure in both bellows is known. Based on the pressures, and value of $\bar{\nu_{set}}$ the entries of the input mapping can be redetermined. Following this procedure, the revised input mapping was found as,
 
 \begin{equation}
     H = \begin{bmatrix} 	0.0206 &  -0.0206 \\ 
@@ -398,6 +398,7 @@ where it can be seen that the moment to pressure mapping has increased by a fact
 
 Table \ref{tab5:tuningcosiderations} shows the experimentally implemented tuning parameters together with its tuning consideration. The used parameters are found by iterative tuning and observing the system's response for a step input. The step input was chosen to be $r_{set} = [-0.014,0.082]m$. A detailed tuning procedure is also provided. 
 
+\newpage
 
 \begin{table}[H]
     \centering
@@ -474,7 +475,7 @@ As mentioned, the first set-point is mirrored to check if the soft robot has equ
 
 The error response in both Cartesian directions is shown in Figure \ref{fig5:errorswingright}. Compared to the left set-point, this right set-point does not clearly show a swing during the first 2 seconds. Instead, a more gradual decrease in error is observed. After 13 seconds the zero error line is first crossed. From the input moment, as depicted in Figure \ref{fig5:nuright}, it can be seen that a steady-state is only reached after 20 seconds, at a value of $0.78 Nm$. Recalling, that a moment of $-0.6 Nm$ is necessary for the left set-point. Additionally, the bellow pressure $p_2$ reached a pressure of $60 kPa$ for the right setpoint, whilst for the left the set-point this was $51 kPa$. The reason for the observed behaviour remains inconclusively. A likely explanation is unequal pump characteristics caused by the degradation of the valves. Or possibly, the material properties of the actuator are not equal throughout the soft robot. The error in y-direction for the right set-point shows similar behaviour as for the left set-point. The settling time is around 10 seconds which is 2 seconds more when compared to the first set-point. This can also be seen from force input in Figure \ref{fig5:nuright} which reaches a steady-state force of $15 N$.
 
-Figure \ref{fig5:inputswingright} shows the control Volt send to the air pumps. The observed response is similar to the previous set-point. The input during the first 1.5 seconds is initiated by the proportional action. After 1.5 seconds, the integrator action becomes dominant over the proportional gain. Eventually the control input $V_1$ and $V_2$ stay close to 4.3 and 9.5 V, respectively. This voltage is higher compared to the left set-point, as the stiffness in this rotational directions seems to be higher. The control input to the motor also contains higher amplitude changes, which are linked to the noise on the pressure signal. Figure \ref{fig3:pump_dynamics_adapted} in Chapter \ref{chap3} showed that for higher pressures the noise floor increases. The noise effects can be observed in the controller input. To decrease these effects a low-pass filter on the pressure controller could be implemented, or the cut-off frequency of the low-pass filter on the pressure data could be decreased. However, both actions increase delays in the system which could cause stability problems.
+Figure \ref{fig5:inputswingright} shows the control Volt send to the air pumps. The observed response is similar to the previous set-point. The input during the first 1.5 seconds is initiated by the proportional action. After 1.5 seconds, the integrator action becomes dominant over the proportional gain. Eventually the control input $V_1$ and $V_2$ stay close to 4.3 and 9.5 V, respectively. This voltage is higher compared to the left set-point, as the stiffness in this rotational direction seems to be higher. The control input to the motor also contains higher amplitude changes, which are linked to the noise on the pressure signal. Figure \ref{fig3:pump_dynamics_adapted} in Chapter \ref{chap3} showed that for higher pressures the noise floor increases. The noise effects can be observed in the controller input. To decrease these effects a low-pass filter on the pressure controller could be implemented, or the cut-off frequency of the low-pass filter on the pressure data could be decreased. However, both actions increase delays in the system which could cause stability problems.
 
 \begin{figure}[H] 
     \begin{minipage}[b]{0.49\linewidth}
@@ -595,7 +596,7 @@ To improve tracking performance i.e. tracking speed and error reduction, feedfor
 \end{figure}
 
 
-Figure \ref{fig5:controlellips}, shows the control input during the ellipsoid reference. The top figure displays the input as determined by the Jacobian controller. During the first $t_1$ seconds the moment is equal to zero, whereas the force is slowly increasing to induce the elongation. The moment then has two extrema at the time instance where x-displacement is required to be largest. The force is maximum, and the moment is near zero when the at elongation of the manipulator is largest. The centre figure shows the pressure setpoint and measured pressure over time. During the first half of the ellipsoid, a higher pressure $p_2$ is reached than $p_1$ in the second half. This might be caused by the systems deflation rate, which can not be actively regulated. Another explanation can be the unsymmetrical material properties of the actuator. The bottom figure shows the Volt input to the air pumps. Near the saturation region, the control input to the air pumps has high-frequency noise. This is caused by higher noise levels on the pressure readings compared to lower pressures. Another notable phenomenon is the control input spikes occurring at 90 seconds. These are caused by a change in angular rate between the 3rd and 4th quadrant of the ellipsoid. At the switching plane between the 1st and 2nd quadrant, occurring at 40 seconds, this behaviour is not visible. A possible explanation can be the deflation of the soft robot, for which the controller tries to compensate. 
+Figure \ref{fig5:controlellips}, shows the control input during the ellipsoid reference. The top figure displays the input as determined by the Jacobian controller. During the first $t_1$ seconds the moment is equal to zero, whereas the force is slowly increasing to induce the elongation. The moment then has two extrema at the time instance where x-displacement is required to be largest. The force is maximum, and the moment is near zero when the elongation of the manipulator is largest. The centre figure shows the pressure setpoint and measured pressure over time. During the first half of the ellipsoid, a higher pressure $p_2$ is reached than $p_1$ in the second half. This might be caused by the systems deflation rate, which can not be actively regulated. Another explanation can be the unsymmetrical material properties of the actuator. The bottom figure shows the Volt input to the air pumps. Near the saturation region, the control input to the air pumps has high-frequency noise. This is caused by higher noise levels on the pressure readings compared to lower pressures. Another notable phenomenon is the control input spikes occurring at 90 seconds. These are caused by a change in angular rate between the 3rd and 4th quadrant of the ellipsoid. At the switching plane between the 1st and 2nd quadrant, occurring at 40 seconds, this behaviour is not visible. A possible explanation can be the deflation of the soft robot, for which the controller tries to compensate. 
 
 
 
@@ -623,6 +624,7 @@ Although the model and experimental results show quite some differences some gen
 First of all, the model and experimental results show similar behaviour. The step responses are difficult to compare regarding settling times and controller gains as a different input mapping was used. However, the general behaviour of the controller is similar. First, a step like control input to the air pumps is initiated, causing the actuator to rapidly move to the reference direction. Then a dip in control input is observed. From that point onwards the integrator gains cause the system to move to its desired position. In the experiments, a difference was observed for the mirrored set-points. This phenomenon is most likely to be caused by unequal pump characteristics. For the simulation, equal pump characteristics were assumed. 
 
 Reference tracking in simulation and experiments also show equal characteristics. The largest difference is the time in which the ellipsoid reference path was tracked. The actual system was able to track the ellipse in 100 seconds with an RMS error of $0.7926 \hspace{2pt} mm$ and $0.4044 \hspace{2pt} mm$. For the model, the time to complete the ellipsoid was set to 400 seconds. In simulation, an RMS error of $e_x = 0.1489  \hspace{2pt} mm$ and $e_y = 0.0899 \hspace{2pt} mm$ was found. Both simulation and experiments show a time delay between the reference and actual position. The reason for this delay is the pump dynamics and low-pass filtering of the control input.
+
 
 
 \subsection*{Summary}

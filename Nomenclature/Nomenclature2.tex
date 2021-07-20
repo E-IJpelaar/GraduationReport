@@ -11,12 +11,12 @@
     B     &  Input matrix \\
     D     &  Damping matrix \\
     F     & Force \\
+    G     & Stiffness tuning matrix \\
     H     &  Mapping matrix \\
     J     &  Jacobian matrix \\
     K     &  Stiffness matrix \\
     L     &  Relaxed actuator length \\
     M     &  Mass matrix \\
-    M     &  Moment \\
     N     & Order of approximation \\
     Q     & Weighing matrix \\
     R     & Rotation matrix \\
@@ -45,9 +45,7 @@
      $s$     & Position vector backbone curve \\
      $t$     & Time \\
      $w$     & Width \\
-     $x$     & Cartesian x-direction \\
      $x$     & State vector \\
-     $y$     & Cartesian y-direction \\
      $y$     & Sensor value data input \\ \hline
     \end{tabular}
 \end{table}
@@ -73,14 +71,17 @@
 
 \begin{table}[H]
 \centering
-    \begin{tabular}{p{2.5cm} p{3.4cm}} \hline
+    \begin{tabular}{p{2.7cm} p{3.8cm}} \hline
     \textbf{Greek symbol}    &   \textbf{Description }\\ \hline
-    $\alpha$      & Elongation stiffness parameter  \\
-    $\beta$       & Rotational stiffness parameter \\
+    $\alpha$      & Elongation stiffness\\
+                  & parameter  \\
+    $\beta$       & Rotational stiffness \\
+                  & parameter  \\
     $\gamma$      & Poisson ratio \\
     $\delta$      & Complementary filter parameter \\
     $\epsilon$    & Strain \\
-    $\zeta$       & Low-pass filter parameter \\
+    $\zeta$       & Low-pass filter \\
+                  & parameter  \\
     $\eta$        & Velocity vector \\
     $\theta$      & Rotation \\
     $\kappa$      & Curvature \\
@@ -88,7 +89,8 @@
     $\Lambda$     & Pixel coordinate \\
     $\mu$         & Singularity factor \\
     $\nu$         & Control input vector \\
-    $\xi$         & Curvature-strain vector \\
+    $\xi$         & Curvature-strain  \\
+                  & vector  \\
     $\Pi$         & Pixel coordinate \\
     $\rho$        & Mass density \\
     $\sigma$      & Position instance \\
@@ -97,7 +99,7 @@
     $\Phi$        & Shape-function matrix \\
     $\chi$        & Learning gain \\
     $\psi$        & Weighing factor \\
-    $\omega$      &  Rotational velocity \\ \hline
+    $\omega$      & Angular velocity \\ \hline
     \end{tabular}
 \end{table}
 
@@ -112,16 +114,16 @@
     c     & Control \\
     end   & Last entry of vector \\
     est   & Estimate \\
-    gyro  & Gyroscope \\
+    exp    & Experiment \\
+    gyr  & Gyroscope \\
     i     & Integral \\
     ip     & Integral pressure controller \\
-    length & Arc length \\
-    mid    & Nodes discretized backbone curve \\
     nc    & Non-conservative \\
     off   & Offset \\
     p    & Proportional \\
     pp    & Proportional pressure controller\\
     set   & Set-point \\
+    sim   & Simulation \\
     tot    & Total \\ \hline
     \end{tabular}
 \end{table}
@@ -162,39 +164,50 @@
 \centering
     \begin{tabular}{p{1.5cm} p{5cm}} \hline
      \multicolumn{2}{l}{\textbf{Mathematical notations}}\\ \hline
-    $0_m$    & Column vector of zeros of dimension $m$ \\
+    $0_m$    & Column vector of zeros of \\
+             & dimension $m$ \\
     $a_i$ & $i$-th entry of vector $a$ \\
     $a^\top$ & Transpose of vector $a$ \\
     $A^\top$ & Transpose of matrix $A$ \\
     \underbar{$a$} & Vector with measured values $a$  \\
     $||a||$ & Norm of vector $a$ \\
     $\text{dim}(a)$ & Dimension of vector $a$ \\
-    $\text{diag}([a])$ & Diagonal matrix with the elements of $a$ as the main diagonal\\
+    $\text{diag}([a])$ & Diagonal matrix with the \\
+                       & elements of $a$ as the main \\
+                       & diagonal\\
      $\Tilde{s}$ & Position vector $s$ in adjoint mapping \\
     $\Bar{\nu}$ & Low-pass filtered $\nu$ \\
     $A^\dagger$ & Pseudo-Inverse of non-square matrix $A$ \\
     $A^{-1}$ & Inverse of matrix $A$ \\
     $A_\times$ & Skew-symmetric matrix $A$ \\
-    $A_{m,n}$ & Matrix entry at row $m$ and column $n$ \\
+    $A_{m,n}$ & Matrix entry at row $m$ and \\
+              & column $n$ \\
     $A_{m \times n}$ & Matrix with $m$ rows and $n$ columns \\
-    $A \otimes B$ & Kronecker tensor product between matrices $A$ and $B$ \\
+    $A \otimes B$ & Kronecker tensor product \\
+                  & between matrices $A$ and $B$ \\
     $\text{Ad}_g$ & Adjoint action on function $g$\\
-    $\partial g$     &  Partial derivative w.r.t function $g$\\ 
-    $[g]_N$ & $N$-th order truncation of function $g$\\ 
+    $\partial g$     &  Partial derivative w.r.t \\
+                     & function $g$\\ 
+    $[g]_N$ & $N$-th order truncation of \\
+            & function $g$\\ 
     $g'$ & Spatial derivative of function $g$ \\
     $\dot{g}$ & Time derivative of function $g$ \\
     $\hat{g}$ & Isomorphism of $\hat{g} \longmapsto g$ \\
     $I_m$    & Square identity matrix of size $m \times m$ \\
-    $O_m$    & Square zero matrix of size $m \times m$ \\
-    
+    $O_m$    & Square zero matrix of size \\ 
+             & $m \times m$ \\
     $\mathbb{R}$ & Real number\\
     $\mathbb{R}^+$ & Positive real number\\
     $\mathbb{N}$ & Natural number\\
-    $\mathbb{N}^+_0$ & Positive natural number including zero\\
+    $\mathbb{N}^+_0$ & Positive natural number \\ 
+                     & including zero\\
     $\mathfrak{se}(2)$ & Square real matrix expressing Lie algebra on $\mathbb{SE}(2)$ group  \\
-    $\mathbb{SE}(2)$ & Special Euclidean group representing 2D rigid-body transformations\\
-    $\mathfrak{so}(2)$ & Skew-symmetric square real matrix\\
-    $\mathbb{SO}(2)$ &  Special orthogonal group representing 2D rotation. \\
+    $\mathbb{SE}(2)$ & Special Euclidean group \\ 
+                     & representing 2D rigid-body \\
+                     & transformations\\
+    $\mathfrak{so}(2)$ & Skew-symmetric real matrix expressing Lie algebra on $\mathbb{SO}(2)$ group\\
+    $\mathbb{SO}(2)$ &  Special orthogonal group \\
+                     & representing 2D rotation \\
     \hline
     
 
